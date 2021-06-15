@@ -7,3 +7,5 @@ include(":main")
 include(":tlsexternalcertprovider")
 include(":remoteExample")
 include(":app")
+
+//include(":yubikeyplugin")
