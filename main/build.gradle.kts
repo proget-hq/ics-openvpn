@@ -1,4 +1,5 @@
 import com.android.build.gradle.api.ApplicationVariant
+import com.android.build.gradle.api.LibraryVariant
 
 /*
  * Copyright (c) 2012-2016 Arne Schwabe
@@ -6,7 +7,7 @@ import com.android.build.gradle.api.ApplicationVariant
  */
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("checkstyle")
 
     id("kotlin-android")
@@ -147,15 +148,22 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
     }
     return baseDir
 }
+android.libraryVariants.forEach { variant ->
+    val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
+    val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
 
-android.applicationVariants.all(object : Action<ApplicationVariant> {
-    override fun execute(variant: ApplicationVariant) {
-        val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
-        val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
+    variant.registerJavaGeneratingTask(task, sourceDir)
+}
 
-        variant.registerJavaGeneratingTask(task, sourceDir)
-    }
-})
+//
+//android.applicationVariants.all(object : Action<ApplicationVariant> {
+//    override fun execute(variant: ApplicationVariant) {
+//        val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
+//        val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
+//
+//        variant.registerJavaGeneratingTask(task, sourceDir)
+//    }
+//})
 
 
 dependencies {

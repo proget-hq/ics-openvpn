@@ -250,7 +250,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     private void showNotification(final String msg, String tickerText, @NonNull String channel,
                                   long when, ConnectionStatus status, Intent intent) {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        int icon = getIconByConnectionStatus(status);
+//        int icon = getIconByConnectionStatus(status);
 
         android.app.Notification.Builder nbuilder = new Notification.Builder(this);
 
@@ -271,7 +271,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         nbuilder.setOnlyAlertOnce(true);
         nbuilder.setOngoing(true);
 
-        nbuilder.setSmallIcon(icon);
+        nbuilder.setSmallIcon(R.drawable.ic_launcher);
         if (status == LEVEL_WAITING_FOR_USER_INPUT) {
             PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
             nbuilder.setContentIntent(pIntent);
@@ -284,10 +284,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
         // Try to set the priority available since API 16 (Jellybean)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            jbNotificationExtras(priority, nbuilder);
-            addVpnActionsToNotification(nbuilder);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            jbNotificationExtras(priority, nbuilder);
+//            addVpnActionsToNotification(nbuilder);
+//        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             lpNotificationExtras(nbuilder, Notification.CATEGORY_SERVICE);

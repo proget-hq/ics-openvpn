@@ -1,0 +1,165 @@
+<resources>
+    <string name="app_name">OpenVPN for Enterprise</string>
+
+    <!--CONFIG BEGIN-->
+    <!--BASIC-->
+    <string name="config_name">Name of VPN profile</string>
+    <string name="config_auto_connect">Auto connect</string>
+    <string name="config_desc_auto_connect">Application will try to establish VPN connection right after configuration applied</string>
+    <string name="config_allow_user_disconnect">Allow disconnect VPN</string>
+    <string name="config_desc_allow_user_disconnect">Allow user to disconnect VPN connection</string>
+    <string name="config_allow_import_ovpn_file">Allow import profile from .ovpn</string>
+    <string name="config_desc_allow_import_ovpn_file">Allow import profile from .ovpn file. When this option is enabled managed configuration is ignored.</string>
+    <string name="config_desc_name">Name of VPN profile. This field is required</string>
+    <string name="config_auth_type">Authentication type</string>
+    <string name="config_desc_auth_type">Type of authentication that will be used to establish vpn connection</string>
+    <string name="config_use_lzo">Use LZO compression</string>
+    <string name="config_desc_use_lzo">When checked LZO compression will be used</string>
+    <string name="config_ca">CA certificate</string>
+    <string name="config_desc_ca">Content of CA certificate in Base64 format</string>
+    <string name="config_client_cert">Client certificate</string>
+    <string name="config_desc_client_cert">Content of Client certificate in Base64 format</string>
+    <string name="config_client_key">Client key</string>
+    <string name="config_desc_client_key">Content of Client key in Base64 format</string>
+    <string name="config_pkcs12">PKCS12</string>
+    <string name="config_desc_pkcs12">Content of PKCS12 in Base64 format</string>
+    <string name="config_pkcs12_password">PKCS12 password</string>
+    <string name="config_desc_pkcs12_password">Password of PKCS12 file</string>
+    <string name="config_username">Username</string>
+    <string name="config_desc_username">Username that will be used when authentication type requires Username and Password</string>
+    <string name="config_password">Password</string>
+    <string name="config_desc_password">Password that will be used when authentication type requires Username and Password</string>
+    <!--SERVER-->
+    <string name="config_connection">Connection</string>
+    <string name="config_server_name">Server Address</string>
+    <string name="config_desc_server_name">Server Address</string>
+    <string name="config_server_port">Server port</string>
+    <string name="config_desc_server_port">Server port</string>
+    <string name="config_protocol">Protocol</string>
+    <string name="config_desc_protocol">Protocol that will be used in connection.</string>
+    <string name="config_proxy">Proxy</string>
+    <string name="config_desc_proxy">Proxy</string>
+    <string name="config_proxy_address">Proxy server address</string>
+    <string name="config_desc_proxy_address">Proxy server address is required only when Proxy is set to HTTP or Socksv5</string>
+    <string name="config_proxy_port">Proxy server port</string>
+    <string name="config_desc_proxy_port">Proxy server port is required only when Proxy is set to HTTP or Socksv5</string>
+    <string name="config_enable_proxy_authentication">Enable Proxy authentication</string>
+    <string name="config_desc_enable_proxy_authentication">Can be set only when HTTP Proxy is set. When set proxy username and password will be required</string>
+    <string name="config_proxy_username">Proxy username</string>
+    <string name="config_desc_proxy_username">Proxy username used only when Proxy Authentication is set in HTTP Proxy</string>
+    <string name="config_proxy_user_password">Proxy password</string>
+    <string name="config_desc_proxy_user_password">Proxy username used only when Proxy Authentication is set in HTTP Proxy</string>
+    <string name="config_connection_timeout">Connection timeout</string>
+    <string name="config_desc_connection_timeout">Connection timeout. Default 120s</string>
+    <!--IP and DNS-->
+    <string name="config_ip_dns">IP and DNS</string>
+    <string name="config_use_server_ip_settings">Use server IP settings (pull)</string>
+    <string name="config_desc_use_server_ip_settings">When set Requests IP addresses, routes and timing options will be pulled from server. In other way Settings need to be specified</string>
+    <string name="config_ipv4">IPv4 Address</string>
+    <string name="config_desc_ipv4">Used when pull option is not set. Provide IPv4 Address/Netmask in CIDR Format (e.q. 1.2.3.4/24)</string>
+    <string name="config_ipv6">IPv6 Address</string>
+    <string name="config_desc_ipv6">Used when pull option is not set. Provide IPv6 Address/Netmask in CIDR Format (e.q. 2000:dd::23/64)</string>
+    <string name="config_no_bind">No local binding</string>
+    <string name="config_desc_no_bind">Do not bind to local address and port</string>
+    <string name="config_override_dns">Override DNS settings</string>
+    <string name="config_desc_override_dns">Override DNS settings provided by server</string>
+    <string name="config_search_domain">Search domain</string>
+    <string name="config_desc_search_domain">Search domain, will be used only when override DNS settings is set</string>
+    <string name="config_dns_server">DNS Server</string>
+    <string name="config_desc_dns_server">DNS Server address, will be used only when override DNS settings is set</string>
+    <string name="config_dns_alternative_server">Alternative DNS server</string>
+    <string name="config_desc_dns_alternative_server">Alternative DNS server, will be used only when override DNS settings is set</string>
+    <!--ROUTING-->
+    <string name="config_routing">Routing</string>
+    <string name="config_ignore_routes">Ignore pushed routes</string>
+    <string name="config_desc_ignore_routes">Ignore routes pushed by server</string>
+    <string name="config_allow_local_lan">Bypass VPN for local networks</string>
+    <string name="config_desc_allow_local_lan">Networks directly connected to the local interfaces will not be routed over the VPN. Deselecting this option will redirect all traffic intended for local networks to VPN</string>
+    <string name="config_block_unused_address_families">Block IPv6 (or IPv4) if not set</string>
+    <string name="config_desc_block_unused_address_families">This option instructs Android to not allow protocols (IPv4/IPv6) if the VPN does not set any IPv4 or IPv6 addresses</string>
+    <string name="config_use_default_routes">Use default Route (IPv4)</string>
+    <string name="config_desc_use_default_routes">Redirects all Traffic over the VPN for IPv4</string>
+    <string name="config_custom_routes">Custom routes (IPv4)</string>
+    <string name="config_desc_custom_routes">Used only when Redirect all Traffic over the VPN is not set. Provide only destination in CIDR format. "10.0.0.0/8" would redirect 10.0.0.0/8 over the VPN</string>
+    <string name="config_excluded_routes">Excluded networks (IPv4)</string>
+    <string name="config_desc_excluded_routes">Used only when Redirect all Traffic over the VPN is not set. Specify Routes that should NOT be routed over the VPN. Use the same syntax as for included routes</string>
+    <string name="config_use_default_routes_v6">Use default Route (IPv6)</string>
+    <string name="config_desc_use_default_routes_v6">Redirects all Traffic over the VPN for IPv6</string>
+    <string name="config_custom_routes_v6">Custom routes (IPv6)</string>
+    <string name="config_desc_custom_routes_v6">Used only when Redirect all Traffic over the VPN is not set. Provide only destination in CIDR format. "10.0.0.0/8" would redirect 10.0.0.0/8 over the VPN</string>
+    <string name="config_excluded_routes_v6">Excluded networks (IPv6)</string>
+    <string name="config_desc_excluded_routes_v6">Used only when Redirect all Traffic over the VPN is not set. Specify Routes that should NOT be routed over the VPN. Use the same syntax as for included routes</string>
+    <!--AUTHENTICATION/ENCRYPTION-->
+    <string name="config_authentication">Authentication and Encryption</string>
+    <string name="config_expect_tls_cert">Expect TLS server certificate</string>
+    <string name="config_desc_expect_tls_cert">Checks whether the server uses a certificate with TLS Server extensions (—remote-cert-tls server)</string>
+    <string name="config_check_remote_cn">Certificate Hostname Check</string>
+    <string name="config_desc_check_remote_cn">Checks the Remote Server Certificate Subject DN</string>
+    <string name="config_remote_cn_type">Certificate verification type</string>
+    <string name="config_desc_remote_cn_type">Used only when Certificate Hostname Check is set. Certificate verification type. For more details see the OpenVPN 2.3.1+ manpage under —verify-x509-name</string>
+    <string name="config_remote_cn">Remote certificate subject</string>
+    <string name="config_desc_remote_cn">Used only when Certificate Hostname Check is set. Remote certificate subject</string>
+    <string name="config_x509_username">X509 Username field</string>
+    <string name="config_desc_x509_username">Used only when Certificate Hostname Check is set. Field in the X.509 certificate subject to be used as the username (default=CN)</string>
+    <string name="config_use_tls">Use TLS Authentication</string>
+    <string name="config_desc_use_tls">Enables the TLS Key Authentication</string>
+    <string name="config_tls_cert">TLS Certificate</string>
+    <string name="config_desc_tls_cert">Used only when TLS Authentication is enabled. Provide content of TLS Certificate in Base64 format</string>
+    <string name="config_tls_auth_direction">TLS Direction</string>
+    <string name="config_desc_tls_auth_direction">Specify TLS Direction. Default: unspecified</string>
+    <string name="config_cipher">Encryption cipher</string>
+    <string name="config_desc_cipher">Enter the encryption cipher algorithm used by OpenVPN. Leave empty to use default cipher</string>
+    <string name="config_auth">Packet authentication</string>
+    <string name="config_desc_auth">Enter the authentication digest used for OpenVPN. Leave empty to use default digest</string>
+    <!--ADVANCED-->
+    <string name="config_advanced">Advanced</string>
+    <string name="config_use_persistent_tun">Persistent tun</string>
+    <string name="config_desc_use_persistent_tun">Do not fallback to no VPN connection when OpenVPN is reconnecting</string>
+    <string name="config_push_peer_info">Push Peer info</string>
+    <string name="config_desc_push_peer_info">Send extra information to the server, e.g. SSL version and Android version</string>
+    <string name="config_use_random_hostname">Random Host Prefix</string>
+    <string name="config_desc_use_random_hostname">Adds 6 random chars in front of hostname</string>
+    <string name="config_use_float">Allow floating server</string>
+    <string name="config_desc_use_float">Allows authenticated packets from any IP</string>
+    <string name="config_mss_fix_value">Set MSS of TCP payload</string>
+    <string name="config_desc_mss_fix_value">Default 1280</string>
+    <string name="config_tun_mtu">Tunnel MTU (tun-mtu)</string>
+    <string name="config_desc_tun_mtu">Default 1500</string>
+    <string name="config_user_options">Custom options</string>
+    <string name="config_desc_user_options">Enter custom OpenVPN options. Use with caution. Also not that many of the tun related OpenVPN settings cannot be supported by design of the VPNSettings</string>
+    <string name="config_connection_retries">Connection retries</string>
+    <string name="config_desc_connection_retries">Number of connection retries</string>
+    <string name="config_connection_retry_time">Seconds between connections</string>
+    <string name="config_desc_connection_retry_time">Number of seconds to wait between connection attempts. Default 2s</string>
+    <string name="config_connection_retry_time_max">Maximum time between connection attempts</string>
+    <string name="config_desc_connection_retry_time_max">Enter the maximum time between connection attempts. OpenVPN will slowly raise its waiting time after an unsuccessful connection attempt up to this value. Default 300s</string>
+    <!--APPS-->
+    <string name="config_applications">Applications</string>
+    <string name="config_use_vpn_for_all_applications">Use VPN for all applications</string>
+    <string name="config_desc_use_vpn_for_all_applications">Specify that all applications on device should use VPN</string>
+    <string name="config_apps">List of applications</string>
+    <string name="config_desc_apps">List of applications. When Use VPN for all applications is set then applications on this list will excluded from VPN. When Use VPN for all applications is not set then only applications on this list will use VPN</string>
+    <!--CONFIG END-->
+
+    <string name="info_title">Information:</string>
+    <string name="connection_title">Connections:</string>
+    <string name="status_title">Session status:</string>
+    <string name="send_logs">Send logs</string>
+    <string name="no_configuration">No configuration received from the EMM agent</string>
+    <string name="not_connected">Not connected</string>
+    <string name="not_initiated">Not initiated</string>
+    <string name="configured_by_emm">Configured by EMM agent</string>
+    <string name="connected_to">Connected to %1$s</string>
+    <string name="connecting_to">Connecting to %1$s</string>
+    <string name="started">Started</string>
+    <string name="logfile_subject">OpenVPN for Enterprise logfile</string>
+    <string name="about_vpn_title">%1$s %2$s</string>
+    <string name="vpn_copyright">Copyright 2021 VPN for Enterprise Project &lt;vpn.for.enterprise.project@gmail.com&gt;\n\nOpenVPN version: openvpnforenterprise/v%1$s\n\nThis program takes advantage of the rights listed below.</string>
+    <string name="copyright_openvpn">Copyright © 2002–2010 OpenVPN Technologies, Inc. &lt;sales@openvpn.net&gt;\nOpenVPN is a trademark of OpenVPN Technologies, Inc.</string>
+
+    <string name="vpn_is_running">VPN is running</string>
+    <string name="config_logs">Logs</string>
+    <string name="config_desc_keep_logs_days">Older logs will be deleted</string>
+    <string name="config_keep_logs_days">Max time to keep logs (in days)</string>
+    <string name="config_log_level">Log level</string>
+</resources>
