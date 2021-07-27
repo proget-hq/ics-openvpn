@@ -13,7 +13,11 @@ class AboutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+        ActivityAboutBinding.inflate(layoutInflater)
+            .let {
+                binding = it
+                setContentView(it.root)
+            }
 
         binding.vpnTitle.text = getString(
             R.string.about_vpn_title, getString(R.string.app), BuildConfig.VERSION_NAME

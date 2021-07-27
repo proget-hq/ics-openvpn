@@ -21,7 +21,6 @@
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,7 +29,10 @@
             android:name="de.blinkt.openvpn.LaunchVPN"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true" />
-        <activity android:name=".ui.about.AboutActivity" />
+
+        <activity
+            android:name=".ui.about.AboutActivity"
+            android:parentActivityName=".ui.main.MainActivity" />
 
         <activity-alias
             android:name="${applicationId}.activities.LogWindow"
