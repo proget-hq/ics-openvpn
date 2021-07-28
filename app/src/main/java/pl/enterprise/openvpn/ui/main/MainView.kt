@@ -5,16 +5,18 @@ import java.io.File
 
 interface MainView {
     fun showNoConfiguration()
-    fun showNotConnected()
+    fun showNotConnected(importedProfile: Boolean)
     fun showConnected(
         serverName: String,
-        allowDisconnect: Boolean
+        allowDisconnect: Boolean,
+        importedProfile: Boolean
     )
 
-    fun showAuthFailed()
+    fun showAuthFailed(importedProfile: Boolean)
     fun showConnecting(
         serverName: String,
-        allowDisconnect: Boolean
+        allowDisconnect: Boolean,
+        importedProfile: Boolean
     )
 
     fun startVpn(profile: VpnProfile)
@@ -22,4 +24,6 @@ interface MainView {
     fun showAboutView()
     fun showSendLogView(logFile: File)
     fun showNoLogs()
+    fun showFilePicker()
+    fun showImportProfileDisallowed()
 }

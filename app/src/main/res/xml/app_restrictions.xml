@@ -24,7 +24,7 @@
     <restriction
         android:defaultValue="false"
         android:description="@string/config_desc_allow_import_ovpn_file"
-        android:key="allowImportFromOvpnFile"
+        android:key="allowImportProfileFromOvpnFile"
         android:restrictionType="bool"
         android:title="@string/config_allow_import_ovpn_file" />
 

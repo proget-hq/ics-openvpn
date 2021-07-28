@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/importProfile"
+        android:title="@string/import_vpn_profile" />
+    <item
         android:id="@+id/sendLogs"
-        android:title="@string/send_logs"/>
+        android:title="@string/send_logs" />
     <item
         android:id="@+id/about"
-        android:title="@string/about"/>
+        android:title="@string/about" />
 </menu>

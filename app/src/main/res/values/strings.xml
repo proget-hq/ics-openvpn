@@ -8,7 +8,7 @@
     <string name="config_desc_auto_connect">Application will try to establish VPN connection right after configuration applied</string>
     <string name="config_allow_user_disconnect">Allow disconnect VPN</string>
     <string name="config_desc_allow_user_disconnect">Allow user to disconnect VPN connection</string>
-    <string name="config_allow_import_ovpn_file">Allow import profile from .ovpn</string>
+    <string name="config_allow_import_ovpn_file">Allow import profile from .ovpn file</string>
     <string name="config_desc_allow_import_ovpn_file">Allow import profile from .ovpn file. When this option is enabled managed configuration is ignored.</string>
     <string name="config_desc_name">Name of VPN profile. This field is required</string>
     <string name="config_auth_type">Authentication type</string>
@@ -162,4 +162,8 @@
     <string name="config_desc_keep_logs_days">Older logs will be deleted</string>
     <string name="config_keep_logs_days">Max time to keep logs (in days)</string>
     <string name="config_log_level">Log level</string>
+    <string name="import_profile_not_allowed">Profile importing is disabled by managed configuration</string>
+    <string name="import_profile_failed">Import failed</string>
+    <string name="manual_configuration">Manual configuration</string>
+    <string name="import_vpn_profile">Import profile</string>
 </resources>

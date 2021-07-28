@@ -1,11 +1,13 @@
 package pl.enterprise.openvpn.ui.main
 
 import android.content.Intent
-import de.blinkt.openvpn.core.Connection
+import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ConnectionStatus
 import de.blinkt.openvpn.core.ProfileManager
 import de.blinkt.openvpn.core.VpnStatus
 import pl.enterprise.openvpn.data.ConfigRepo
+import pl.enterprise.openvpn.data.connection
+import pl.enterprise.openvpn.data.isImported
 import pl.enterprise.openvpn.logs.LogFileProvider
 
 class MainPresenter(
@@ -39,18 +41,22 @@ class MainPresenter(
         Intent: Intent?
     ) {
         if (level != null) {
-            getConnection()?.run {
-                when (level) {
-                    ConnectionStatus.LEVEL_CONNECTED -> view?.showConnected(
-                        mServerName,
-                        configRepo.fetchConfig().allowDisconnect
-                    )
-                    ConnectionStatus.LEVEL_AUTH_FAILED -> view?.showAuthFailed()
-                    ConnectionStatus.LEVEL_NOTCONNECTED -> view?.showNotConnected()
-                    else -> view?.showConnecting(
-                        mServerName,
-                        configRepo.fetchConfig().allowDisconnect
-                    )
+            getProfile()?.run {
+                connection()?.let { connection ->
+                    when (level) {
+                        ConnectionStatus.LEVEL_CONNECTED -> view?.showConnected(
+                            connection.mServerName,
+                            configRepo.fetchConfig().allowDisconnect,
+                            isImported()
+                        )
+                        ConnectionStatus.LEVEL_AUTH_FAILED -> view?.showAuthFailed(isImported())
+                        ConnectionStatus.LEVEL_NOTCONNECTED -> view?.showNotConnected(isImported())
+                        else -> view?.showConnecting(
+                            connection.mServerName,
+                            configRepo.fetchConfig().allowDisconnect,
+                            isImported()
+                        )
+                    }
                 }
             }
         }
@@ -69,6 +75,11 @@ class MainPresenter(
         }
     }
 
+    fun onImportProfileClick() {
+        if (configRepo.fetchConfig().allowImportProfile) view?.showFilePicker()
+        else view?.showImportProfileDisallowed()
+    }
+
     fun onSendLogsClick() {
         logFileProvider.getLogsAsZip()?.let { view?.showSendLogView(it) }
             ?: view?.showNoLogs()
@@ -78,6 +89,10 @@ class MainPresenter(
         view?.showAboutView()
     }
 
-    private fun getConnection(): Connection? =
-        manager.profiles.firstOrNull()?.mConnections?.get(0)
+    fun onProfileImported() {
+        view?.showNotConnected(true)
+    }
+
+    private fun getProfile(): VpnProfile? =
+        manager.profiles.firstOrNull()
 }

@@ -10,6 +10,9 @@ import android.os.Bundle
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.Connection
 import de.blinkt.openvpn.core.ProfileManager
+import pl.enterprise.openvpn.data.Config
+import pl.enterprise.openvpn.data.ConfigRepo
+import pl.enterprise.openvpn.data.save
 
 class AppRestrictions private constructor() {
 
@@ -43,15 +46,15 @@ class AppRestrictions private constructor() {
                 getString("name")?.let {
                     VpnProfile(it)
                         .apply {
-                            mAuthenticationType = mapper.mapAuthType(getString("authType"));
-                            mUseLzo = getBoolean("useLzo", true);
-                            mCaFilename = mapper.mapCertificate(getString("ca"));
-                            mClientCertFilename = mapper.mapCertificate(getString("clientCert"));
-                            mClientKeyFilename = mapper.mapCertificate(getString("clientKey"));
-                            mPKCS12Filename = mapper.mapCertificate(getString("pkcs12"));
-                            mPKCS12Password = getString("pkcs12Password");
-                            mUsername = getString("username");
-                            mPassword = getString("password");
+                            mAuthenticationType = mapper.mapAuthType(getString("authType"))
+                            mUseLzo = getBoolean("useLzo", true)
+                            mCaFilename = mapper.mapCertificate(getString("ca"))
+                            mClientCertFilename = mapper.mapCertificate(getString("clientCert"))
+                            mClientKeyFilename = mapper.mapCertificate(getString("clientKey"))
+                            mPKCS12Filename = mapper.mapCertificate(getString("pkcs12"))
+                            mPKCS12Password = getString("pkcs12Password")
+                            mUsername = getString("username")
+                            mPassword = getString("password")
 
                             applyConnection(getBundle("connection"))
                             applyIpDns(getBundle("ipDns"))
@@ -60,14 +63,12 @@ class AppRestrictions private constructor() {
                             applyAdvanced(getBundle("advanced"))
                             applyApplications(getBundle("applications"))
                         }
-                        .let {
+                        .let { profile ->
                             ProfileManager.getInstance(context)
-                                .run {
-                                    addProfile(it)
-                                    saveProfile(context, it)
-                                    saveProfileList(context)
-                                }
+                                .save(context, profile)
                         }
+
+                    ConfigRepo.getInstance(context).updateConfig(Config(this))
                 }
             }
         }
