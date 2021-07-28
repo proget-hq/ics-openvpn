@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun showSendLogView(logFile: File) {
-        FileProvider.getUriForFile(applicationContext, "pl.enterprise.openvpn.provider", logFile)
+        FileProvider.getUriForFile(applicationContext, "${packageName}.provider", logFile)
             .let {
                 Intent(Intent.ACTION_SEND)
                     .setData(it)

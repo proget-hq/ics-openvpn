@@ -22,21 +22,21 @@ android {
     }
 
     sourceSets {
-        create("skeleton") {
-
-        }
-        create("ui") {
-
-        }
+        create("staging")
+        create("prod")
     }
+
     flavorDimensions("implementation")
 
     productFlavors {
-        create("skeleton") {
+        create("staging") {
             dimension = "implementation"
+            applicationId("pl.enterprise.openvpndevelop")
+            matchingFallbacks.add("skeleton")
         }
-        create("ui") {
+        create("prod") {
             dimension = "implementation"
+            matchingFallbacks.add("skeleton")
         }
     }
 
