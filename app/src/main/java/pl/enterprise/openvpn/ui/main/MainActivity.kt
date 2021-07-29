@@ -12,7 +12,6 @@ import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ConfigParser
@@ -24,15 +23,13 @@ import pl.enterprise.openvpn.R
 import pl.enterprise.openvpn.data.ConfigRepo
 import pl.enterprise.openvpn.data.save
 import pl.enterprise.openvpn.databinding.ActivityMainBinding
-import pl.enterprise.openvpn.logs.LogFileProvider
 import pl.enterprise.openvpn.ui.about.AboutActivity
-import java.io.File
+import pl.enterprise.openvpn.ui.logs.LogsActivity
 
 class MainActivity : AppCompatActivity(), MainView {
     private val presenter by lazy {
         MainPresenter(
             ProfileManager.getInstance(this),
-            LogFileProvider(this),
             ConfigRepo.getInstance(this)
         )
     }
@@ -75,10 +72,6 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.attach(this)
     }
 
-    override fun showNoLogs() {
-        Toast.makeText(this, "No logs to share", Toast.LENGTH_SHORT).show()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         presenter.detach()
@@ -93,7 +86,7 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.importProfile -> presenter.onImportProfileClick()
-            R.id.sendLogs -> presenter.onSendLogsClick()
+            R.id.logs -> startActivity(Intent(this, LogsActivity::class.java))
             R.id.about -> presenter.onAboutClick()
         }
 
@@ -233,24 +226,6 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun stopVpn() {
         service?.stopVPN(false)
-    }
-
-    override fun showSendLogView(logFile: File) {
-        FileProvider.getUriForFile(applicationContext, "${packageName}.provider", logFile)
-            .let {
-                Intent(Intent.ACTION_SEND)
-                    .setData(it)
-                    .putExtra(Intent.EXTRA_STREAM, it)
-                    .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.logfile_subject))
-                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    .run {
-                        runOnUiThread {
-                            this@MainActivity.startActivity(
-                                Intent.createChooser(this, getString(R.string.send_logs))
-                            )
-                        }
-                    }
-            }
     }
 
     override fun showAboutView() {

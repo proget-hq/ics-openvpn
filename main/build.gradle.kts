@@ -1,6 +1,3 @@
-import com.android.build.gradle.api.ApplicationVariant
-import com.android.build.gradle.api.LibraryVariant
-
 /*
  * Copyright (c) 2012-2016 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
@@ -21,8 +18,6 @@ android {
     defaultConfig {
         minSdk = 16
         targetSdk = 31
-        versionCode = 185
-        versionName = "0.7.31"
 
         externalNativeBuild {
             cmake {
@@ -196,7 +191,7 @@ dependencies {
     dependencies.add("uiImplementation", "androidx.webkit:webkit:1.4.0")
     dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    
+
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:3.9.0")

@@ -22,8 +22,6 @@ interface MainView {
     fun startVpn(profile: VpnProfile)
     fun stopVpn()
     fun showAboutView()
-    fun showSendLogView(logFile: File)
-    fun showNoLogs()
     fun showFilePicker()
     fun showImportProfileDisallowed()
 }

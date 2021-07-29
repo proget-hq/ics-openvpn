@@ -19,7 +19,7 @@ data class Config(
                     VpnStatus.LogLevel.getEnumByValue(it.toInt())
                 } ?: emptyList()
             )
-        },
+        } ?: Logs(),
         allowImportProfile = bundle.getBoolean("allowImportProfileFromOvpnFile", false)
     )
 }
@@ -27,4 +27,6 @@ data class Config(
 data class Logs(
     val keepLogsInDays: Int,
     val logLevels: List<VpnStatus.LogLevel>
-)
+) {
+    constructor(): this(1, VpnStatus.LogLevel.values().toList())
+}

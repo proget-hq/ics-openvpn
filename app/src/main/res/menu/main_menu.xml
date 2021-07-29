@@ -4,8 +4,8 @@
         android:id="@+id/importProfile"
         android:title="@string/import_vpn_profile" />
     <item
-        android:id="@+id/sendLogs"
-        android:title="@string/send_logs" />
+        android:id="@+id/logs"
+        android:title="@string/logs" />
     <item
         android:id="@+id/about"
         android:title="@string/about" />

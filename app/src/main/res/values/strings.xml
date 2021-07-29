@@ -144,6 +144,7 @@
     <string name="info_title">Information:</string>
     <string name="connection_title">Connections:</string>
     <string name="status_title">Session status:</string>
+    <string name="logs">Logs</string>
     <string name="send_logs">Send logs</string>
     <string name="no_configuration">No configuration received from the EMM agent</string>
     <string name="not_connected">Not connected</string>

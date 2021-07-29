@@ -18,8 +18,8 @@
 
         <activity
             android:name=".ui.main.MainActivity"
-            android:launchMode="singleTop"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,6 +34,9 @@
         <activity
             android:name=".ui.about.AboutActivity"
             android:parentActivityName=".ui.main.MainActivity" />
+
+        <activity android:name=".ui.logs.LogsActivity"
+            android:label="@string/logs"/>
 
         <activity-alias
             android:name="${applicationId}.activities.LogWindow"

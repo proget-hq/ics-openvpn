@@ -8,17 +8,17 @@ val buildVersionName: String = project.properties["versionName"] as String? ?: "
 val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
 
 android {
-    compileSdkVersion(31)
-    buildToolsVersion("30.0.3")
+    compileSdk = 31
+    buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId("pl.enterprise.openvpn$buildPackageNamePostfix")
-        minSdkVersion(21)
-        targetSdkVersion(31)
-        versionCode(buildVersionCode)
-        versionName(buildVersionName)
+        applicationId = "pl.enterprise.openvpn$buildPackageNamePostfix"
+        minSdk = 21
+        targetSdk = 31
+        versionCode = buildVersionCode
+        versionName = buildVersionName
 
-        testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     sourceSets {
@@ -26,12 +26,12 @@ android {
         create("prod")
     }
 
-    flavorDimensions("implementation")
+    flavorDimensions.add("implementation")
 
     productFlavors {
         create("staging") {
             dimension = "implementation"
-            applicationId("pl.enterprise.openvpndevelop")
+            applicationId = "pl.enterprise.openvpndevelop"
             matchingFallbacks.add("skeleton")
         }
         create("prod") {
@@ -42,7 +42,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            minifyEnabled(false)
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

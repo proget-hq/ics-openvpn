@@ -12,7 +12,6 @@ import pl.enterprise.openvpn.logs.LogFileProvider
 
 class MainPresenter(
     private val manager: ProfileManager,
-    private val logFileProvider: LogFileProvider,
     private val configRepo: ConfigRepo
 ) : VpnStatus.StateListener {
 
@@ -78,11 +77,6 @@ class MainPresenter(
     fun onImportProfileClick() {
         if (configRepo.fetchConfig().allowImportProfile) view?.showFilePicker()
         else view?.showImportProfileDisallowed()
-    }
-
-    fun onSendLogsClick() {
-        logFileProvider.getLogsAsZip()?.let { view?.showSendLogView(it) }
-            ?: view?.showNoLogs()
     }
 
     fun onAboutClick() {
