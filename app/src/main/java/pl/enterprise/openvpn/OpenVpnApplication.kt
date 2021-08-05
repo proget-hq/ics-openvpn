@@ -25,7 +25,8 @@ class OpenVpnApplication : Application() {
             createNotificationChannels()
         }
 
-        if (shouldAttachLogger()) {
+        val isMainProcess = isMainProcess()
+        if (isMainProcess()) {
             VpnStatus.addLogListener(
                 LogListener(
                     LogFileProvider(applicationContext),
@@ -36,7 +37,9 @@ class OpenVpnApplication : Application() {
         }
 
         StatusListener().init(applicationContext)
-        AppRestrictions.getInstance().checkRestrictions(applicationContext)
+        if (isMainProcess) {
+            AppRestrictions.getInstance().checkRestrictions(applicationContext)
+        }
     }
 
     /**
@@ -87,7 +90,7 @@ class OpenVpnApplication : Application() {
         )
     }
 
-    private fun shouldAttachLogger(): Boolean {
+    private fun isMainProcess(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getProcessName() == packageName
         } else {

@@ -1,8 +1,6 @@
 package pl.enterprise.openvpn.ui.main
 
-import android.content.ComponentName
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
@@ -48,6 +46,7 @@ class MainActivity : AppCompatActivity(), MainView {
             this@MainActivity.service = IOpenVPNServiceInternal.Stub.asInterface(service)
         }
     }
+    private val eventsReceiver by lazy { EventsReceiver(presenter) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,12 +69,14 @@ class MainActivity : AppCompatActivity(), MainView {
             presenter.onConnectChanged(isChecked)
         }
         presenter.attach(this)
+        registerReceiver(eventsReceiver, eventsReceiver.intentFilter())
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter.detach()
         unbindService(serviceConnection)
+        unregisterReceiver(eventsReceiver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -183,6 +184,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.connection.text = getString(R.string.connected_to, serverName)
             binding.connectionMarble.setGreen()
             binding.info.text = information(importedProfile)
+            binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
             binding.connectSwitch.isClickable = allowDisconnect
         }
@@ -210,6 +212,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.connection.text = getString(R.string.connecting_to, serverName)
             binding.connectionMarble.setOrange()
             binding.info.text = information(importedProfile)
+            binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
             binding.connectSwitch.isClickable = allowDisconnect
         }

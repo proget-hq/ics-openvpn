@@ -22,7 +22,7 @@ class RestrictionsMapper {
         }
 
     fun mapCertificate(value: String?): String? =
-        value?.let {
+        value?.takeIf { it.isNotEmpty() }?.let {
             VpnProfile.INLINE_TAG + String(
                 Base64.decode(it, Base64.DEFAULT),
                 StandardCharsets.UTF_8

@@ -5,7 +5,7 @@ plugins {
 
 val buildVersionCode: Int = ((project.properties["versionCode"] as String?)?.toInt() ?: 999)
 val buildVersionName: String = project.properties["versionName"] as String? ?: "develop"
-val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
+val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: "develop"
 
 android {
     compileSdk = 31
@@ -70,6 +70,7 @@ dependencies {
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("net.lingala.zip4j:zip4j:2.7.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
 

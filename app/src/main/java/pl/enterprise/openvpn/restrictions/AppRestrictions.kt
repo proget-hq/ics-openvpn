@@ -1,18 +1,22 @@
 package pl.enterprise.openvpn.restrictions
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.RestrictionsManager
+import android.content.*
+import android.content.Context.BIND_AUTO_CREATE
 import android.os.Bundle
+import android.os.IBinder
+import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.Connection
+import de.blinkt.openvpn.core.IOpenVPNServiceInternal
+import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
-import pl.enterprise.openvpn.data.Config
-import pl.enterprise.openvpn.data.ConfigRepo
-import pl.enterprise.openvpn.data.save
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
+import pl.enterprise.openvpn.Const
+import pl.enterprise.openvpn.data.*
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class AppRestrictions private constructor() {
 
@@ -23,6 +27,7 @@ class AppRestrictions private constructor() {
     }
     private val mapper = RestrictionsMapper()
     private var checked = false
+
 
     @Synchronized
     fun checkRestrictions(context: Context) {
@@ -43,7 +48,24 @@ class AppRestrictions private constructor() {
     private fun applyRestrictions(context: Context) {
         with(context.getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager) {
             applicationRestrictions.run {
-                getString("name")?.let {
+                val config = Config(this)
+                val configRepo = ConfigRepo.getInstance(context)
+                configRepo.updateConfig(config)
+
+                val hash = hash()
+                if (hash == runBlocking { configRepo.fetchLastAppRestrictionsHash().first() }) {
+                    return
+                }
+
+                var vpnProfile: VpnProfile? = null
+
+                if (config.allowImportProfile &&
+                    ProfileManager.getInstance(context).hasImportedProfile()
+                ) {
+                    return
+                }
+
+                getString("name")?.takeIf { it.isNotEmpty() }?.let {
                     VpnProfile(it)
                         .apply {
                             mAuthenticationType = mapper.mapAuthType(getString("authType"))
@@ -55,8 +77,11 @@ class AppRestrictions private constructor() {
                             mPKCS12Password = getString("pkcs12Password")
                             mUsername = getString("username")
                             mPassword = getString("password")
+                            mVersion++
 
                             applyConnection(getBundle("connection"))
+                            mServerName = connection()?.mServerName
+                            mServerPort = connection()?.mServerPort
                             applyIpDns(getBundle("ipDns"))
                             applyRouting(getBundle("routing"))
                             applyAuthentication(getBundle("authentication"))
@@ -64,12 +89,44 @@ class AppRestrictions private constructor() {
                             applyApplications(getBundle("applications"))
                         }
                         .let { profile ->
+                            vpnProfile = profile
                             ProfileManager.getInstance(context)
                                 .save(context, profile)
                         }
+                } ?: ProfileManager.getInstance(context).removeProfileFromRestrictions(context)
 
-                    ConfigRepo.getInstance(context).updateConfig(Config(this))
+                CoroutineScope(Dispatchers.IO).launch {
+                    configRepo.insertAppRestrictionsHash(hash)
                 }
+
+                context.bindService(
+                    Intent(context, OpenVPNService::class.java)
+                        .setAction(OpenVPNService.START_SERVICE),
+                    object : ServiceConnection {
+                        override fun onServiceConnected(p0: ComponentName?, binder: IBinder?) {
+                            IOpenVPNServiceInternal.Stub.asInterface(binder).stopVPN(false)
+                            context.sendBroadcast(Intent(Const.ACTION_CONFIGURATION_CHANGED))
+                            if (config.autoConnect && vpnProfile != null) {
+                                Intent(context, LaunchVPN::class.java)
+                                    .putExtra(LaunchVPN.EXTRA_KEY, vpnProfile!!.uuid.toString())
+                                    .setAction(Intent.ACTION_MAIN)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .run {
+                                        context.startActivity(this)
+                                    }
+                            }
+
+                            try {
+                                context.unbindService(this)
+                            } catch (ignored: Exception) {
+                            }
+                        }
+
+                        override fun onServiceDisconnected(p0: ComponentName?) {
+                        }
+                    },
+                    BIND_AUTO_CREATE
+                )
             }
         }
     }
@@ -151,6 +208,10 @@ class AppRestrictions private constructor() {
 
             }
             mCipher = getString("cipher")
+
+            if (mCipher.isNotEmpty() && mCipher != "AES-256-GCM" && mCipher != "AES-128-GCM") {
+                mDataCiphers = "AES-256-GCM:AES-128-GCM:$mCipher"
+            }
             mAuth = getString("auth")
         }
     }
@@ -174,9 +235,42 @@ class AppRestrictions private constructor() {
         bundle?.run {
             mAllowedAppsVpn = mapper.mapApplications(getString("apps"))
             mAllowedAppsVpnAreDisallowed = mAllowedAppsVpn.size > 0 &&
-                getBoolean("useVpnForAllApplications", false)
+                    getBoolean("useVpnForAllApplications", false)
         }
     }
+
+    private fun Bundle.hash(): String =
+        hashConfig(toRawString())
+
+    private fun Bundle.toRawString(): String =
+        keySet().map {
+            it to when (val value = get(it)) {
+                is Array<*> -> handleArray(value)
+                is Bundle -> value.toRawString()
+                else -> value.toString()
+            }
+        }.joinToString("\n") { "${it.first}=\"${it.second}\" " }
+
+    private fun handleArray(value: Array<*>) =
+        value.joinToString {
+            when (val singleValue = it) {
+                is Bundle -> singleValue.toRawString()
+                else -> singleValue.toString()
+            }
+        }
+
+    private fun hashConfig(config: String): String =
+        try {
+            with(MessageDigest.getInstance("SHA1")) {
+                config.toByteArray()
+                    .let { configBytes ->
+                        update(configBytes, 0, configBytes.size)
+                        BigInteger(1, digest()).toString(16)
+                    }
+            }
+        } catch (exception: Throwable) {
+            ""
+        }
 
     companion object {
         @SuppressLint("StaticFieldLeak")

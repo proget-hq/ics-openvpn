@@ -8,7 +8,6 @@ import de.blinkt.openvpn.core.VpnStatus
 import pl.enterprise.openvpn.data.ConfigRepo
 import pl.enterprise.openvpn.data.connection
 import pl.enterprise.openvpn.data.isImported
-import pl.enterprise.openvpn.logs.LogFileProvider
 
 class MainPresenter(
     private val manager: ProfileManager,
@@ -57,7 +56,7 @@ class MainPresenter(
                         )
                     }
                 }
-            }
+            } ?: view?.showNoConfiguration()
         }
     }
 
@@ -68,7 +67,9 @@ class MainPresenter(
         with(manager.profiles.firstOrNull()) {
             when {
                 this == null -> view?.showNoConfiguration()
-                checked -> view?.startVpn(this)
+                checked -> {
+                    view?.startVpn(this)
+                }
                 else -> view?.stopVpn()
             }
         }
@@ -85,6 +86,12 @@ class MainPresenter(
 
     fun onProfileImported() {
         view?.showNotConnected(true)
+    }
+
+    fun onConfigurationChanged() {
+        if (getProfile() == null) {
+            view?.showNoConfiguration()
+        }
     }
 
     private fun getProfile(): VpnProfile? =

@@ -4,13 +4,21 @@ import android.os.Bundle
 import de.blinkt.openvpn.core.VpnStatus
 
 data class Config(
+    val autoConnect: Boolean,
     val allowDisconnect: Boolean,
     val logs: Logs?,
     val allowImportProfile: Boolean
 ) {
 
-    constructor() : this(true, null, false)
+    constructor() : this(
+        autoConnect = false,
+        allowDisconnect = true,
+        logs = null,
+        allowImportProfile = false
+    )
+
     constructor(bundle: Bundle) : this(
+        autoConnect = bundle.getBoolean("autoConnect", false),
         allowDisconnect = bundle.getBoolean("allowUserDisconnect", true),
         logs = bundle.getBundle("logs")?.run {
             Logs(
@@ -28,5 +36,5 @@ data class Logs(
     val keepLogsInDays: Int,
     val logLevels: List<VpnStatus.LogLevel>
 ) {
-    constructor(): this(1, VpnStatus.LogLevel.values().toList())
+    constructor() : this(1, VpnStatus.LogLevel.values().toList())
 }
