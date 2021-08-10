@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 
 class ConfigRepo private constructor(
     restrictionsManager: RestrictionsManager,
-    private val  dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>
 ) {
     private val appRestrictionHash = stringPreferencesKey(APP_RESTRICTIONS_HASH_KEY)
     private var config: Config = restrictionsManager.applicationRestrictions
@@ -25,7 +25,7 @@ class ConfigRepo private constructor(
         this.config = config
     }
 
-    fun  fetchLastAppRestrictionsHash(): Flow<String?> =
+    fun fetchLastAppRestrictionsHash(): Flow<String?> =
         dataStore.data.map { it[appRestrictionHash] }
 
     suspend fun insertAppRestrictionsHash(hash: String) {

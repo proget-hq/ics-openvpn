@@ -1,8 +1,14 @@
 package pl.enterprise.openvpn.restrictions
 
 import android.annotation.SuppressLint
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
 import android.content.Context.BIND_AUTO_CREATE
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.RestrictionsManager
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import de.blinkt.openvpn.LaunchVPN
@@ -11,23 +17,33 @@ import de.blinkt.openvpn.core.Connection
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import pl.enterprise.openvpn.Const
-import pl.enterprise.openvpn.data.*
+import pl.enterprise.openvpn.data.Config
+import pl.enterprise.openvpn.data.ConfigRepo
+import pl.enterprise.openvpn.data.connection
+import pl.enterprise.openvpn.data.hasImportedProfile
+import pl.enterprise.openvpn.data.removeProfileFromRestrictions
+import pl.enterprise.openvpn.data.save
 import java.math.BigInteger
 import java.security.MessageDigest
 
 class AppRestrictions private constructor() {
 
     private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
+        override fun onReceive(
+            context: Context,
+            intent: Intent
+        ) {
             applyRestrictions(context)
         }
     }
     private val mapper = RestrictionsMapper()
     private var checked = false
-
 
     @Synchronized
     fun checkRestrictions(context: Context) {
@@ -103,7 +119,10 @@ class AppRestrictions private constructor() {
                     Intent(context, OpenVPNService::class.java)
                         .setAction(OpenVPNService.START_SERVICE),
                     object : ServiceConnection {
-                        override fun onServiceConnected(p0: ComponentName?, binder: IBinder?) {
+                        override fun onServiceConnected(
+                            p0: ComponentName?,
+                            binder: IBinder?
+                        ) {
                             IOpenVPNServiceInternal.Stub.asInterface(binder).stopVPN(false)
                             context.sendBroadcast(Intent(Const.ACTION_CONFIGURATION_CHANGED))
                             if (config.autoConnect && vpnProfile != null) {
@@ -235,7 +254,7 @@ class AppRestrictions private constructor() {
         bundle?.run {
             mAllowedAppsVpn = mapper.mapApplications(getString("apps"))
             mAllowedAppsVpnAreDisallowed = mAllowedAppsVpn.size > 0 &&
-                    getBoolean("useVpnForAllApplications", false)
+                getBoolean("useVpnForAllApplications", false)
         }
     }
 
