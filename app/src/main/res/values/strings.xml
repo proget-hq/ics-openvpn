@@ -138,7 +138,7 @@
     <string name="config_use_vpn_for_all_applications">Use VPN for all applications</string>
     <string name="config_desc_use_vpn_for_all_applications">Specify that all applications on device should use VPN</string>
     <string name="config_apps">List of applications</string>
-    <string name="config_desc_apps">List of applications. When Use VPN for all applications is set then applications on this list will excluded from VPN. When Use VPN for all applications is not set then only applications on this list will use VPN</string>
+    <string name="config_desc_apps">List of applications. When Use VPN for all applications is set then applications on this list will excluded from VPN. When Use VPN for all applications is not set then only applications on this list will use VPN. To add list of applications split them with ";" symbol.</string>
     <!--CONFIG END-->
 
     <string name="info_title">Information:</string>
