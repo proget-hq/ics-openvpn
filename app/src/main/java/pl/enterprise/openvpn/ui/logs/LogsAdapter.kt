@@ -3,8 +3,8 @@ package pl.enterprise.openvpn.ui.logs
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import de.blinkt.openvpn.core.LogItem
 import pl.enterprise.openvpn.databinding.LogItemBinding
+import pl.enterprise.openvpn.logs.LogItem
 
 class LogsAdapter : RecyclerView.Adapter<LogsViewHolder>() {
 
@@ -22,8 +22,8 @@ class LogsAdapter : RecyclerView.Adapter<LogsViewHolder>() {
     override fun getItemCount(): Int =
         list.size
 
-    fun add(item: LogItem) {
-        list.add(item)
+    fun add(vararg item: LogItem) {
+        list.addAll(item)
         notifyItemInserted(list.size)
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start" />
+
+    <ConstraintSet android:id="@+id/logs_loaded">
+        <Constraint android:id="@id/progress">
+            <PropertySet android:visibility="invisible" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet
+        android:id="@+id/down_button_visible"
+        motion:deriveConstraintsFrom="@id/logs_loaded">
+
+        <Constraint android:id="@+id/arrow_down">
+            <PropertySet android:visibility="visible" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet
+        android:id="@+id/up_button_visible"
+        motion:deriveConstraintsFrom="@id/logs_loaded">
+        <Constraint android:id="@+id/arrow_up">
+            <PropertySet android:visibility="visible" />
+        </Constraint>
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@id/logs_loaded"
+        motion:constraintSetStart="@id/start" />
+    <Transition
+        motion:constraintSetEnd="@id/down_button_visible"
+        motion:constraintSetStart="@id/logs_loaded"
+        motion:duration="500" />
+    <Transition
+        motion:constraintSetEnd="@id/up_button_visible"
+        motion:constraintSetStart="@id/logs_loaded"
+        motion:duration="500" />
+    <Transition
+        motion:constraintSetEnd="@id/logs_loaded"
+        motion:constraintSetStart="@+id/up_button_visible"
+        motion:duration="500" />
+    <Transition
+        motion:constraintSetEnd="@id/logs_loaded"
+        motion:constraintSetStart="@+id/down_button_visible"
+        motion:duration="500" />
+
+</MotionScene>

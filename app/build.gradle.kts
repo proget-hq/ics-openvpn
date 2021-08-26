@@ -8,13 +8,13 @@ val buildVersionName: String = project.properties["versionName"] as String? ?: "
 val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: "develop"
 
 android {
-    compileSdk = 31
+    compileSdk = 30
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "pl.enterprise.openvpn$buildPackageNamePostfix"
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 30
         versionCode = buildVersionCode
         versionName = buildVersionName
 

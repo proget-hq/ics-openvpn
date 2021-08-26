@@ -3,10 +3,9 @@ package pl.enterprise.openvpn.logs
 import android.content.Context
 import de.blinkt.openvpn.core.LogItem
 import de.blinkt.openvpn.core.VpnStatus
+import pl.enterprise.openvpn.CalendarApi.dateFormatter
 import pl.enterprise.openvpn.data.ConfigRepo
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 class LogListener(
     private val provider: LogFileProvider,
@@ -24,5 +23,5 @@ class LogListener(
     }
 
     private fun LogItem.getTime(): String =
-        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date(logtime))
+        dateFormatter().format(Date(logtime))
 }

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.text.format.DateUtils.DAY_IN_MILLIS
 import pl.enterprise.openvpn.data.ConfigRepo
 import java.io.File
 import java.io.FileFilter
@@ -59,7 +60,6 @@ class LogFileProvider(private val context: Context) {
     }
 
     companion object {
-        private const val DAY_IN_MILLIS: Long = 24 * 60 * 60 * 1000
         private const val LOGS_DIR_NAME = "logs"
     }
 }

@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import de.blinkt.openvpn.core.VpnStatus
 import pl.enterprise.openvpn.R
 import pl.enterprise.openvpn.databinding.ActivityLogsBinding
 import pl.enterprise.openvpn.logs.LogFileProvider
+import pl.enterprise.openvpn.logs.LogItem
 import java.io.File
+import java.util.Date
 
 class LogsActivity : AppCompatActivity(), LogsView {
 
@@ -21,16 +25,42 @@ class LogsActivity : AppCompatActivity(), LogsView {
     private val presenter by lazy { LogsPresenter(LogFileProvider(this)) }
     private val adapter = LogsAdapter()
     private val logListener = VpnStatus.LogListener {
-        runOnUiThread { adapter.add(it) }
+        runOnUiThread { adapter.add(LogItem(Date(it.logtime), it.getString(this))) }
+    }
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                (recyclerView.layoutManager as LinearLayoutManager).let {
+                    if (it.findFirstVisibleItemPosition() == 0 || it.findLastVisibleItemPosition() == adapter.itemCount - 1) {
+                        binding.root.transitionToState(R.id.logs_loaded)
+                    }
+                }
+            }
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            with(binding.root) {
+                if (progress == 0f || progress == 1f) {
+                    if (dy > 5 && currentState != R.id.down_button_visible) {
+                        transitionToState(R.id.logs_loaded)
+                        transitionToState(R.id.down_button_visible)
+                    }
+                    if (dy < -5 && currentState != R.id.up_button_visible) {
+                        transitionToState(R.id.logs_loaded)
+                        transitionToState(R.id.up_button_visible)
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityLogsBinding.inflate(layoutInflater)
-            .let {
-                binding = it
-                setContentView(it.root)
-            }
+        binding = ActivityLogsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(this)
@@ -40,8 +70,22 @@ class LogsActivity : AppCompatActivity(), LogsView {
                 DividerItemDecoration.VERTICAL
             )
         )
-        VpnStatus.addLogListener(logListener)
+        binding.arrowDown.setOnClickListener {
+            binding.recycler.smoothScrollToPosition(adapter.itemCount)
+        }
+        binding.arrowUp.setOnClickListener {
+            binding.recycler.smoothScrollToPosition(0)
+        }
+        binding.recycler.addOnScrollListener(scrollListener)
         presenter.attach(this)
+    }
+
+    override fun loadLogs(logs: List<LogItem>) {
+        runOnUiThread {
+            binding.root.transitionToState(R.id.logs_loaded)
+            adapter.add(*logs.toTypedArray())
+            VpnStatus.addLogListener(logListener)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -59,6 +103,7 @@ class LogsActivity : AppCompatActivity(), LogsView {
     override fun onDestroy() {
         super.onDestroy()
         presenter.detach()
+        binding.recycler.removeOnScrollListener(scrollListener)
         VpnStatus.removeLogListener(logListener)
     }
 
