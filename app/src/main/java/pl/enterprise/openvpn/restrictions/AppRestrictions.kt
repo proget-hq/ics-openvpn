@@ -29,6 +29,7 @@ import pl.enterprise.openvpn.data.connection
 import pl.enterprise.openvpn.data.hasImportedProfile
 import pl.enterprise.openvpn.data.removeProfileFromRestrictions
 import pl.enterprise.openvpn.data.save
+import pl.enterprise.openvpn.tools.tryIgnoringException
 import java.math.BigInteger
 import java.security.MessageDigest
 
@@ -135,9 +136,8 @@ class AppRestrictions private constructor() {
                                     }
                             }
 
-                            try {
+                            tryIgnoringException {
                                 context.unbindService(this)
-                            } catch (ignored: Exception) {
                             }
                         }
 

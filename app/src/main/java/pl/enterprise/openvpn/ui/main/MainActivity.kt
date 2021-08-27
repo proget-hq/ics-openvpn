@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(false)
             binding.info.text = information(importedProfile)
-            binding.connectSwitch.isClickable = true
+            binding.connectSwitch.isEnabled = true
         }
     }
 
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.info.text = information(importedProfile)
             binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
-            binding.connectSwitch.isClickable = allowDisconnect
+            binding.connectSwitch.isEnabled = allowDisconnect
         }
     }
 
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.info.text = information(importedProfile)
             binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
-            binding.connectSwitch.isClickable = allowDisconnect
+            binding.connectSwitch.isEnabled = allowDisconnect
         }
     }
 

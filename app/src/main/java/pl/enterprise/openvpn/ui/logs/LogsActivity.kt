@@ -61,9 +61,10 @@ class LogsActivity : AppCompatActivity(), LogsView {
         super.onCreate(savedInstanceState)
         binding = ActivityLogsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.recycler.adapter = adapter
-        binding.recycler.layoutManager = LinearLayoutManager(this)
+        binding.recycler.layoutManager = SpeedyLinearLayoutManager(this)
         binding.recycler.addItemDecoration(
             DividerItemDecoration(
                 this,
@@ -95,6 +96,7 @@ class LogsActivity : AppCompatActivity(), LogsView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> onBackPressed()
             R.id.send_logs -> presenter.onSendLogsClick()
         }
         return true
