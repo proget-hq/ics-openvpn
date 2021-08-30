@@ -14,7 +14,7 @@ data class Config(
         autoConnect = false,
         allowDisconnect = true,
         logs = null,
-        allowImportProfile = false
+        allowImportProfile = true
     )
 
     constructor(bundle: Bundle) : this(
@@ -28,7 +28,7 @@ data class Config(
                 } ?: emptyList()
             )
         } ?: Logs(),
-        allowImportProfile = bundle.getBoolean("allowImportProfileFromOvpnFile", false)
+        allowImportProfile = bundle.getBoolean("allowImportProfileFromOvpnFile", true)
     )
 }
 

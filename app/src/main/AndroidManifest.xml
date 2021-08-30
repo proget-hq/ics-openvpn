@@ -42,24 +42,29 @@
             android:launchMode="singleInstance"
             android:parentActivityName=".ui.main.MainActivity" />
 
+        <activity
+            android:name=".ui.AutoFinishActivity"
+            android:autoRemoveFromRecents="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoDisplay" />
+
         <activity-alias
             android:name="${applicationId}.activities.LogWindow"
-            android:targetActivity=".ui.main.MainActivity" />
+            android:targetActivity=".ui.AutoFinishActivity" />
 
         <service
             android:name="de.blinkt.openvpn.core.OpenVPNService"
             android:exported="true"
             android:foregroundServiceType="connectedDevice"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:process=":openvpn">
+            android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
         <service
             android:name="de.blinkt.openvpn.core.OpenVPNStatusService"
-            android:exported="false"
-            android:process=":openvpn" />
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
