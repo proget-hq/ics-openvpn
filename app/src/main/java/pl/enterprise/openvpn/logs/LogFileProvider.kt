@@ -17,7 +17,10 @@ class LogFileProvider(private val context: Context) {
 
     private val logDir = File(context.filesDir, LOGS_DIR_NAME).also { it.mkdirs() }
     private val dayChangeReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
+        override fun onReceive(
+            context: Context,
+            intent: Intent
+        ) {
             clearOutdatedLogs()
         }
     }
@@ -30,7 +33,7 @@ class LogFileProvider(private val context: Context) {
 
     fun logFile(): File =
         File(
-            File(context.filesDir, LOGS_DIR_NAME),
+            logDir,
             SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .format(Date())
         )
@@ -52,7 +55,8 @@ class LogFileProvider(private val context: Context) {
 
     private fun clearOutdatedLogs() {
         thread {
-            logDir.listFiles(FileFilter { System.currentTimeMillis() > it.lastModified() + keepLogsTime() })
+            logDir.listFiles(
+                FileFilter { System.currentTimeMillis() > it.lastModified() + keepLogsTime() })
                 ?.forEach {
                     it.delete()
                 }
