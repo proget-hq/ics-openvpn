@@ -150,17 +150,6 @@ android.libraryVariants.forEach { variant ->
     variant.registerJavaGeneratingTask(task, sourceDir)
 }
 
-//
-//android.applicationVariants.all(object : Action<ApplicationVariant> {
-//    override fun execute(variant: ApplicationVariant) {
-//        val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
-//        val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
-//
-//        variant.registerJavaGeneratingTask(task, sourceDir)
-//    }
-//})
-
-
 dependencies {
     // https://maven.google.com/web/index.html
     // https://developer.android.com/jetpack/androidx/releases/core
