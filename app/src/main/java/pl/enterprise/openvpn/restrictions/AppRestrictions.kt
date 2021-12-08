@@ -17,6 +17,9 @@ import de.blinkt.openvpn.core.Connection
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
+import de.blinkt.openvpn.core.VpnStatus
+import java.math.BigInteger
+import java.security.MessageDigest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -30,8 +33,6 @@ import pl.enterprise.openvpn.data.hasImportedProfile
 import pl.enterprise.openvpn.data.removeProfileFromRestrictions
 import pl.enterprise.openvpn.data.save
 import pl.enterprise.openvpn.tools.tryIgnoringException
-import java.math.BigInteger
-import java.security.MessageDigest
 
 class AppRestrictions private constructor() {
 
@@ -109,12 +110,15 @@ class AppRestrictions private constructor() {
                             vpnProfile = profile
                             ProfileManager.getInstance(context)
                                 .save(context, profile)
+                            VpnStatus.logInfo("AppRestrictions: saved new profile")
                         }
                 } ?: ProfileManager.getInstance(context).removeProfileFromRestrictions(context)
 
                 CoroutineScope(Dispatchers.IO).launch {
                     configRepo.insertAppRestrictionsHash(hash)
                 }
+
+                VpnStatus.logInfo("AppRestrictions: binding service")
 
                 context.bindService(
                     Intent(context, OpenVPNService::class.java)
@@ -124,7 +128,10 @@ class AppRestrictions private constructor() {
                             p0: ComponentName?,
                             binder: IBinder?
                         ) {
-                            IOpenVPNServiceInternal.Stub.asInterface(binder).stopVPN(false)
+                            vpnProfile?.let {
+                                IOpenVPNServiceInternal.Stub.asInterface(binder)
+                                    ?.managedConfigurationChanged(it.uuidString)
+                            }
                             context.sendBroadcast(Intent(Const.ACTION_CONFIGURATION_CHANGED))
                             if (config.autoConnect && vpnProfile != null) {
                                 Intent(context, LaunchVPN::class.java)
@@ -142,6 +149,7 @@ class AppRestrictions private constructor() {
                         }
 
                         override fun onServiceDisconnected(p0: ComponentName?) {
+                            VpnStatus.logInfo("AppRestrictions: vpn service disconnected")
                         }
                     },
                     BIND_AUTO_CREATE
@@ -254,7 +262,7 @@ class AppRestrictions private constructor() {
         bundle?.run {
             mAllowedAppsVpn = mapper.mapApplications(getString("apps"))
             mAllowedAppsVpnAreDisallowed = mAllowedAppsVpn.size > 0 &&
-                getBoolean("useVpnForAllApplications", false)
+                    getBoolean("useVpnForAllApplications", false)
         }
     }
 

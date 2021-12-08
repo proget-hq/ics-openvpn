@@ -133,7 +133,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             OpenVPNService.this.challengeResponse(repsonse);
         }
 
-
+        @Override
+        public void managedConfigurationChanged(String profileUuid) throws RemoteException {
+            OpenVPNService.this.managedConfigurationChanged(profileUuid);
+        }
     };
     private String mLastTunCfg;
     private String mRemoteGW;
@@ -1407,5 +1410,17 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         mNotificationManager.notify(notificationId, notification);
     }
 
-
+    @Override
+    public void managedConfigurationChanged(String profileUuid) throws RemoteException {
+        VpnStatus.logInfo("VpnService: managedConfigurationChanged");
+        mProfile = ProfileManager.get(this, profileUuid);
+        if (mProfile == null) {
+            VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned null");
+        } else {
+            VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned profile");
+            new Thread(this::startOpenVPN).start();
+            ProfileManager.setConnectedVpnProfile(this, mProfile);
+            VpnStatus.setConnectedVPNProfile(mProfile.getUUIDString());
+        }
+    }
 }
