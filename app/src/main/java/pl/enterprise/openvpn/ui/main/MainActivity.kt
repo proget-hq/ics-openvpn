@@ -19,6 +19,8 @@ import de.blinkt.openvpn.core.ProfileManager
 import pl.enterprise.openvpn.Const
 import pl.enterprise.openvpn.R
 import pl.enterprise.openvpn.data.ConfigRepo
+import pl.enterprise.openvpn.data.isImported
+import pl.enterprise.openvpn.data.isValid
 import pl.enterprise.openvpn.data.save
 import pl.enterprise.openvpn.databinding.ActivityMainBinding
 import pl.enterprise.openvpn.ui.about.AboutActivity
@@ -114,12 +116,17 @@ class MainActivity : AppCompatActivity(), MainView {
                     ConfigParser().run {
                         parseConfig(inputStream?.reader())
                         convertProfile().let { profile ->
-                            profile.mName = Const.IMPORTED_PROFILE_NAME
-                            profile.importedProfileHash = Const.IMPORTED_PROFILE_HASH
-                            ProfileManager.getInstance(this@MainActivity)
-                                .save(this@MainActivity, profile)
+                            if (profile.isValid()) {
+                                profile.isImported()
+                                profile.mName = Const.IMPORTED_PROFILE_NAME
+                                profile.importedProfileHash = Const.IMPORTED_PROFILE_HASH
+                                ProfileManager.getInstance(this@MainActivity)
+                                    .save(this@MainActivity, profile)
+                                presenter.onProfileImported()
+                            } else {
+                                Toast.makeText(this@MainActivity, R.string.profile_is_invalid, Toast.LENGTH_SHORT).show()
+                            }
                         }
-                        presenter.onProfileImported()
                     }
                 } catch (e: Exception) {
                     Toast.makeText(this, R.string.import_profile_failed, Toast.LENGTH_SHORT).show()
@@ -141,7 +148,6 @@ class MainActivity : AppCompatActivity(), MainView {
                             "application/openvpn-profile",
                             "application/ovpn",
                             "text/plain",
-                            "application/octet-stream",
                             it.getMimeTypeFromExtension("ovpn"),
                             it.getMimeTypeFromExtension("conf")
                         )

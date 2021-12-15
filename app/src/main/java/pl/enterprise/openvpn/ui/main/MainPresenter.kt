@@ -55,7 +55,7 @@ class MainPresenter(
                             isImported()
                         )
                     }
-                }
+                } ?: view?.showNotConnected(isImported())
             } ?: view?.showNoConfiguration()
         }
     }
