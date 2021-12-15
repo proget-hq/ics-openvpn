@@ -118,8 +118,6 @@ class AppRestrictions private constructor() {
                     configRepo.insertAppRestrictionsHash(hash)
                 }
 
-                VpnStatus.logInfo("AppRestrictions: binding service")
-
                 context.bindService(
                     Intent(context, OpenVPNService::class.java)
                         .setAction(OpenVPNService.START_SERVICE),
@@ -128,10 +126,12 @@ class AppRestrictions private constructor() {
                             p0: ComponentName?,
                             binder: IBinder?
                         ) {
-                            vpnProfile?.let {
-                                IOpenVPNServiceInternal.Stub.asInterface(binder)
-                                    ?.managedConfigurationChanged(it.uuidString)
-                            }
+                            IOpenVPNServiceInternal.Stub.asInterface(binder)
+                                .run {
+                                    stopVPN(false)
+                                    vpnProfile?.let { managedConfigurationChanged(it.uuidString) }
+                                }
+
                             context.sendBroadcast(Intent(Const.ACTION_CONFIGURATION_CHANGED))
                             if (config.autoConnect && vpnProfile != null) {
                                 Intent(context, LaunchVPN::class.java)
