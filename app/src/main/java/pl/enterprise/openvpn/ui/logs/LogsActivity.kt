@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -116,6 +115,7 @@ class LogsActivity : AppCompatActivity(), LogsView {
                     .setData(it)
                     .putExtra(Intent.EXTRA_STREAM, it)
                     .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.logfile_subject))
+                    .setType("application/zip")
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     .run {
                         runOnUiThread {
