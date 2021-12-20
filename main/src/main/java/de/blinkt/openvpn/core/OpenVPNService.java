@@ -529,7 +529,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
         /* start the OpenVPN process itself in a background thread */
-        new Thread(() -> startOpenVPN(intent, startId)).start();
+        new Thread(() -> startOpenVPN(fetchVPNProfile(intent), startId)).start();
 
         return START_STICKY;
     }
@@ -578,9 +578,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         return mProfile;
     }
 
-    private void startOpenVPN(Intent intent, int startId) {
-        VpnProfile vp = fetchVPNProfile(intent);
-        if (vp == null) {
+    private void startOpenVPN(VpnProfile vpnProfile, int startId) {
+        if (vpnProfile == null) {
             stopSelf(startId);
             return;
         }
@@ -1418,7 +1417,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned null");
         } else if (autoConnect){
             VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned profile");
-            new Thread(this::startOpenVPN).start();
+            new Thread(() -> startOpenVPN(mProfile, 1)).start();
             ProfileManager.setConnectedVpnProfile(this, mProfile);
             VpnStatus.setConnectedVPNProfile(mProfile.getUUIDString());
         }
