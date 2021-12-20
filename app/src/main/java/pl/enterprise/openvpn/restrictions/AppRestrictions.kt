@@ -129,7 +129,7 @@ class AppRestrictions private constructor() {
                             IOpenVPNServiceInternal.Stub.asInterface(binder)
                                 .run {
                                     stopVPN(false)
-                                    vpnProfile?.let { managedConfigurationChanged(it.uuidString) }
+                                    vpnProfile?.let { managedConfigurationChanged(it.uuidString, config.autoConnect) }
                                 }
 
                             context.sendBroadcast(Intent(Const.ACTION_CONFIGURATION_CHANGED))

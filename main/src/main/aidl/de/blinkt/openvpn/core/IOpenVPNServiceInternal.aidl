@@ -27,5 +27,5 @@ interface IOpenVPNServiceInternal {
 
     void challengeResponse(String repsonse);
 
-    void managedConfigurationChanged(String profileUuid);
+    void managedConfigurationChanged(String profileUuid, boolean autoConnect);
 }
