@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.Preferences
 import de.blinkt.openvpn.core.ProfileManager
+import de.blinkt.openvpn.core.ProfileManager.saveProfile
 import pl.enterprise.openvpn.Const
 
 fun ProfileManager.save(
