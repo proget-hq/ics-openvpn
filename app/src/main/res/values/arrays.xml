@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="auth_types">
+        <item>Certificates</item>
+        <item>PKCS12 File</item>
+        <item>Android Certificate</item>
+        <item>Username/Password</item>
+        <item>Static Keys</item>
+        <item>User/PW + Certificates</item>
+        <item>User/PW + PKCS12 </item>
+        <item>User/PW + Android</item>
+        <item>External Auth Provider</item>
+    </string-array>
+
+    <string-array name="auth_types_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+    <string-array name="protocol_type">
+        <item>UDP</item>
+        <item>TCP</item>
+    </string-array>
+
+    <string-array name="protocol_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="proxy_type">
+        <item>None</item>
+        <item>HTTP</item>
+        <item>Socksv5</item>
+        <item>Tor (Orbot)</item>
+    </string-array>
+
+    <string-array name="proxy_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="remote_cn_type">
+        <item>DN</item>
+        <item>RDN</item>
+        <item>RDN Prefix</item>
+    </string-array>
+
+    <string-array name="remote_cn_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="tls_auth_direction_type">
+        <item translatable="false">0</item>
+        <item translatable="false">1</item>
+        <item>Unspecified</item>
+        <item>Encryption (—tls-crypt)</item>
+        <item>TLS Crypt V2</item>
+    </string-array>
+
+    <string-array name="tls_auth_direction_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="connection_retries_type">
+        <item>No reconnection retries</item>
+        <item>One reconnection retry</item>
+        <item>Five reconnection retries</item>
+        <item>Fifty reconnection retries</item>
+        <item>Unlimited reconnection retries</item>
+    </string-array>
+
+    <string-array name="connection_retries_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="log_level_type">
+        <item>INFO</item>
+        <item>ERROR</item>
+        <item>WARNING</item>
+        <item>VERBOSE</item>
+        <item>DEBUG</item>
+    </string-array>
+
+    <string-array name="log_level_type_values">
+        <item>2</item>
+        <item>-2</item>
+        <item>1</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+</resources>

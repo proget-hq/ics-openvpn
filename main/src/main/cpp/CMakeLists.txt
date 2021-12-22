@@ -261,4 +261,3 @@ add_custom_command(TARGET pie_openvpn.${ANDROID_ABI} POST_BUILD
 # Hack that these targets are really executed
 add_dependencies(ovpnutil pie_openvpn.${ANDROID_ABI})
 add_dependencies(pie_openvpn.${ANDROID_ABI} makeassetdir)
-

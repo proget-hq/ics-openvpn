@@ -133,7 +133,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             OpenVPNService.this.challengeResponse(repsonse);
         }
 
-
+        @Override
+        public void managedConfigurationChanged(String profileUuid, boolean autoConnect) {
+            OpenVPNService.this.managedConfigurationChanged(profileUuid, autoConnect);
+        }
     };
     private String mLastTunCfg;
     private String mRemoteGW;
@@ -250,7 +253,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     private void showNotification(final String msg, String tickerText, @NonNull String channel,
                                   long when, ConnectionStatus status, Intent intent) {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        int icon = getIconByConnectionStatus(status);
+//        int icon = getIconByConnectionStatus(status);
 
         android.app.Notification.Builder nbuilder = new Notification.Builder(this);
 
@@ -271,7 +274,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         nbuilder.setOnlyAlertOnce(true);
         nbuilder.setOngoing(true);
 
-        nbuilder.setSmallIcon(icon);
+        nbuilder.setSmallIcon(R.drawable.ic_launcher);
         if (status == LEVEL_WAITING_FOR_USER_INPUT) {
             PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
             nbuilder.setContentIntent(pIntent);
@@ -284,10 +287,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
         // Try to set the priority available since API 16 (Jellybean)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            jbNotificationExtras(priority, nbuilder);
-            addVpnActionsToNotification(nbuilder);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            jbNotificationExtras(priority, nbuilder);
+//            addVpnActionsToNotification(nbuilder);
+//        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             lpNotificationExtras(nbuilder, Notification.CATEGORY_SERVICE);
@@ -526,7 +529,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
         /* start the OpenVPN process itself in a background thread */
-        new Thread(() -> startOpenVPN(intent, startId)).start();
+        new Thread(() -> startOpenVPN(fetchVPNProfile(intent), startId)).start();
 
         return START_STICKY;
     }
@@ -575,9 +578,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         return mProfile;
     }
 
-    private void startOpenVPN(Intent intent, int startId) {
-        VpnProfile vp = fetchVPNProfile(intent);
-        if (vp == null) {
+    private void startOpenVPN(VpnProfile vpnProfile, int startId) {
+        if (vpnProfile == null) {
             stopSelf(startId);
             return;
         }
@@ -1407,5 +1409,17 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         mNotificationManager.notify(notificationId, notification);
     }
 
-
+    @Override
+    public void managedConfigurationChanged(String profileUuid, boolean autoConnect) {
+        VpnStatus.logInfo("VpnService: managedConfigurationChanged");
+        mProfile = ProfileManager.get(this, profileUuid);
+        if (mProfile == null) {
+            VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned null");
+        } else if (autoConnect){
+            VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned profile");
+            new Thread(() -> startOpenVPN(mProfile, 1)).start();
+            ProfileManager.setConnectedVpnProfile(this, mProfile);
+            VpnStatus.setConnectedVPNProfile(mProfile.getUUIDString());
+        }
+    }
 }

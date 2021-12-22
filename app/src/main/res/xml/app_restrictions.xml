@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <restriction
+        android:description="@string/config_desc_name"
+        android:key="name"
+        android:restrictionType="string"
+        android:title="@string/config_name" />
+
+    <restriction
+        android:defaultValue="true"
+        android:description="@string/config_desc_auto_connect"
+        android:key="autoConnect"
+        android:restrictionType="bool"
+        android:title="@string/config_auto_connect" />
+
+    <restriction
+        android:defaultValue="true"
+        android:description="@string/config_desc_allow_user_disconnect"
+        android:key="allowUserDisconnect"
+        android:restrictionType="bool"
+        android:title="@string/config_allow_user_disconnect" />
+
+    <restriction
+        android:defaultValue="false"
+        android:description="@string/config_desc_allow_import_ovpn_file"
+        android:key="allowImportProfileFromOvpnFile"
+        android:restrictionType="bool"
+        android:title="@string/config_allow_import_ovpn_file" />
+
+    <restriction
+        android:description="@string/config_desc_auth_type"
+        android:entries="@array/auth_types"
+        android:entryValues="@array/auth_types_values"
+        android:key="authType"
+        android:restrictionType="choice"
+        android:title="@string/config_auth_type" />
+
+    <restriction
+        android:defaultValue="true"
+        android:description="@string/config_desc_use_lzo"
+        android:key="useLzo"
+        android:restrictionType="bool"
+        android:title="@string/config_use_lzo" />
+
+    <restriction
+        android:description="@string/config_desc_ca"
+        android:key="ca"
+        android:restrictionType="string"
+        android:title="@string/config_ca" />
+
+    <restriction
+        android:description="@string/config_desc_client_cert"
+        android:key="clientCert"
+        android:restrictionType="string"
+        android:title="@string/config_client_cert" />
+
+    <restriction
+        android:description="@string/config_desc_client_key"
+        android:key="clientKey"
+        android:restrictionType="string"
+        android:title="@string/config_client_key" />
+
+    <restriction
+        android:description="@string/config_desc_pkcs12"
+        android:key="pkcs12"
+        android:restrictionType="string"
+        android:title="@string/config_pkcs12" />
+
+    <restriction
+        android:description="@string/config_desc_pkcs12_password"
+        android:key="pkcs12Password"
+        android:restrictionType="string"
+        android:title="@string/config_pkcs12_password" />
+
+    <restriction
+        android:description="@string/config_desc_username"
+        android:key="username"
+        android:restrictionType="string"
+        android:title="@string/config_username" />
+
+    <restriction
+        android:description="@string/config_desc_password"
+        android:key="password"
+        android:restrictionType="string"
+        android:title="@string/config_password" />
+
+    <restriction
+        android:key="connection"
+        android:restrictionType="bundle"
+        android:title="@string/config_connection">
+
+        <restriction
+            android:description="@string/config_desc_server_name"
+            android:key="serverName"
+            android:restrictionType="string"
+            android:title="@string/config_server_name" />
+
+        <restriction
+            android:defaultValue="1194"
+            android:description="@string/config_desc_server_port"
+            android:key="serverPort"
+            android:restrictionType="integer"
+            android:title="@string/config_server_port" />
+
+        <restriction
+            android:defaultValue="0"
+            android:description="@string/config_desc_protocol"
+            android:entries="@array/protocol_type"
+            android:entryValues="@array/protocol_type_values"
+            android:key="protocol"
+            android:restrictionType="choice"
+            android:title="@string/config_protocol" />
+
+        <restriction
+            android:defaultValue="120"
+            android:description="@string/config_desc_connection_timeout"
+            android:key="connectionTimeout"
+            android:restrictionType="integer"
+            android:title="@string/config_connection_timeout" />
+
+        <restriction
+            android:defaultValue="0"
+            android:description="@string/config_desc_proxy"
+            android:entries="@array/proxy_type"
+            android:entryValues="@array/proxy_type_values"
+            android:key="proxy"
+            android:restrictionType="choice"
+            android:title="@string/config_proxy" />
+
+        <restriction
+            android:description="@string/config_desc_proxy_address"
+            android:key="proxyAddress"
+            android:restrictionType="string"
+            android:title="@string/config_proxy_address" />
+
+        <restriction
+            android:description="@string/config_desc_proxy_port"
+            android:key="proxyPort"
+            android:restrictionType="integer"
+            android:title="@string/config_proxy_port" />
+
+        <restriction
+            android:description="@string/config_desc_enable_proxy_authentication"
+            android:key="enableProxyAuthentication"
+            android:restrictionType="bool"
+            android:title="@string/config_enable_proxy_authentication" />
+
+        <restriction
+            android:description="@string/config_desc_proxy_username"
+            android:key="proxyUsername"
+            android:restrictionType="string"
+            android:title="@string/config_proxy_username" />
+
+        <restriction
+            android:description="@string/config_desc_proxy_user_password"
+            android:key="proxyUserPassword"
+            android:restrictionType="string"
+            android:title="@string/config_proxy_user_password" />
+
+    </restriction>
+
+    <restriction
+        android:key="ipDns"
+        android:restrictionType="bundle"
+        android:title="@string/config_ip_dns">
+
+        <restriction
+            android:defaultValue="true"
+            android:description="@string/config_desc_use_server_ip_settings"
+            android:key="useServerIpSettings"
+            android:restrictionType="bool"
+            android:title="@string/config_use_server_ip_settings" />
+
+        <restriction
+            android:description="@string/config_desc_ipv4"
+            android:key="ipv4"
+            android:restrictionType="string"
+            android:title="@string/config_ipv4" />
+
+        <restriction
+            android:description="@string/config_desc_ipv6"
+            android:key="ipv6"
+            android:restrictionType="string"
+            android:title="@string/config_ipv6" />
+
+        <restriction
+            android:description="@string/config_desc_no_bind"
+            android:key="noBind"
+            android:restrictionType="bool"
+            android:title="@string/config_no_bind" />
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_override_dns"
+            android:key="overrideDNS"
+            android:restrictionType="bool"
+            android:title="@string/config_override_dns" />
+
+        <restriction
+            android:description="@string/config_desc_search_domain"
+            android:key="searchDomain"
+            android:restrictionType="string"
+            android:title="@string/config_search_domain" />
+
+        <restriction
+            android:defaultValue="8.8.8.8"
+            android:description="@string/config_desc_dns_server"
+            android:key="dnsServer"
+            android:restrictionType="string"
+            android:title="@string/config_dns_server" />
+
+        <restriction
+            android:defaultValue="8.8.4.4"
+            android:description="@string/config_desc_dns_alternative_server"
+            android:key="dnsAlternativeServer"
+            android:restrictionType="string"
+            android:title="@string/config_dns_alternative_server" />
+
+    </restriction>
+
+    <restriction
+        android:key="routing"
+        android:restrictionType="bundle"
+        android:title="@string/config_routing">
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_ignore_routes"
+            android:key="ignoreRoutes"
+            android:restrictionType="bool"
+            android:title="@string/config_ignore_routes" />
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_allow_local_lan"
+            android:key="allowLocalLAN"
+            android:restrictionType="bool"
+            android:title="@string/config_allow_local_lan" />
+
+        <restriction
+            android:defaultValue="true"
+            android:description="@string/config_desc_block_unused_address_families"
+            android:key="blockUnusedAddressFamilies"
+            android:restrictionType="bool"
+            android:title="@string/config_block_unused_address_families" />
+
+        <restriction
+            android:defaultValue="true"
+            android:description="@string/config_desc_use_default_routes"
+            android:key="useDefaultRoutes"
+            android:restrictionType="bool"
+            android:title="@string/config_use_default_routes" />
+
+        <restriction
+            android:description="@string/config_desc_custom_routes"
+            android:key="customRoutes"
+            android:restrictionType="string"
+            android:title="@string/config_custom_routes" />
+
+        <restriction
+            android:description="@string/config_desc_excluded_routes"
+            android:key="excludedRoutes"
+            android:restrictionType="string"
+            android:title="@string/config_excluded_routes" />
+
+        <restriction
+            android:defaultValue="true"
+            android:description="@string/config_desc_use_default_routes_v6"
+            android:key="useDefaultRoutesV6"
+            android:restrictionType="bool"
+            android:title="@string/config_use_default_routes_v6" />
+
+        <restriction
+            android:description="@string/config_desc_custom_routes_v6"
+            android:key="customRoutesV6"
+            android:restrictionType="string"
+            android:title="@string/config_custom_routes_v6" />
+
+        <restriction
+            android:description="@string/config_desc_excluded_routes_v6"
+            android:key="excludedRoutesV6"
+            android:restrictionType="string"
+            android:title="@string/config_excluded_routes_v6" />
+
+    </restriction>
+
+    <restriction
+        android:key="authentication"
+        android:restrictionType="bundle"
+        android:title="@string/config_authentication">
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_expect_tls_cert"
+            android:key="expectTlsCert"
+            android:restrictionType="bool"
+            android:title="@string/config_expect_tls_cert" />
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_check_remote_cn"
+            android:key="checkRemoteCN"
+            android:restrictionType="bool"
+            android:title="@string/config_check_remote_cn" />
+
+        <restriction
+            android:description="@string/config_desc_remote_cn_type"
+            android:entries="@array/remote_cn_type"
+            android:entryValues="@array/remote_cn_type_values"
+            android:key="remoteCnType"
+            android:restrictionType="choice"
+            android:title="@string/config_remote_cn_type" />
+
+        <restriction
+            android:description="@string/config_desc_remote_cn"
+            android:key="remoteCn"
+            android:restrictionType="string"
+            android:title="@string/config_remote_cn" />
+
+        <restriction
+            android:defaultValue="CN"
+            android:description="@string/config_desc_x509_username"
+            android:key="x509username"
+            android:restrictionType="string"
+            android:title="@string/config_x509_username" />
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_use_tls"
+            android:key="useTls"
+            android:restrictionType="bool"
+            android:title="@string/config_use_tls" />
+
+        <restriction
+            android:description="@string/config_desc_tls_cert"
+            android:key="tlsCert"
+            android:restrictionType="string"
+            android:title="@string/config_tls_cert" />
+
+        <restriction
+            android:defaultValue="2"
+            android:description="@string/config_desc_tls_auth_direction"
+            android:entries="@array/tls_auth_direction_type"
+            android:entryValues="@array/tls_auth_direction_type_values"
+            android:key="tlsAuthDirection"
+            android:restrictionType="choice"
+            android:title="@string/config_tls_auth_direction" />
+
+        <restriction
+            android:description="@string/config_desc_cipher"
+            android:key="cipher"
+            android:restrictionType="string"
+            android:title="@string/config_cipher" />
+
+        <restriction
+            android:description="@string/config_desc_auth"
+            android:key="auth"
+            android:restrictionType="string"
+            android:title="@string/config_auth" />
+
+    </restriction>
+
+    <restriction
+        android:key="advanced"
+        android:restrictionType="bundle"
+        android:title="@string/config_advanced">
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_use_persistent_tun"
+            android:key="usePersistentTun"
+            android:restrictionType="bool"
+            android:title="@string/config_use_persistent_tun" />
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_push_peer_info"
+            android:key="pushPeerInfo"
+            android:restrictionType="bool"
+            android:title="@string/config_push_peer_info" />
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_use_random_hostname"
+            android:key="useRandomHostname"
+            android:restrictionType="bool"
+            android:title="@string/config_use_random_hostname" />
+
+        <restriction
+            android:defaultValue="false"
+            android:description="@string/config_desc_use_float"
+            android:key="useFloat"
+            android:restrictionType="bool"
+            android:title="@string/config_use_float" />
+
+        <restriction
+            android:defaultValue="1280"
+            android:description="@string/config_desc_mss_fix_value"
+            android:key="mssFixValue"
+            android:restrictionType="integer"
+            android:title="@string/config_mss_fix_value" />
+
+        <restriction
+            android:defaultValue="1500"
+            android:description="@string/config_desc_tun_mtu"
+            android:key="tunMtu"
+            android:restrictionType="integer"
+            android:title="@string/config_tun_mtu" />
+
+        <restriction
+            android:description="@string/config_desc_user_options"
+            android:key="userOptions"
+            android:restrictionType="string"
+            android:title="@string/config_user_options" />
+
+        <restriction
+            android:defaultValue="4"
+            android:description="@string/config_desc_connection_retries"
+            android:entries="@array/connection_retries_type"
+            android:entryValues="@array/connection_retries_type_values"
+            android:key="connectionRetries"
+            android:restrictionType="choice"
+            android:title="@string/config_connection_retries" />
+
+        <restriction
+            android:defaultValue="2"
+            android:description="@string/config_desc_connection_retry_time"
+            android:key="connectionRetryTime"
+            android:restrictionType="integer"
+            android:title="@string/config_connection_retry_time" />
+
+        <restriction
+            android:defaultValue="300"
+            android:description="@string/config_desc_connection_retry_time_max"
+            android:key="connectionRetryMaxTime"
+            android:restrictionType="integer"
+            android:title="@string/config_connection_retry_time_max" />
+
+    </restriction>
+
+    <restriction
+        android:key="applications"
+        android:restrictionType="bundle"
+        android:title="@string/config_applications">
+
+        <restriction
+            android:defaultValue="true"
+            android:description="@string/config_desc_use_vpn_for_all_applications"
+            android:key="useVpnForAllApplications"
+            android:restrictionType="bool"
+            android:title="@string/config_use_vpn_for_all_applications" />
+
+        <restriction
+            android:description="@string/config_desc_apps"
+            android:key="apps"
+            android:restrictionType="string"
+            android:title="@string/config_apps" />
+
+    </restriction>
+
+    <restriction
+        android:key="logs"
+        android:restrictionType="bundle"
+        android:title="@string/config_logs">
+
+        <restriction
+            android:defaultValue="1"
+            android:description="@string/config_desc_keep_logs_days"
+            android:key="keepLogsDays"
+            android:restrictionType="integer"
+            android:title="@string/config_keep_logs_days" />
+
+        <restriction
+            android:entries="@array/log_level_type"
+            android:entryValues="@array/log_level_type_values"
+            android:key="logLevel"
+            android:restrictionType="multi-select"
+            android:title="@string/config_log_level" />
+    </restriction>
+</restrictions>
