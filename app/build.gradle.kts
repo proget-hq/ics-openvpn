@@ -5,14 +5,13 @@ plugins {
 
 val buildVersionCode: Int = ((project.properties["versionCode"] as String?)?.toInt() ?: 999)
 val buildVersionName: String = project.properties["versionName"] as String? ?: "develop"
-val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: "develop"
 
 android {
     compileSdk = 30
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId = "pl.enterprise.openvpn$buildPackageNamePostfix"
+        applicationId = "pl.proget.openvpn"
         minSdk = 21
         targetSdk = 30
         versionCode = buildVersionCode
@@ -37,6 +36,7 @@ android {
         create("prod") {
             dimension = "implementation"
             matchingFallbacks.add("skeleton")
+            applicationId = "pl.proget.openvpn"
         }
     }
 
