@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/status"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
-    <pl.enterprise.openvpn.ui.Marble
+    <pl.proget.openvpn.ui.Marble
         android:id="@+id/statusMarble"
         android:layout_width="12dp"
         android:layout_height="12dp"
@@ -76,7 +76,7 @@
         app:layout_constraintBottom_toTopOf="@id/connection"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
-    <pl.enterprise.openvpn.ui.Marble
+    <pl.proget.openvpn.ui.Marble
         android:id="@+id/connectionMarble"
         android:layout_width="12dp"
         android:layout_height="12dp"
