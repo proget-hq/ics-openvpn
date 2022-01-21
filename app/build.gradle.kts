@@ -30,7 +30,7 @@ android {
     productFlavors {
         create("staging") {
             dimension = "implementation"
-            applicationId = "pl.enterprise.openvpndevelop"
+            applicationId = "pl.proget.openvpndevelop"
             matchingFallbacks.add("skeleton")
         }
         create("prod") {
