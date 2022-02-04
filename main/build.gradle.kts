@@ -70,9 +70,9 @@ android {
     }
 
     lint {
-        enable("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
-        warning("ImpliedQuantity", "MissingQuantity")
-        disable("MissingTranslation", "UnsafeNativeCodeLocation")
+        enable += setOf("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
+        checkOnly += setOf("ImpliedQuantity", "MissingQuantity")
+        disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
     }
 
     buildTypes {
@@ -85,8 +85,7 @@ android {
             }
         }
     }
-
-    flavorDimensions("implementation")
+    flavorDimensions += listOf("implementation")
 
     productFlavors {
         create("ui") {
