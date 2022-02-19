@@ -6,8 +6,6 @@
 package de.blinkt.openvpn.core;
 
 import android.Manifest.permission;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -38,9 +36,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -53,6 +48,8 @@ import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
