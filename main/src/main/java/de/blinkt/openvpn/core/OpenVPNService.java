@@ -283,9 +283,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 //            jbNotificationExtras(priority, nbuilder);
 //            addVpnActionsToNotification(nbuilder);
 //        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            lpNotificationExtras(nbuilder, Notification.CATEGORY_SERVICE);
+        lpNotificationExtras(nbuilder, Notification.CATEGORY_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //noinspection NewApi
@@ -329,7 +327,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             });
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void lpNotificationExtras(Notification.Builder nbuilder, String category) {
         nbuilder.setCategory(category);
         nbuilder.setLocalOnly(true);
@@ -748,7 +745,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             return null;
         }
 
-        boolean allowUnsetAF = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mProfile.mBlockUnusedAddressFamilies;
+        boolean allowUnsetAF = !mProfile.mBlockUnusedAddressFamilies;
         if (allowUnsetAF) {
             allowAllAFFamilies(builder);
         }
@@ -791,19 +788,12 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         }
 
         String release = Build.VERSION.RELEASE;
-        if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !release.startsWith("4.4.3")
-                && !release.startsWith("4.4.4") && !release.startsWith("4.4.5") && !release.startsWith("4.4.6"))
-                && mMtu < 1280) {
-            VpnStatus.logInfo(String.format(Locale.US, "Forcing MTU to 1280 instead of %d to workaround Android Bug #70916", mMtu));
-            builder.setMtu(1280);
-        } else {
-            builder.setMtu(mMtu);
-        }
+        builder.setMtu(mMtu);
 
         Collection<IpAddress> positiveIPv4Routes = mRoutes.getPositiveIPList();
         Collection<IpAddress> positiveIPv6Routes = mRoutesv6.getPositiveIPList();
 
-        if ("samsung".equals(Build.BRAND) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mDnslist.size() >= 1) {
+        if ("samsung".equals(Build.BRAND) && mDnslist.size() >= 1) {
             // Check if the first DNS Server is in the VPN range
             try {
                 IpAddress dnsServer = new IpAddress(new CIDRIP(mDnslist.get(0), 32), true);
@@ -881,13 +871,9 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         VpnStatus.logInfo(R.string.dns_server_info, TextUtils.join(", ", mDnslist), mDomain);
         VpnStatus.logInfo(R.string.routes_info_incl, TextUtils.join(", ", mRoutes.getNetworks(true)), TextUtils.join(", ", mRoutesv6.getNetworks(true)));
         VpnStatus.logInfo(R.string.routes_info_excl, TextUtils.join(", ", mRoutes.getNetworks(false)), TextUtils.join(", ", mRoutesv6.getNetworks(false)));
-        if (mProxyInfo != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            VpnStatus.logInfo(R.string.proxy_info, mProxyInfo.getHost(), mProxyInfo.getPort());
-        }
+        VpnStatus.logInfo(R.string.proxy_info, mProxyInfo.getHost(), mProxyInfo.getPort());
         VpnStatus.logDebug(R.string.routes_debug, TextUtils.join(", ", positiveIPv4Routes), TextUtils.join(", ", positiveIPv6Routes));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setAllowedVpnPackages(builder);
-        }
+        setAllowedVpnPackages(builder);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             // VPN always uses the default network
             builder.setUnderlyingNetworks(null);
@@ -960,7 +946,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void allowAllAFFamilies(Builder builder) {
         builder.allowFamily(OsConstants.AF_INET);
         builder.allowFamily(OsConstants.AF_INET6);
@@ -989,8 +974,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     }
 
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setAllowedVpnPackages(Builder builder) {
         boolean profileUsesOrBot = false;
 
@@ -1068,9 +1051,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     }
 
     public boolean addHttpProxy(String proxy, int port) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-            return false;
-
         try {
             mProxyInfo = ProxyInfo.buildDirectProxy(proxy, port);
         } catch (Exception e) {
@@ -1177,8 +1157,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         }
 
 
-        /* Workaround for Lollipop, it  does not route traffic to the VPNs own network mask */
-        if (mLocalIP.len <= 31 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /* Workaround for Lollipop and higher, it does not route traffic to the VPNs own network mask */
+        if (mLocalIP.len <= 31) {
             CIDRIP interfaceRoute = new CIDRIP(mLocalIP.mIp, mLocalIP.len);
             interfaceRoute.normalise();
             addRoute(interfaceRoute, true);
@@ -1272,13 +1252,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         if (currentConfiguration.equals(mLastTunCfg)) {
             return "NOACTION";
         } else {
-            String release = Build.VERSION.RELEASE;
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !release.startsWith("4.4.3")
-                    && !release.startsWith("4.4.4") && !release.startsWith("4.4.5") && !release.startsWith("4.4.6"))
-                // There will be probably no 4.4.4 or 4.4.5 version, so don't waste effort to do parsing here
-                return "OPEN_AFTER_CLOSE";
-            else
-                return "OPEN_BEFORE_CLOSE";
+            return "OPEN_BEFORE_CLOSE";
         }
     }
 
@@ -1366,9 +1340,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         nbuilder.setContentIntent(pIntent);
 
         jbNotificationExtras(PRIORITY_MAX, nbuilder);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            lpNotificationExtras(nbuilder, Notification.CATEGORY_STATUS);
+        lpNotificationExtras(nbuilder, Notification.CATEGORY_STATUS);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //noinspection NewApi
