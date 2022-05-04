@@ -363,7 +363,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void jbNotificationExtras(int priority,
                                       android.app.Notification.Builder nbuilder) {
         try {
@@ -384,7 +383,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void addVpnActionsToNotification(Notification.Builder nbuilder) {
         Intent disconnectVPN = new Intent(this, DisconnectVPN.class);
         disconnectVPN.setAction(DISCONNECT_VPN);
@@ -445,9 +443,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
         registerReceiver(mDeviceStateReceiver, filter);
         VpnStatus.addByteCountListener(mDeviceStateReceiver);
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            addLollipopCMListener(); */
     }
 
     synchronized void unregisterDeviceStateReceiver(DeviceStateReceiver deviceStateReceiver) {
@@ -461,9 +456,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 // Ignore for now ...
                 iae.printStackTrace();
             }
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            removeLollipopCMListener();*/
-
     }
 
     public void userPause(boolean shouldBePaused) {
@@ -945,9 +937,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         } catch (Exception e) {
             VpnStatus.logError(R.string.tun_open_error);
             VpnStatus.logError(getString(R.string.error) + e.getLocalizedMessage());
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                VpnStatus.logError(R.string.tun_error_helpful);
-            }
             return null;
         }
 
@@ -985,10 +974,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             if (ipAddr.equals(mLocalIP.mIp))
                 continue;
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && !mProfile.mAllowLocalLAN) {
-                mRoutes.addIPSplit(new CIDRIP(ipAddr, netMask), true);
-
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mProfile.mAllowLocalLAN)
+            if(mProfile.mAllowLocalLAN)
                 mRoutes.addIP(new CIDRIP(ipAddr, netMask), false);
         }
 
@@ -1379,10 +1365,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         VpnStatus.updateStateString("USER_INPUT", "waiting for user input", reason, LEVEL_WAITING_FOR_USER_INPUT, intent);
         nbuilder.setContentIntent(pIntent);
 
-
-        // Try to set the priority available since API 16 (Jellybean)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-            jbNotificationExtras(PRIORITY_MAX, nbuilder);
+        jbNotificationExtras(PRIORITY_MAX, nbuilder);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             lpNotificationExtras(nbuilder, Notification.CATEGORY_STATUS);
