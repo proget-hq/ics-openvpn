@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (c) 2012-2016 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
@@ -20,8 +20,8 @@ android {
         targetSdk = 32
 <<<<<<< HEAD
 =======
-        versionCode = 190
-        versionName = "0.7.35"
+        versionCode = 191
+        versionName = "0.7.36"
 >>>>>>> bdd93dbb (Version 0.7.35)
         externalNativeBuild {
             cmake {
