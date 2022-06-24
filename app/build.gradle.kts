@@ -7,13 +7,13 @@ val buildVersionCode: Int = ((project.properties["versionCode"] as String?)?.toI
 val buildVersionName: String = project.properties["versionName"] as String? ?: "develop"
 
 android {
-    compileSdk = 30
+    compileSdk = 32
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "pl.proget.openvpn"
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 32
         versionCode = buildVersionCode
         versionName = buildVersionName
 
