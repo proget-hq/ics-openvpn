@@ -97,7 +97,7 @@ else ()
     message("Not budiling OpenVPN for output dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 endif ()
 
-add_library(ovpnutil SHARED ovpnutil/jniglue.c ovpnutil/scan_ifs.c)
+add_library(ovpnutil SHARED ovpnutil/jniglue.c)
 target_compile_definitions(ovpnutil PRIVATE -DTARGET_ARCH_ABI=\"${ANDROID_ABI}\"
         -DOPENVPN2_GIT_REVISION=\"${OPENVPN2_GIT}\"
         -DOPENVPN3_GIT_REVISION=\"${OPENVPN3_GIT}\"
@@ -113,11 +113,6 @@ if (NOT ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} MATCHES "build/intermediates/cmake/.*s
 else ()
     message("Not budiling SSLSpeedTest for output dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 endif ()
-
-# The magic Jellybean keystore signing hack. Beware dragons and dlsyms magic ahead
-add_library(jbcrypto SHARED jbcrypto/jbcrypto.cpp)
-target_link_libraries(jbcrypto log dl)
-target_compile_options(jbcrypto PRIVATE)
 
 set(openvpn_srcs
         src/compat/compat-basename.c
@@ -136,6 +131,8 @@ set(openvpn_srcs
         src/openvpn/crypto_mbedtls.c
         src/openvpn/cryptoapi.c
         src/openvpn/dhcp.c
+        src/openvpn/dns.c
+        src/openvpn/dns.h
         src/openvpn/error.c
         src/openvpn/event.c
         src/openvpn/env_set.c
@@ -190,6 +187,8 @@ set(openvpn_srcs
         src/openvpn/ssl_openssl.c
         src/openvpn/ssl_mbedtls.c
         src/openvpn/ssl_ncp.c
+        src/openvpn/ssl_pkt.c
+        src/openvpn/ssl_pkt.h
         src/openvpn/ssl_util.c
         src/openvpn/ssl_verify.c
         src/openvpn/ssl_verify_openssl.c

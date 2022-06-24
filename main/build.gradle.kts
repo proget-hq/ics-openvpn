@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (c) 2012-2016 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
@@ -11,19 +11,19 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
 
-    //ndkVersion = "23.0.7599858"
+    ndkVersion = "24.0.8215888"
 
     defaultConfig {
-        minSdk = 16
-        targetSdk = 31
-
+        minSdk = 21
+        targetSdk = 32
         externalNativeBuild {
             cmake {
             }
         }
     }
+
 
     testOptions.unitTests.isIncludeAndroidResources = true
 
@@ -70,9 +70,9 @@ android {
     }
 
     lint {
-        enable("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
-        warning("ImpliedQuantity", "MissingQuantity")
-        disable("MissingTranslation", "UnsafeNativeCodeLocation")
+        enable += setOf("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
+        checkOnly += setOf("ImpliedQuantity", "MissingQuantity")
+        disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
     }
 
     buildTypes {
@@ -85,8 +85,7 @@ android {
             }
         }
     }
-
-    flavorDimensions("implementation")
+    flavorDimensions += listOf("implementation")
 
     productFlavors {
         create("ui") {
@@ -117,9 +116,11 @@ android {
 }
 
 var swigcmd = "swig"
-// Workaround for Mac OS X since it otherwise does not find swig and I cannot get
-// the Exec task to respect the PATH environment :(
-if (File("/usr/local/bin/swig").exists())
+// Workaround for macOS(arm64) and macOS(intel) since it otherwise does not find swig and
+// I cannot get the Exec task to respect the PATH environment :(
+if (file("/opt/homebrew/bin/swig").exists())
+    swigcmd = "/opt/homebrew/bin/swig"
+else if (file("/usr/local/bin/swig").exists())
     swigcmd = "/usr/local/bin/swig"
 
 
@@ -153,10 +154,10 @@ android.libraryVariants.forEach { variant ->
 dependencies {
     // https://maven.google.com/web/index.html
     // https://developer.android.com/jetpack/androidx/releases/core
-    val preferenceVersion = "1.1.1"
-    val coreVersion = "1.6.0"
-    val materialVersion = "1.1.0"
-    val fragment_version = "1.3.6"
+    val preferenceVersion = "1.2.0"
+    val coreVersion = "1.7.0"
+    val materialVersion = "1.5.0"
+    val fragment_version = "1.4.1"
 
 
     implementation("androidx.annotation:annotation:1.3.0")
@@ -164,13 +165,13 @@ dependencies {
 
 
     // Is there a nicer way to do this?
-    dependencies.add("uiImplementation", "androidx.constraintlayout:constraintlayout:2.1.1")
-    dependencies.add("uiImplementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30")
+    dependencies.add("uiImplementation", "androidx.constraintlayout:constraintlayout:2.1.3")
+    dependencies.add("uiImplementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
     dependencies.add("uiImplementation", "androidx.cardview:cardview:1.0.0")
     dependencies.add("uiImplementation", "androidx.recyclerview:recyclerview:1.2.1")
-    dependencies.add("uiImplementation", "androidx.appcompat:appcompat:1.3.1")
+    dependencies.add("uiImplementation", "androidx.appcompat:appcompat:1.4.1")
     dependencies.add("uiImplementation", "com.github.PhilJay:MPAndroidChart:v3.1.0")
-    dependencies.add("uiImplementation", "com.squareup.okhttp3:okhttp:4.9.1")
+    dependencies.add("uiImplementation", "com.squareup.okhttp3:okhttp:4.9.3")
     dependencies.add("uiImplementation", "androidx.core:core:$coreVersion")
     dependencies.add("uiImplementation", "androidx.core:core-ktx:$coreVersion")
     dependencies.add("uiImplementation", "androidx.fragment:fragment-ktx:$fragment_version")
@@ -178,10 +179,10 @@ dependencies {
     dependencies.add("uiImplementation", "androidx.preference:preference-ktx:$preferenceVersion")
     dependencies.add("uiImplementation", "com.google.android.material:material:$materialVersion")
     dependencies.add("uiImplementation", "androidx.webkit:webkit:1.4.0")
-    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
-    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30")
+    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    dependencies.add("uiImplementation","androidx.security:security-crypto:1.0.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:3.9.0")
     testImplementation("org.robolectric:robolectric:4.5.1")
