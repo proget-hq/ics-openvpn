@@ -1,6 +1,8 @@
 package pl.proget.openvpn.ui.main
 
-import android.content.*
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
@@ -67,8 +69,8 @@ class MainActivity : AppCompatActivity(), MainView {
                 )
             }
 
-        binding.connectSwitch.setOnCheckedChangeListener { _, isChecked ->
-            presenter.onConnectChanged(isChecked)
+        binding.connectSwitch.setOnClickListener {
+            presenter.onConnectChanged(binding.connectSwitch.isChecked)
         }
         presenter.attach(this)
         registerReceiver(eventsReceiver, eventsReceiver.intentFilter())
