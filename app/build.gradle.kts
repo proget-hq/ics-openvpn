@@ -5,6 +5,7 @@ plugins {
 
 val buildVersionCode: Int = ((project.properties["versionCode"] as String?)?.toInt() ?: 999)
 val buildVersionName: String = project.properties["versionName"] as String? ?: "develop"
+val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
 
 android {
     compileSdk = 32
@@ -36,7 +37,7 @@ android {
         create("prod") {
             dimension = "implementation"
             matchingFallbacks.add("skeleton")
-            applicationId = "pl.proget.openvpn"
+            applicationId = "pl.proget.openvpn$buildPackageNamePostfix"
         }
     }
 
