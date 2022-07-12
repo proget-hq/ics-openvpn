@@ -69,8 +69,10 @@ class MainActivity : AppCompatActivity(), MainView {
                 )
             }
 
-        binding.connectSwitch.setOnClickListener {
-            presenter.onConnectChanged(binding.connectSwitch.isChecked)
+        binding.connectSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed) {
+                presenter.onConnectChanged(isChecked)
+            }
         }
         presenter.attach(this)
         registerReceiver(eventsReceiver, eventsReceiver.intentFilter())
@@ -126,7 +128,11 @@ class MainActivity : AppCompatActivity(), MainView {
                                     .save(this@MainActivity, profile)
                                 presenter.onProfileImported()
                             } else {
-                                Toast.makeText(this@MainActivity, R.string.profile_is_invalid, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    R.string.profile_is_invalid,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
