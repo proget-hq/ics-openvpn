@@ -1,5 +1,6 @@
 package pl.proget.openvpn.ui.main
 
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -163,7 +164,11 @@ class MainActivity : AppCompatActivity(), MainView {
                 }
             }
             .let {
-                startActivityForResult(it, IMPORT_PROFILE_REQUEST_CODE)
+                try {
+                    startActivityForResult(it, IMPORT_PROFILE_REQUEST_CODE)
+                } catch (e: ActivityNotFoundException){
+                    Toast.makeText(this, getString(R.string.no_app_found), Toast.LENGTH_SHORT).show()
+                }
             }
     }
 
