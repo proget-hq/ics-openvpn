@@ -168,4 +168,5 @@
     <string name="manual_configuration">Manual configuration</string>
     <string name="import_vpn_profile">Import profile</string>
     <string name="profile_is_invalid">Profile is invalid</string>
+    <string name="no_app_found">No app found to perform this operation</string>
 </resources>
