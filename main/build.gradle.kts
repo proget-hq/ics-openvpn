@@ -150,6 +150,13 @@ android.libraryVariants.forEach { variant ->
 
     variant.registerJavaGeneratingTask(task, sourceDir)
 }
+ // Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
+ // This fixes issue with no assets in build/ovpnassets after first build.
+ // Check if this is still an issue after each rebase on schwabe project.
+ android.libraryVariants.all {
+     tasks.findByName("compile${name.capitalize()}Kotlin")
+         ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
+ }
 
 dependencies {
     // https://maven.google.com/web/index.html
