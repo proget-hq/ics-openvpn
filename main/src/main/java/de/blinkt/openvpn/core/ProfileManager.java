@@ -278,7 +278,7 @@ public class ProfileManager {
      * profiles
      * @param context
      */
-    public synchronized void refreshVPNList(Context context)
+    public void refreshVPNList(Context context)
     {
         SharedPreferences listpref = Preferences.getSharedPreferencesMulti(PREFS_NAME, context);
         Set<String> vlist = listpref.getStringSet("vpnlist", null);
@@ -289,20 +289,14 @@ public class ProfileManager {
             if (!profiles.containsKey(vpnentry))
                 loadVpnEntry(context, vpnentry);
         }
-
-        Vector<String> removeUuids = new Vector<>();
         for (String profileuuid:profiles.keySet())
         {
             if (!vlist.contains(profileuuid))
-                removeUuids.add(profileuuid);
-        }
-        for (String uuid: removeUuids)
-        {
-            profiles.remove(uuid);
+                profiles.remove(profileuuid);
         }
     }
 
-    private synchronized void loadVPNList(Context context) {
+    private void loadVPNList(Context context) {
         profiles = new HashMap<>();
         SharedPreferences listpref = Preferences.getSharedPreferencesMulti(PREFS_NAME, context);
         Set<String> vlist = listpref.getStringSet("vpnlist", null);
@@ -317,7 +311,7 @@ public class ProfileManager {
         }
     }
 
-    private synchronized void loadVpnEntry(Context context, String vpnentry) {
+    private void loadVpnEntry(Context context, String vpnentry) {
         ObjectInputStream vpnfile = null;
         try {
             FileInputStream vpInput;
