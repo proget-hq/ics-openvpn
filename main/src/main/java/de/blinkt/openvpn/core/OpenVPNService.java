@@ -535,7 +535,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 R.string.building_configration,
                 ConnectionStatus.LEVEL_START
         );
-        showNotification(VpnStatus.getLastCleanLogMessage(this),
+        showNotification(
+                VpnStatus.getLastCleanLogMessage(this),
                 VpnStatus.getLastCleanLogMessage(this),
                 NOTIFICATION_CHANNEL_NEWSTATUS_ID,
                 0,
@@ -986,23 +987,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         }
     }
 
-    private void installRoutesExcluded(Builder builder, NetworkSpace routes) {
-        for (IpAddress ipIncl : routes.getNetworks(true)) {
-            try {
-                builder.addRoute(ipIncl.getPrefix());
-            } catch (UnknownHostException | IllegalArgumentException ia) {
-                VpnStatus.logError(getString(R.string.route_rejected) + ipIncl + " " + ia.getLocalizedMessage());
-            }
-        }
-        for (IpAddress ipExcl : routes.getNetworks(false)) {
-            try {
-                builder.excludeRoute(ipExcl.getPrefix());
-            } catch (UnknownHostException | IllegalArgumentException ia) {
-                VpnStatus.logError(getString(R.string.route_rejected) + ipExcl + " " + ia.getLocalizedMessage());
-            }
-        }
-    }
-
     private void installRoutesPostiveOnly(
             Builder builder,
             Collection<IpAddress> positiveIPv4Routes,
@@ -1026,6 +1010,23 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 builder.addRoute(route6.getIPv6Address(), route6.networkMask);
             } catch (IllegalArgumentException ia) {
                 VpnStatus.logError(getString(R.string.route_rejected) + route6 + " " + ia.getLocalizedMessage());
+            }
+        }
+    }
+
+    private void installRoutesExcluded(Builder builder, NetworkSpace routes) {
+        for (IpAddress ipIncl : routes.getNetworks(true)) {
+            try {
+                builder.addRoute(ipIncl.getPrefix());
+            } catch (UnknownHostException | IllegalArgumentException ia) {
+                VpnStatus.logError(getString(R.string.route_rejected) + ipIncl + " " + ia.getLocalizedMessage());
+            }
+        }
+        for (IpAddress ipExcl : routes.getNetworks(false)) {
+            try {
+                builder.excludeRoute(ipExcl.getPrefix());
+            } catch (UnknownHostException | IllegalArgumentException ia) {
+                VpnStatus.logError(getString(R.string.route_rejected) + ipExcl + " " + ia.getLocalizedMessage());
             }
         }
     }
