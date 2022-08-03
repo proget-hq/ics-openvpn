@@ -270,10 +270,16 @@ public class ProfileManager {
             if (!profiles.containsKey(vpnentry))
                 loadVpnEntry(context, vpnentry);
         }
+
+        Vector<String> removeUuids = new Vector<>();
         for (String profileuuid:profiles.keySet())
         {
             if (!vlist.contains(profileuuid))
-                profiles.remove(profileuuid);
+                removeUuids.add(profileuuid);
+        }
+        for (String uuid: removeUuids)
+        {
+            profiles.remove(uuid);
         }
     }
 
