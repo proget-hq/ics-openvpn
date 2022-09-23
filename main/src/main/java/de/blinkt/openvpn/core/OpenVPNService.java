@@ -1065,7 +1065,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 mRoutes.addIP(new CIDRIP(ipAddr, netMask), false);
         }
 
-        // IPv6 is Lollipop+ only so we can skip the lower than KITKAT case
         if (mProfile.mAllowLocalLAN) {
             for (String net : NetworkUtils.getLocalNetworks(this, true)) {
                 addRoutev6(net, false);
