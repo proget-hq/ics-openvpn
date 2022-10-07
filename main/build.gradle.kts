@@ -4,9 +4,10 @@
  */
 
 plugins {
-    alias(libs.plugins.kotlin.android)
-    id("com.android.library")
+    id("com.android.application")
     id("checkstyle")
+
+    id("kotlin-android")
 }
 
 android {
@@ -23,14 +24,13 @@ android {
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 33
         externalNativeBuild {
             cmake {
                 //arguments+= "-DCMAKE_VERBOSE_MAKEFILE=1"
             }
         }
     }
-
 
     //testOptions.unitTests.isIncludeAndroidResources = true
 
@@ -90,7 +90,14 @@ android {
     }
 
     lint {
-        enable += setOf("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
+        enable += setOf(
+            "BackButton",
+            "EasterEgg",
+            "StopShip",
+            "IconExpectedSize",
+            "GradleDynamicVersion",
+            "NewerVersionAvailable"
+        )
         checkOnly += setOf("ImpliedQuantity", "MissingQuantity")
         disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
     }
@@ -176,13 +183,28 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
         doFirst {
             mkdir(genDir)
         }
-        commandLine(listOf(swigcmd, "-outdir", genDir, "-outcurrentdir", "-c++", "-java", "-package", "net.openvpn.ovpn3",
-                "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
+        commandLine(
+            listOf(
+                swigcmd,
+                "-outdir",
+                genDir,
+                "-outcurrentdir",
+                "-c++",
+                "-java",
+                "-package",
+                "net.openvpn.ovpn3",
+                "-Isrc/main/cpp/openvpn3/client",
+                "-Isrc/main/cpp/openvpn3/",
                 "-DOPENVPN_PLATFORM_ANDROID",
-                "-o", "${genDir}/ovpncli_wrap.cxx", "-oh", "${genDir}/ovpncli_wrap.h",
-                "src/main/cpp/openvpn3/client/ovpncli.i"))
-        inputs.files( "src/main/cpp/openvpn3/client/ovpncli.i")
-        outputs.dir( genDir)
+                "-o",
+                "${genDir}/ovpncli_wrap.cxx",
+                "-oh",
+                "${genDir}/ovpncli_wrap.h",
+                "src/main/cpp/openvpn3/client/ovpncli.i"
+            )
+        )
+        inputs.files("src/main/cpp/openvpn3/client/ovpncli.i")
+        outputs.dir(genDir)
 
     }
     return baseDir
