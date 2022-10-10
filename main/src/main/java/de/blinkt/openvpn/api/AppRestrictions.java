@@ -283,6 +283,14 @@ public class AppRestrictions {
                 }
             }
         }
+
+        if(restrictions.containsKey("screenoffpausevpn"))
+        {
+            boolean pauseVPN = restrictions.getBoolean("screenoffpausevpn");
+            SharedPreferences.Editor editor = defaultPrefs.edit();
+            editor.putBoolean("screenoff", pauseVPN);
+            editor.apply();
+        }
     }
 
     /**
