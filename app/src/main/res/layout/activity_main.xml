@@ -9,16 +9,13 @@
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_launcher"
-        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/logo_black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.33"
+        app:layout_constraintWidth_percent="0.6"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -32,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/status"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
-    <pl.enterprise.openvpn.ui.Marble
+    <pl.proget.openvpn.ui.Marble
         android:id="@+id/statusMarble"
         android:layout_width="12dp"
         android:layout_height="12dp"
@@ -80,7 +77,7 @@
         app:layout_constraintBottom_toTopOf="@id/connection"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
-    <pl.enterprise.openvpn.ui.Marble
+    <pl.proget.openvpn.ui.Marble
         android:id="@+id/connectionMarble"
         android:layout_width="12dp"
         android:layout_height="12dp"

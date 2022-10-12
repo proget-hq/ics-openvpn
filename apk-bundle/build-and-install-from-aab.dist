@@ -1,0 +1,39 @@
+#!/bin/bash
+
+bundletoolPath=bundletool-all-1.8.2.jar
+
+# Fill fields below ONLY!
+
+# Main module in Android Project
+module=app
+# Build flavor - leave empty if not specified
+flavor="prod"
+# Path to Android Project
+projectPath=".."
+# Build type
+buildType=debug
+# Path to .jks file
+keystorePath=
+keystorePass="vpnclient"
+keystoreAlias="openvpnalias"
+
+#Should not be modified if not necessary
+if [ "$flavor" == "" ]
+then
+    aabFilePath=$projectPath/$module/$buildType/$module-$buildType.aab
+    outputPath=$projectPath/$module/$buildType/generated.apks
+else
+    aabFilePath=$projectPath/$module/$flavor/$buildType/$module-$flavor-$buildType.aab
+    outputPath=$projectPath/$module/$flavor/$buildType/generated.apks
+fi
+
+# Executable
+
+echo "Remove old generated files.."
+rm $outputPath
+
+echo "Generating apk.."
+java -jar $bundletoolPath build-apks --bundle=$aabFilePath --output=$outputPath --connected-device --ks=$keystorePath --ks-pass=pass:$keystorePass --key-pass=pass:$keystorePass --ks-key-alias=$keystoreAlias
+
+echo "Installing apk.."
+java -jar $bundletoolPath install-apks --apks=$outputPath

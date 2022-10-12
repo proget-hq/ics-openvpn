@@ -8,12 +8,12 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Used to show all apps in the allowed Apps selection,
          this app needs the list the app in the allow/deny apps over the VPN -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
             tools:ignore="QueryAllPackagesPermission" />
-
 
 <!--    <queries>-->
 <!--        <intent>-->
@@ -31,6 +31,7 @@
         android:appCategory="productivity"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app"
         android:supportsRtl="true"
         android:theme="@style/blinkt"
@@ -126,6 +127,15 @@
             android:name=".api.DisconnectVPN"
             android:exported="true"
             android:targetActivity=".api.RemoteAction" />
+        <activity-alias
+                android:name=".api.PauseVPN"
+                android:exported="true"
+                android:targetActivity=".api.RemoteAction" />
+        <activity-alias
+                android:name=".api.ResumeVPN"
+                android:exported="true"
+                android:targetActivity=".api.RemoteAction" />
+
     </application>
 
 </manifest>

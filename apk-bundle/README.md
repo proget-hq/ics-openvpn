@@ -1,0 +1,1 @@
+Copy .dist file and fill variables according to your environment

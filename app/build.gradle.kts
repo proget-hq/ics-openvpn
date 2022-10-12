@@ -5,16 +5,16 @@ plugins {
 
 val buildVersionCode: Int = ((project.properties["versionCode"] as String?)?.toInt() ?: 999)
 val buildVersionName: String = project.properties["versionName"] as String? ?: "develop"
-val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: "develop"
+val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
 
 android {
-    compileSdk = 30
+    compileSdk = 33
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId = "pl.enterprise.openvpn$buildPackageNamePostfix"
+        applicationId = "pl.proget.openvpn"
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 33
         versionCode = buildVersionCode
         versionName = buildVersionName
 
@@ -31,12 +31,13 @@ android {
     productFlavors {
         create("staging") {
             dimension = "implementation"
-            applicationId = "pl.enterprise.openvpndevelop"
+            applicationId = "pl.proget.openvpndevelop"
             matchingFallbacks.add("skeleton")
         }
         create("prod") {
             dimension = "implementation"
             matchingFallbacks.add("skeleton")
+            applicationId = "pl.proget.openvpn$buildPackageNamePostfix"
         }
     }
 
@@ -64,12 +65,12 @@ android {
 dependencies {
     implementation(project(":main"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.20")
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.0")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation("net.lingala.zip4j:zip4j:2.7.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("com.google.android.material:material:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("net.lingala.zip4j:zip4j:2.9.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
