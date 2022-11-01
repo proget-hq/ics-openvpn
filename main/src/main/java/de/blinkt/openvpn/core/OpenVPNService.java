@@ -35,6 +35,7 @@ import android.system.OsConstants;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -564,9 +565,13 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     }
 
     private VpnProfile fetchVPNProfile(Intent intent) {
+        String startReason;
         if (intent != null && intent.hasExtra(getPackageName() + ".profileUUID")) {
             String profileUUID    = intent.getStringExtra(getPackageName() + ".profileUUID");
             int    profileVersion = intent.getIntExtra(getPackageName() + ".profileVersion", 0);
+            startReason = intent.getStringExtra(getPackageName() + ".startReason");
+            if (startReason == null)
+                startReason = "(unknown)";
             // Try for 10s to get current version of the profile
             mProfile = ProfileManager.get(this, profileUUID, profileVersion, 100);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -575,10 +580,13 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         } else {
             /* The intent is null when we are set as always-on or the service has been restarted. */
             mProfile = ProfileManager.getLastConnectedProfile(this);
+            startReason = "Using last connected profile (started with null intent, always-on or restart after crash)";
             VpnStatus.logInfo(R.string.service_restarted);
 
             /* Got no profile, just stop */
             if (mProfile == null) {
+                startReason = "could not get last connected profile, using default (started with null intent, always-on or restart after crash)";
+
                 Log.d(
                         "OpenVPN",
                         "Got no last connected profile on null intent. Assuming always on."
@@ -592,6 +600,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             /* Do the asynchronous keychain certificate stuff */
             mProfile.checkForRestart(this);
         }
+        String name = "(null)";
+        if (mProfile != null)
+            name = mProfile.getName();
+        VpnStatus.logDebug(String.format("Fetched VPN profile (%s) triggered by %s", name, startReason));
         return mProfile;
     }
 
