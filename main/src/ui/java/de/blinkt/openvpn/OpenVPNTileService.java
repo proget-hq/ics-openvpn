@@ -7,6 +7,7 @@ package de.blinkt.openvpn;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +23,6 @@ import de.blinkt.openvpn.core.ConnectionStatus;
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal;
 import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.ProfileManager;
-import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
 
 
@@ -85,7 +85,14 @@ public class OpenVPNTileService extends TileService implements VpnStatus.StateLi
     @SuppressLint("Override")
     @TargetApi(Build.VERSION_CODES.N)
     void launchVPN(VpnProfile profile, Context context) {
-          VPNLaunchHelper.startOpenVpn(profile, getBaseContext(), "QuickTile", true);
+        Intent startVpnIntent = new Intent(Intent.ACTION_MAIN);
+        startVpnIntent.setClass(context, LaunchVPN.class);
+        startVpnIntent.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUIDString());
+        startVpnIntent.putExtra(LaunchVPN.EXTRA_START_REASON, "QuickTile");
+        startVpnIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startVpnIntent.putExtra(LaunchVPN.EXTRA_HIDELOG, true);
+
+        context.startActivity(startVpnIntent);
     }
 
     @TargetApi(Build.VERSION_CODES.N)

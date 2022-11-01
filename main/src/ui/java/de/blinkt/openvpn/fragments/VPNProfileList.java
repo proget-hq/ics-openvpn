@@ -25,9 +25,6 @@ import android.os.PersistableBundle;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.ListFragment;
@@ -71,7 +68,6 @@ import de.blinkt.openvpn.core.VpnStatus;
 import static de.blinkt.openvpn.core.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT;
 import static de.blinkt.openvpn.core.OpenVPNService.DISCONNECT_VPN;
 import static de.blinkt.openvpn.core.OpenVPNService.EXTRA_CHALLENGE_TXT;
-import static de.blinkt.openvpn.core.OpenVPNService.EXTRA_START_REASON;
 
 
 public class VPNProfileList extends ListFragment implements OnClickListener, VpnStatus.StateListener {
@@ -94,8 +90,6 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
     private ArrayAdapter<VpnProfile> mArrayadapter;
     private Intent mLastIntent;
     private VpnProfile defaultVPN;
-    private View mPermissionView;
-    private ActivityResultLauncher<String> mPermReceiver;
     private View mPermissionView;
     private ActivityResultLauncher<String> mPermReceiver;
 
@@ -248,7 +242,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         shortcutIntent.setClass(requireContext(), LaunchVPN.class);
         shortcutIntent.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUID().toString());
         shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra(EXTRA_START_REASON, "shortcut");
+        shortcutIntent.putExtra(LaunchVPN.EXTRA_START_REASON, "shortcut");
         shortcutIntent.putExtra("EXTRA_HIDELOG", true);
 
         PersistableBundle versionExtras = new PersistableBundle();
@@ -569,7 +563,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
 
         Intent intent = new Intent(getActivity(), LaunchVPN.class);
         intent.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUID().toString());
-        intent.putExtra(EXTRA_START_REASON, "main profile list");
+        intent.putExtra(LaunchVPN.EXTRA_START_REASON, "main profile list");
         intent.setAction(Intent.ACTION_MAIN);
         startActivity(intent);
     }
@@ -674,9 +668,9 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         public Drawable getDrawable(String source) {
             Drawable d = null;
             if ("ic_menu_add".equals(source))
-                d = requireActivity().getResources().getDrawable(R.drawable.ic_menu_add_grey, requireActivity().getTheme());
+                d = requireActivity().getResources().getDrawable(R.drawable.ic_menu_add_grey);
             else if ("ic_menu_archive".equals(source))
-                d = requireActivity().getResources().getDrawable(R.drawable.ic_menu_import_grey, requireActivity().getTheme());
+                d = requireActivity().getResources().getDrawable(R.drawable.ic_menu_import_grey);
 
 
             if (d != null) {
