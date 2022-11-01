@@ -1,10 +1,12 @@
- /*
+import com.android.build.gradle.api.ApplicationVariant
+
+/*
  * Copyright (c) 2012-2016 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
 plugins {
-    id("com.android.library")
+    id("com.android.application")
     id("checkstyle")
 
     id("kotlin-android")
@@ -19,6 +21,8 @@ android {
     defaultConfig {
         minSdk = 21
         targetSdk = 33
+        versionCode = 197
+        versionName = "0.7.42"
         externalNativeBuild {
             cmake {
             }
@@ -137,6 +141,7 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
         }
         commandLine(listOf(swigcmd, "-outdir", genDir, "-outcurrentdir", "-c++", "-java", "-package", "net.openvpn.ovpn3",
                 "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
+                "-DOPENVPN_PLATFORM_ANDROID",
                 "-o", "${genDir}/ovpncli_wrap.cxx", "-oh", "${genDir}/ovpncli_wrap.h",
                 "src/main/cpp/openvpn3/client/ovpncli.i"))
         inputs.files( "src/main/cpp/openvpn3/client/ovpncli.i")
@@ -145,19 +150,16 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
     }
     return baseDir
 }
-android.libraryVariants.forEach { variant ->
-    val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
-    val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
 
-    variant.registerJavaGeneratingTask(task, sourceDir)
-}
- // Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
- // This fixes issue with no assets in build/ovpnassets after first build.
- // Check if this is still an issue after each rebase on schwabe project.
- android.libraryVariants.all {
-     tasks.findByName("compile${name.capitalize()}Kotlin")
-         ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
- }
+android.applicationVariants.all(object : Action<ApplicationVariant> {
+    override fun execute(variant: ApplicationVariant) {
+        val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
+        val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
+
+        variant.registerJavaGeneratingTask(task, sourceDir)
+    }
+})
+
 
 dependencies {
     // https://maven.google.com/web/index.html
@@ -190,6 +192,8 @@ dependencies {
     dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     dependencies.add("uiImplementation","androidx.security:security-crypto:1.0.0")
+
+
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:3.9.0")
