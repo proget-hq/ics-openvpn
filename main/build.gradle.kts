@@ -228,24 +228,14 @@ android.libraryVariants.all {
 
 dependencies {
     // https://maven.google.com/web/index.html
+    // https://developer.android.com/jetpack/androidx/releases/core
+    val preferenceVersion = "1.2.0"
+    val coreVersion = "1.9.0"
+    val materialVersion = "1.7.0"
+    val fragment_version = "1.5.5"
+
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.core.ktx)
-
-    uiImplementation(libs.android.view.material)
-    uiImplementation(libs.androidx.appcompat)
-    uiImplementation(libs.androidx.cardview)
-    uiImplementation(libs.androidx.constraintlayout)
-    uiImplementation(libs.androidx.core.ktx)
-    uiImplementation(libs.androidx.fragment.ktx)
-    uiImplementation(libs.androidx.lifecycle.runtime.ktx)
-    uiImplementation(libs.androidx.lifecycle.viewmodel.ktx)
-    uiImplementation(libs.androidx.preference.ktx)
-    uiImplementation(libs.androidx.recyclerview)
-    uiImplementation(libs.androidx.security.crypto)
-    uiImplementation(libs.androidx.webkit)
-    uiImplementation(libs.kotlin)
-    uiImplementation(libs.mpandroidchart)
-    uiImplementation(libs.square.okhttp)
 
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.junit)
@@ -254,5 +244,29 @@ dependencies {
     testImplementation(libs.robolectric)
 }
 
-fun DependencyHandler.uiImplementation(dependencyNotation: Any): Dependency? =
-    add("uiImplementation", dependencyNotation)
+    // Is there a nicer way to do this?
+    dependencies.add("uiImplementation", "androidx.constraintlayout:constraintlayout:2.1.4")
+    dependencies.add("uiImplementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.22")
+    dependencies.add("uiImplementation", "androidx.cardview:cardview:1.0.0")
+    dependencies.add("uiImplementation", "androidx.recyclerview:recyclerview:1.2.1")
+    dependencies.add("uiImplementation", "androidx.appcompat:appcompat:1.5.1")
+    dependencies.add("uiImplementation", "com.github.PhilJay:MPAndroidChart:v3.1.0")
+    dependencies.add("uiImplementation", "com.squareup.okhttp3:okhttp:4.9.3")
+    dependencies.add("uiImplementation", "androidx.core:core:$coreVersion")
+    dependencies.add("uiImplementation", "androidx.core:core-ktx:$coreVersion")
+    dependencies.add("uiImplementation", "androidx.fragment:fragment-ktx:$fragment_version")
+    dependencies.add("uiImplementation", "androidx.preference:preference:$preferenceVersion")
+    dependencies.add("uiImplementation", "androidx.preference:preference-ktx:$preferenceVersion")
+    dependencies.add("uiImplementation", "com.google.android.material:material:$materialVersion")
+    dependencies.add("uiImplementation", "androidx.webkit:webkit:1.4.0")
+    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    dependencies.add("uiImplementation","androidx.security:security-crypto:1.0.0")
+
+
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:3.9.0")
+    testImplementation("org.robolectric:robolectric:4.5.1")
+    testImplementation("androidx.test:core:1.4.0")
+}
