@@ -11,6 +11,10 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        aidl = true
+    }
+    namespace = "de.blinkt.openvpn"
     compileSdk = 33
 
     // Also update runcoverity.sh
