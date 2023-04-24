@@ -60,6 +60,7 @@ android {
         viewBinding = true
         aidl = true
     }
+    namespace = "pl.proget.openvpn"
 }
 
 dependencies {
