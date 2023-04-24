@@ -60,6 +60,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    namespace = "pl.proget.openvpn"
 }
 
 dependencies {
