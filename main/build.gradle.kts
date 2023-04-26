@@ -11,8 +11,13 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        aidl = true
+    }
+    namespace = "de.blinkt.openvpn"
     compileSdk = 33
 
+    // Also update runcoverity.sh
     ndkVersion = "25.1.8937393"
 
     defaultConfig {
@@ -136,6 +141,7 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
         }
         commandLine(listOf(swigcmd, "-outdir", genDir, "-outcurrentdir", "-c++", "-java", "-package", "net.openvpn.ovpn3",
                 "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
+                "-DOPENVPN_PLATFORM_ANDROID",
                 "-o", "${genDir}/ovpncli_wrap.cxx", "-oh", "${genDir}/ovpncli_wrap.h",
                 "src/main/cpp/openvpn3/client/ovpncli.i"))
         inputs.files( "src/main/cpp/openvpn3/client/ovpncli.i")
@@ -162,9 +168,9 @@ dependencies {
     // https://maven.google.com/web/index.html
     // https://developer.android.com/jetpack/androidx/releases/core
     val preferenceVersion = "1.2.0"
-    val coreVersion = "1.7.0"
-    val materialVersion = "1.5.0"
-    val fragment_version = "1.4.1"
+    val coreVersion = "1.9.0"
+    val materialVersion = "1.7.0"
+    val fragment_version = "1.5.5"
 
 
     implementation("androidx.annotation:annotation:1.3.0")
@@ -172,11 +178,11 @@ dependencies {
 
 
     // Is there a nicer way to do this?
-    dependencies.add("uiImplementation", "androidx.constraintlayout:constraintlayout:2.1.3")
-    dependencies.add("uiImplementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
+    dependencies.add("uiImplementation", "androidx.constraintlayout:constraintlayout:2.1.4")
+    dependencies.add("uiImplementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.22")
     dependencies.add("uiImplementation", "androidx.cardview:cardview:1.0.0")
     dependencies.add("uiImplementation", "androidx.recyclerview:recyclerview:1.2.1")
-    dependencies.add("uiImplementation", "androidx.appcompat:appcompat:1.4.1")
+    dependencies.add("uiImplementation", "androidx.appcompat:appcompat:1.5.1")
     dependencies.add("uiImplementation", "com.github.PhilJay:MPAndroidChart:v3.1.0")
     dependencies.add("uiImplementation", "com.squareup.okhttp3:okhttp:4.9.3")
     dependencies.add("uiImplementation", "androidx.core:core:$coreVersion")
@@ -186,12 +192,12 @@ dependencies {
     dependencies.add("uiImplementation", "androidx.preference:preference-ktx:$preferenceVersion")
     dependencies.add("uiImplementation", "com.google.android.material:material:$materialVersion")
     dependencies.add("uiImplementation", "androidx.webkit:webkit:1.4.0")
-    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     dependencies.add("uiImplementation","androidx.security:security-crypto:1.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:3.9.0")
-    testImplementation("org.robolectric:robolectric:4.5.1")
+    testImplementation("org.robolectric:robolectric:4.10")
     testImplementation("androidx.test:core:1.4.0")
 }
