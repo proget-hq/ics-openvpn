@@ -14,7 +14,6 @@ import android.text.TextUtils;
 
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.ConfigParser;
-import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.Preferences;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VpnStatus;
@@ -246,46 +245,22 @@ public class AppRestrictions {
      * the authentication method and will also set the keystore alias
      */
     private void addCertificateAlias(VpnProfile vpnProfile, String certAlias, Context c) {
-        if (vpnProfile == null)
+        if (vpnProfile == null || vpnProfile == null)
             return;
-
-        if (certAlias == null)
-            certAlias = "";
 
         int oldType = vpnProfile.mAuthenticationType;
         String oldAlias = vpnProfile.mAlias;
 
-        if (!TextUtils.isEmpty(certAlias)) {
-            switch (vpnProfile.mAuthenticationType)
-            {
-                case VpnProfile.TYPE_PKCS12:
-                case VpnProfile.TYPE_CERTIFICATES:
-                    vpnProfile.mAuthenticationType = VpnProfile.TYPE_KEYSTORE;
-                    break;
-                case VpnProfile.TYPE_USERPASS_CERTIFICATES:
-                case VpnProfile.TYPE_USERPASS_PKCS12:
-                    vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_KEYSTORE;
-                    break;
-            }
-
-        } else
+        switch (vpnProfile.mAuthenticationType)
         {
-            /* Alias is null, return to non keystore method */
-            boolean pkcs12present = !TextUtils.isEmpty(vpnProfile.mPKCS12Filename);
-            switch (vpnProfile.mAuthenticationType) {
-                case VpnProfile.TYPE_USERPASS_KEYSTORE:
-                    if (pkcs12present)
-                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_PKCS12;
-                    else
-                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_CERTIFICATES;
-                    break;
-                case VpnProfile.TYPE_KEYSTORE:
-                    if (pkcs12present)
-                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_PKCS12;
-                    else
-                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_CERTIFICATES;
-                    break;
-             }
+            case VpnProfile.TYPE_PKCS12:
+            case VpnProfile.TYPE_CERTIFICATES:
+                vpnProfile.mAuthenticationType = VpnProfile.TYPE_KEYSTORE;
+                break;
+            case VpnProfile.TYPE_USERPASS_CERTIFICATES:
+            case VpnProfile.TYPE_USERPASS_PKCS12:
+                vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_KEYSTORE;
+                break;
         }
         vpnProfile.mAlias = certAlias;
 
