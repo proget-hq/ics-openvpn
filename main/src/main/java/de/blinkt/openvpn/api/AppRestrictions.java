@@ -183,8 +183,6 @@ public class AppRestrictions {
             /* we always use lower case uuid since Android UUID class will use present
              * them that way */
             uuid = uuid.toLowerCase(Locale.US);
-            if (defaultprofile != null)
-                defaultprofile = defaultprofile.toLowerCase(Locale.US);
 
             if (uuid.equals(defaultprofile))
                 defaultprofileProvisioned = true;
@@ -245,22 +243,43 @@ public class AppRestrictions {
      * the authentication method and will also set the keystore alias
      */
     private void addCertificateAlias(VpnProfile vpnProfile, String certAlias, Context c) {
-        if (vpnProfile == null || vpnProfile == null)
+        if (certAlias == null || vpnProfile == null)
             return;
 
         int oldType = vpnProfile.mAuthenticationType;
         String oldAlias = vpnProfile.mAlias;
 
-        switch (vpnProfile.mAuthenticationType)
+        if (!TextUtils.isEmpty(certAlias)) {
+            switch (vpnProfile.mAuthenticationType)
+            {
+                case VpnProfile.TYPE_PKCS12:
+                case VpnProfile.TYPE_CERTIFICATES:
+                    vpnProfile.mAuthenticationType = VpnProfile.TYPE_KEYSTORE;
+                    break;
+                case VpnProfile.TYPE_USERPASS_CERTIFICATES:
+                case VpnProfile.TYPE_USERPASS_PKCS12:
+                    vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_KEYSTORE;
+                    break;
+            }
+
+        } else
         {
-            case VpnProfile.TYPE_PKCS12:
-            case VpnProfile.TYPE_CERTIFICATES:
-                vpnProfile.mAuthenticationType = VpnProfile.TYPE_KEYSTORE;
-                break;
-            case VpnProfile.TYPE_USERPASS_CERTIFICATES:
-            case VpnProfile.TYPE_USERPASS_PKCS12:
-                vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_KEYSTORE;
-                break;
+            /* Alias is null, return to non keystore method */
+            boolean pkcs12present = !TextUtils.isEmpty(vpnProfile.mPKCS12Filename);
+            switch (vpnProfile.mAuthenticationType) {
+                case VpnProfile.TYPE_USERPASS_KEYSTORE:
+                    if (pkcs12present)
+                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_PKCS12;
+                    else
+                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_USERPASS_CERTIFICATES;
+                    break;
+                case VpnProfile.TYPE_KEYSTORE:
+                    if (pkcs12present)
+                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_PKCS12;
+                    else
+                        vpnProfile.mAuthenticationType = VpnProfile.TYPE_CERTIFICATES;
+                    break;
+             }
         }
         vpnProfile.mAlias = certAlias;
 
