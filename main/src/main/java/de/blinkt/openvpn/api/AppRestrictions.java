@@ -14,6 +14,7 @@ import android.text.TextUtils;
 
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.ConfigParser;
+import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.Preferences;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VpnStatus;
@@ -21,7 +22,6 @@ import de.blinkt.openvpn.core.VpnStatus;
 import java.io.IOException;
 import java.io.StringReader;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -35,13 +35,13 @@ public class AppRestrictions {
     private static AppRestrictions mInstance;
     private BroadcastReceiver mRestrictionsReceiver;
 
-    private AppRestrictions() {
+    private AppRestrictions(Context c) {
 
     }
 
     public static AppRestrictions getInstance(Context c) {
         if (mInstance == null)
-            mInstance = new AppRestrictions();
+            mInstance = new AppRestrictions(c);
         return mInstance;
     }
 
@@ -66,7 +66,7 @@ public class AppRestrictions {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA1");
-            byte[] utf8_bytes = config.getBytes(StandardCharsets.UTF_8);
+            byte[] utf8_bytes = config.getBytes();
             digest.update(utf8_bytes, 0, utf8_bytes.length);
             return new BigInteger(1, digest.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
@@ -80,10 +80,6 @@ public class AppRestrictions {
         if (restrictionsMgr == null)
             return;
         Bundle restrictions = restrictionsMgr.getApplicationRestrictions();
-        parseRestrictionsBundle(c, restrictions);
-    }
-    public void parseRestrictionsBundle(Context c, Bundle restrictions)
-    {
         if (restrictions == null)
             return;
 
@@ -100,8 +96,8 @@ public class AppRestrictions {
         }
         Parcelable[] profileList = restrictions.getParcelableArray("vpn_configuration_list");
         if (profileList == null) {
-            VpnStatus.logInfo("App restriction does not contain a profile list. Removing previously added profiles. (vpn_configuration_list)");
-            profileList = new Parcelable[]{};
+            VpnStatus.logError("App restriction does not contain a profile list (vpn_configuration_list)");
+            return;
         }
 
         importVPNProfiles(c, restrictions, profileList);
@@ -111,7 +107,7 @@ public class AppRestrictions {
     }
 
     private void setAllowedRemoteControl(Context c, Bundle restrictions) {
-        String allowedApps = restrictions.getString("allowed_remote_access", null);
+        Parcelable[] allowedApps = restrictions.getParcelableArray("allowed_remote_access");
         ExternalAppDatabase extapps = new ExternalAppDatabase(c);
 
         if (allowedApps == null)
@@ -122,11 +118,15 @@ public class AppRestrictions {
 
         HashSet<String> restrictionApps = new HashSet<>();
 
-        for (String package_name:allowedApps.split("[, \n\r]")) {
-            if (!TextUtils.isEmpty(package_name)) {
-                restrictionApps.add(package_name);
+        for (Parcelable allowedApp: allowedApps) {
+            if (!(allowedApp instanceof Bundle)) {
+                VpnStatus.logError("App restriction allowed app has wrong type");
+                continue;
             }
+            String package_name = ((Bundle) allowedApp).getString("package_name");
+            restrictionApps.add(package_name);
         }
+
         extapps.setFlagManagedConfiguration(true);
         extapps.clearAllApiApps();
 
@@ -146,13 +146,6 @@ public class AppRestrictions {
             editor.putBoolean("screenoff", pauseVPN);
             editor.apply();
         }
-        if (restrictions.containsKey("restartvpnonboot"))
-        {
-            boolean restartVPNonBoot = restrictions.getBoolean("restartvpnonboot");
-            SharedPreferences.Editor editor = defaultPrefs.edit();
-            editor.putBoolean("restartvpnonboot", restartVPNonBoot);
-            editor.apply();
-        }
     }
 
     private void importVPNProfiles(Context c, Bundle restrictions, Parcelable[] profileList) {
@@ -160,7 +153,6 @@ public class AppRestrictions {
 
         String defaultprofile = restrictions.getString("defaultprofile", null);
         boolean defaultprofileProvisioned = false;
-
 
         ProfileManager pm = ProfileManager.getInstance(c);
         for (Parcelable profile : profileList) {
@@ -183,6 +175,8 @@ public class AppRestrictions {
             /* we always use lower case uuid since Android UUID class will use present
              * them that way */
             uuid = uuid.toLowerCase(Locale.US);
+            if (defaultprofile != null)
+                defaultprofile = defaultprofile.toLowerCase(Locale.US);
 
             if (uuid.equals(defaultprofile))
                 defaultprofileProvisioned = true;
@@ -243,8 +237,11 @@ public class AppRestrictions {
      * the authentication method and will also set the keystore alias
      */
     private void addCertificateAlias(VpnProfile vpnProfile, String certAlias, Context c) {
-        if (certAlias == null || vpnProfile == null)
+        if (vpnProfile == null)
             return;
+
+        if (certAlias == null)
+            certAlias = "";
 
         int oldType = vpnProfile.mAuthenticationType;
         String oldAlias = vpnProfile.mAlias;
