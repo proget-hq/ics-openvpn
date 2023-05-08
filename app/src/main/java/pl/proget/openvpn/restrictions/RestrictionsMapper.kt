@@ -24,7 +24,8 @@ class RestrictionsMapper {
     fun mapCertificate(value: String?): String? =
         value?.takeIf { it.isNotEmpty() }?.let {
             VpnProfile.INLINE_TAG + String(
-                Base64.decode(it, Base64.DEFAULT),
+                runCatching { Base64.decode(it, Base64.DEFAULT) }
+                    .getOrDefault(byteArrayOf()),
                 StandardCharsets.UTF_8
             )
         }
