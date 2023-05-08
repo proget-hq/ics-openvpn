@@ -667,6 +667,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             mManagement = mOpenVPN3;
         } else {
             processThread = new OpenVPNThread(this, argv, nativeLibraryDirectory, tmpDir);
+            mOpenVPNThread = processThread;
         }
 
         synchronized (mProcessLock) {
