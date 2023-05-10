@@ -21,4 +21,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#000000</color>
+    <color name="toolbarGradientDark">#FF503677</color>
 </resources>
