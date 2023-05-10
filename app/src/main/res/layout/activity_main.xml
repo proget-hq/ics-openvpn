@@ -7,15 +7,21 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".45" />
+
     <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
         android:src="@drawable/logo_black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_right"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintStart_toStartOf="@id/guideline_left"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_top"
         tools:ignore="ContentDescription" />
 
     <TextView
