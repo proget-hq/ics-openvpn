@@ -138,6 +138,30 @@ android {
             }
         }
     }
+    flavorDimensions += listOf("implementation", "ovpnimpl")
+
+    productFlavors {
+        create("ui") {
+            dimension = "implementation"
+        }
+
+        create("skeleton") {
+            dimension = "implementation"
+        }
+
+        create("ovpn23")
+        {
+            dimension = "ovpnimpl"
+            buildConfigField("boolean", "openvpn3", "true")
+        }
+
+        create("ovpn2")
+        {
+            dimension = "ovpnimpl"
+            versionNameSuffix = "-o2"
+            buildConfigField("boolean", "openvpn3", "false")
+        }
+    }
 
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_17
