@@ -5,6 +5,7 @@
 
 package de.blinkt.openvpn.core;
 
+import static de.blinkt.openvpn.VpnProfile.EXTRA_PROFILEUUID;
 import static de.blinkt.openvpn.core.ConnectionStatus.LEVEL_CONNECTED;
 import static de.blinkt.openvpn.core.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT;
 import static de.blinkt.openvpn.core.NetworkSpace.IpAddress;
@@ -1406,5 +1407,19 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         mNotificationManager.notify(notificationId, notification);
     }
 
-
+    @Override
+    public void managedConfigurationChanged(String profileUuid, boolean autoConnect) {
+        VpnStatus.logInfo("VpnService: managedConfigurationChanged");
+        mProfile = ProfileManager.get(this, profileUuid);
+        if (mProfile == null) {
+            VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned null");
+        } else if (autoConnect) {
+            Intent intent = new Intent().putExtra(EXTRA_PROFILEUUID, profileUuid);
+            VpnStatus.logInfo(
+                    "VpnService: managedConfigurationChanged getProfile() returned profile");
+            new Thread(() -> startOpenVPN(intent, 1)).start();
+            ProfileManager.setConnectedVpnProfile(this, mProfile);
+            VpnStatus.setConnectedVPNProfile(mProfile.getUUIDString());
+        }
+    }
 }
