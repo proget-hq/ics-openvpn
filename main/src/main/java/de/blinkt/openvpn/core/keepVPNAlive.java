@@ -13,7 +13,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
-import android.os.Build;
 import android.os.PersistableBundle;
 
 import de.blinkt.openvpn.LaunchVPN;
@@ -49,7 +48,7 @@ public class keepVPNAlive extends JobService implements VpnStatus.StateListener 
                 unscheduleKeepVPNAliveJobService(this);
                 return false;
             }
-            VPNLaunchHelper.startOpenVpn(vp, getApplicationContext(), "VPN keep alive Job", false);
+            VPNLaunchHelper.startOpenVpn(vp, getApplicationContext(), "VPN keep alive Job");
         } else {
             VpnStatus.logDebug("Keepalive service called but VPN still connected.");
         }
@@ -89,45 +88,18 @@ public class keepVPNAlive extends JobService implements VpnStatus.StateListener 
          * but we use a minimum of 5 minutes and 2 minutes to avoid problems if there is some
          * strange Android build that allows lower lmits.
          */
-        long initervalMillis = Math.max(getMinPeriodMillis(), 5 * 60 * 1000L);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            long flexMillis = Math.max(JobInfo.getMinFlexMillis(), 2 * 60 * 1000L);
-            jib.setPeriodic(initervalMillis, flexMillis);
-        }
-        else
-        {
-            jib.setPeriodic(initervalMillis);
-        }
+        long initervalMillis = Math.max(JobInfo.getMinPeriodMillis(), 5 * 60 * 1000L);
+        long flexMillis = Math.max(JobInfo.getMinFlexMillis(), 2 * 60 * 1000L);
+        jib.setPeriodic(initervalMillis, flexMillis);
         jib.setPersisted(true);
 
-        JobScheduler jobScheduler = null;
-        jobScheduler = getJobScheduler(c);
-
+        JobScheduler jobScheduler = c.getSystemService(JobScheduler.class);
         jobScheduler.schedule(jib.build());
         VpnStatus.logDebug("Scheduling VPN keep alive for VPN " + vp.mName);
     }
 
-    private static JobScheduler getJobScheduler(Context c) {
-        JobScheduler jobScheduler;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            jobScheduler = c.getSystemService(JobScheduler.class);
-
-        } else {
-            jobScheduler = (JobScheduler) c.getSystemService(JOB_SCHEDULER_SERVICE);
-        }
-        return jobScheduler;
-    }
-
-    private static long getMinPeriodMillis() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return JobInfo.getMinPeriodMillis();
-        } else {
-            return 15 * 60 * 1000L;   // 15 minutes
-        }
-    }
-
     public static void unscheduleKeepVPNAliveJobService(Context c) {
-        JobScheduler jobScheduler = getJobScheduler(c);
+        JobScheduler jobScheduler = c.getSystemService(JobScheduler.class);
         jobScheduler.cancel(JOBID_KEEPVPNALIVE);
         VpnStatus.logDebug("Unscheduling VPN keep alive");
     }
