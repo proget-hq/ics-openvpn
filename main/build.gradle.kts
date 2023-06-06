@@ -87,6 +87,20 @@ android {
             enableV2Signing = true
         }
 
+        create("releaseOvpn2") {
+            // ~/.gradle/gradle.properties
+            val keystoreO2File: String? by project
+            storeFile = keystoreO2File?.let { file(it) }
+            val keystoreO2Password: String? by project
+            storePassword = keystoreO2Password
+            val keystoreO2AliasPassword: String? by project
+            keyPassword = keystoreO2AliasPassword
+            val keystoreO2Alias: String? by project
+            keyAlias = keystoreO2Alias
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+
     }
 
     lint {
@@ -123,6 +137,7 @@ android {
         create("ovpn2")
         {
             dimension = "ovpnimpl"
+            versionNameSuffix = "-o2"
             buildConfigField("boolean", "openvpn3", "false")
         }
     }
@@ -136,30 +151,6 @@ android {
                 productFlavors["ovpn23"].signingConfig = signingConfigs.getByName("release")
                 productFlavors["ovpn2"].signingConfig = signingConfigs.getByName("releaseOvpn2")
             }
-        }
-    }
-    flavorDimensions += listOf("implementation", "ovpnimpl")
-
-    productFlavors {
-        create("ui") {
-            dimension = "implementation"
-        }
-
-        create("skeleton") {
-            dimension = "implementation"
-        }
-
-        create("ovpn23")
-        {
-            dimension = "ovpnimpl"
-            buildConfigField("boolean", "openvpn3", "true")
-        }
-
-        create("ovpn2")
-        {
-            dimension = "ovpnimpl"
-            versionNameSuffix = "-o2"
-            buildConfigField("boolean", "openvpn3", "false")
         }
     }
 
