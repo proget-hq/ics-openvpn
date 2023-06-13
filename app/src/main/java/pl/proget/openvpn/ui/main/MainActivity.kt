@@ -1,9 +1,12 @@
 package pl.proget.openvpn.ui.main
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
@@ -12,6 +15,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.AppCompatActivity
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
@@ -53,6 +57,8 @@ class MainActivity : AppCompatActivity(), MainView {
     }
     private val eventsReceiver by lazy { EventsReceiver(presenter) }
 
+    private val requestPermissionsLauncher = registerForActivityResult(RequestPermission()) {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -77,6 +83,7 @@ class MainActivity : AppCompatActivity(), MainView {
         }
         presenter.attach(this)
         registerReceiver(eventsReceiver, eventsReceiver.intentFilter())
+        checkNotificationPermissions()
     }
 
     override fun onDestroy() {
@@ -166,8 +173,9 @@ class MainActivity : AppCompatActivity(), MainView {
             .let {
                 try {
                     startActivityForResult(it, IMPORT_PROFILE_REQUEST_CODE)
-                } catch (e: ActivityNotFoundException){
-                    Toast.makeText(this, getString(R.string.no_app_found), Toast.LENGTH_SHORT).show()
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(this, getString(R.string.no_app_found), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
     }
@@ -270,6 +278,14 @@ class MainActivity : AppCompatActivity(), MainView {
             if (importedProfile) R.string.manual_configuration
             else R.string.configured_by_emm
         )
+
+    private fun checkNotificationPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            checkSelfPermission(POST_NOTIFICATIONS) == PERMISSION_DENIED
+        ) {
+            requestPermissionsLauncher.launch(POST_NOTIFICATIONS)
+        }
+    }
 
     companion object {
         private const val IMPORT_PROFILE_REQUEST_CODE = 1
