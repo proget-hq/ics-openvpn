@@ -6,12 +6,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <!-- Secondary brand color. -->
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
         <!-- Customize your theme here. -->
-        <item name="actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="toolbarStyle">@style/ActionBarStyle</item>
+        <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
+        <item name="switchStyle">@style/Widget.App.Switch</item>
     </style>
 
     <style name="AboutTitleTheme" parent="android:Widget.TextView">
@@ -24,7 +27,21 @@
         <item name="android:layout_marginTop">4dp</item>
     </style>
 
-    <style name="ActionBarStyle" parent="Widget.MaterialComponents.ActionBar.Solid">
-        <item name="background">@drawable/gradient_background</item>
+    <style name="ActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="titleTextColor">@color/black</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/black</item>
+    </style>
+
+    <style name="Widget.App.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+        <item name="colorSecondary">@color/light_green_400</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorAccent">@color/light_green_400</item>
     </style>
 </resources>
