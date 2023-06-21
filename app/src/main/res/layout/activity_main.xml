@@ -10,18 +10,18 @@
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_top"
         android:layout_width="wrap_content"
-        android:orientation="horizontal"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintGuide_percent=".45" />
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo_black"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
+        android:src="@drawable/proget_openvpn_logo_black"
         app:layout_constraintBottom_toBottomOf="@id/guideline_top"
+        app:layout_constraintEnd_toEndOf="@id/guideline_right"
+        app:layout_constraintStart_toStartOf="@id/guideline_left"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -60,7 +60,8 @@
         android:layout_height="wrap_content"
         android:checked="true"
         app:layout_constraintBottom_toBottomOf="@id/status"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right" />
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:useMaterialThemeColors="true" />
 
     <View
         android:id="@+id/divider2"
