@@ -16,6 +16,7 @@ import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
@@ -67,6 +68,11 @@ class MainActivity : AppCompatActivity(), MainView {
                 binding = it
                 setContentView(it.root)
             }
+
+        supportActionBar?.run {
+            displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+            setCustomView(R.layout.toolbar_title)
+        }
 
         Intent(this, OpenVPNService::class.java)
             .setAction(OpenVPNService.START_SERVICE)
