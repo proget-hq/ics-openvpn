@@ -30,6 +30,7 @@
     <style name="ActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="titleTextColor">@color/black</item>
         <item name="android:background">@android:color/white</item>
+        <item name="buttonGravity">center_vertical</item>
     </style>
 
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
