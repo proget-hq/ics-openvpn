@@ -34,19 +34,16 @@ class Settings_IP : OpenVpnPreferencesFragment(), Preference.OnPreferenceChangeL
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.vpn_ipsettings)
+        bindPreferences()
+        loadSettings()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         /* Bind the preferences early to avoid loadingSetting which is called
          * from the superclass to access an uninitialised earlyinit property
          */
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onBindPreferences() {
-        super.onBindPreferences()
         bindPreferences()
-        loadSettings()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun bindPreferences() {
