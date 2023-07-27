@@ -177,6 +177,38 @@ android {
             useLegacyPackaging = true
         }
     }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
+    // this is possible not needed
+    bundle {
+        codeTransparency {
+            signing {
+                val keystoreTPFile: String? by project
+                storeFile = keystoreTPFile?.let { file(it) }
+                val keystoreTPPassword: String? by project
+                storePassword = keystoreTPPassword
+                val keystoreTPAliasPassword: String? by project
+                keyPassword = keystoreTPAliasPassword
+                val keystoreTPAlias: String? by project
+                keyAlias = keystoreTPAlias
+
+                if (keystoreTPFile?.isEmpty() ?: true)
+                    print("keystoreTPFile not set, disabling transparency signing")
+                if (keystoreTPPassword?.isEmpty() ?: true)
+                    print("keystoreTPPassword not set, disabling transparency signing")
+                if (keystoreTPAliasPassword?.isEmpty() ?: true)
+                    print("keystoreTPAliasPassword not set, disabling transparency signing")
+                if (keystoreTPAlias?.isEmpty() ?: true)
+                    print("keyAlias not set, disabling transparency signing")
+
+            }
+        }
+    }
 }
 
 var swigcmd = "swig"
