@@ -178,13 +178,6 @@ android {
         }
     }
 
-    packaging {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
-
-    // this is possible not needed
     bundle {
         codeTransparency {
             signing {
