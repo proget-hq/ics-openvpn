@@ -191,13 +191,13 @@ android {
                 keyAlias = keystoreTPAlias
 
                 if (keystoreTPFile?.isEmpty() ?: true)
-                    print("keystoreTPFile not set, disabling transparency signing")
+                    println("keystoreTPFile not set, disabling transparency signing")
                 if (keystoreTPPassword?.isEmpty() ?: true)
-                    print("keystoreTPPassword not set, disabling transparency signing")
+                    println("keystoreTPPassword not set, disabling transparency signing")
                 if (keystoreTPAliasPassword?.isEmpty() ?: true)
-                    print("keystoreTPAliasPassword not set, disabling transparency signing")
+                    println("keystoreTPAliasPassword not set, disabling transparency signing")
                 if (keystoreTPAlias?.isEmpty() ?: true)
-                    print("keyAlias not set, disabling transparency signing")
+                    println("keyAlias not set, disabling transparency signing")
 
             }
         }
