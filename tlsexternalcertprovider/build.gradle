@@ -7,6 +7,10 @@ plugins {
     alias libs.plugins.android.application
 }
 
+ext {
+    bouncycastleVersion = '1.49'
+}
+
 android {
     compileSdkVersion 34
 
