@@ -269,6 +269,7 @@ dependencies {
     // https://maven.google.com/web/index.html
     implementation(libs.androidx.annotation)
 
+    uiImplementation(libs.android.view.material)
     uiImplementation(libs.androidx.appcompat)
     uiImplementation(libs.androidx.cardview)
     uiImplementation(libs.androidx.constraintlayout)
@@ -281,15 +282,14 @@ dependencies {
     uiImplementation(libs.androidx.security.crypto)
     uiImplementation(libs.androidx.webkit)
     uiImplementation(libs.kotlin)
-    uiImplementation(libs.material)
     uiImplementation(libs.mpandroidchart)
     uiImplementation(libs.square.okhttp)
 
-    testImplementation("androidx.test:core:1.4.0")
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
-    testImplementation("org.mockito:mockito-core:3.9.0")
-    testImplementation("org.robolectric:robolectric:4.10.2")
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.robolectric)
 }
 
 fun DependencyHandler.uiImplementation(dependencyNotation: Any): Dependency? =
