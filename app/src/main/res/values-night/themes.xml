@@ -1,12 +1,18 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Icsopenvpn" parent="Theme.MaterialComponents.DayNight">
+    <style name="Theme.Icsopenvpn" parent="Theme.Material3.DayNight">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="switchStyle">@style/Widget.App.Switch</item>
+        <item name="actionBarStyle">@style/ActionBarStyle</item>
+        <item name="materialSwitchStyle">@style/SwitchStyle</item>
     </style>
 
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="ActionBarStyle" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="buttonGravity">center_vertical</item>
     </style>
 </resources>
