@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -30,8 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="@string/status_title"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/status"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
@@ -51,20 +48,21 @@
         android:layout_marginStart="12dp"
         android:layout_marginBottom="12dp"
         android:text="@string/not_initiated"
-        app:layout_constraintBottom_toBottomOf="@id/divider2"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/divider_top"
         app:layout_constraintStart_toEndOf="@id/statusMarble" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/connectSwitch"
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/connect_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@id/status"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:useMaterialThemeColors="true" />
+        app:layout_constraintBottom_toBottomOf="@id/divider_top"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right" />
 
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/divider_top"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginBottom="12dp"
@@ -79,13 +77,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="@string/connection_title"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/connection"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
     <pl.proget.openvpn.ui.Marble
-        android:id="@+id/connectionMarble"
+        android:id="@+id/connection_marble"
         android:layout_width="12dp"
         android:layout_height="12dp"
         app:layout_constraintBottom_toBottomOf="@id/connection"
@@ -100,11 +96,13 @@
         android:layout_marginStart="12dp"
         android:layout_marginBottom="12dp"
         android:text="@string/not_connected"
-        app:layout_constraintBottom_toBottomOf="@id/divider1"
-        app:layout_constraintStart_toEndOf="@id/connectionMarble" />
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/divider_bottom"
+        app:layout_constraintStart_toEndOf="@id/connection_marble" />
 
     <View
-        android:id="@+id/divider1"
+        android:id="@+id/divider_bottom"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginBottom="12dp"
@@ -119,8 +117,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="@string/info_title"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/info"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
@@ -130,8 +126,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="@string/no_configuration"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -147,5 +145,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="32dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
