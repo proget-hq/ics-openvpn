@@ -1,13 +1,11 @@
-import com.android.build.gradle.api.ApplicationVariant
-
 /*
  * Copyright (c) 2012-2016 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
 plugins {
-    alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.android.library")
     id("checkstyle")
 }
 
@@ -26,9 +24,6 @@ android {
     defaultConfig {
         minSdk = 21
         targetSdk = 34
-        //targetSdkPreview = "UpsideDownCake"
-        versionCode = 206
-        versionName = "0.7.51"
         externalNativeBuild {
             cmake {
                 //arguments+= "-DCMAKE_VERBOSE_MAKEFILE=1"
@@ -48,7 +43,6 @@ android {
     sourceSets {
         getByName("main") {
             assets.srcDirs("src/main/assets", "build/ovpnassets")
-
         }
 
         create("ui") {
@@ -122,7 +116,6 @@ android {
         create("ovpn2")
         {
             dimension = "ovpnimpl"
-            versionNameSuffix = "-o2"
             buildConfigField("boolean", "openvpn3", "false")
         }
     }
@@ -162,31 +155,6 @@ android {
             useLegacyPackaging = true
         }
     }
-
-    bundle {
-        codeTransparency {
-            signing {
-                val keystoreTPFile: String? by project
-                storeFile = keystoreTPFile?.let { file(it) }
-                val keystoreTPPassword: String? by project
-                storePassword = keystoreTPPassword
-                val keystoreTPAliasPassword: String? by project
-                keyPassword = keystoreTPAliasPassword
-                val keystoreTPAlias: String? by project
-                keyAlias = keystoreTPAlias
-
-                if (keystoreTPFile?.isEmpty() ?: true)
-                    println("keystoreTPFile not set, disabling transparency signing")
-                if (keystoreTPPassword?.isEmpty() ?: true)
-                    println("keystoreTPPassword not set, disabling transparency signing")
-                if (keystoreTPAliasPassword?.isEmpty() ?: true)
-                    println("keystoreTPAliasPassword not set, disabling transparency signing")
-                if (keystoreTPAlias?.isEmpty() ?: true)
-                    println("keyAlias not set, disabling transparency signing")
-
-            }
-        }
-    }
 }
 
 var swigcmd = "swig"
@@ -220,14 +188,20 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
     return baseDir
 }
 
-android.applicationVariants.all(object : Action<ApplicationVariant> {
-    override fun execute(variant: ApplicationVariant) {
-        val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
-        val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
+android.libraryVariants.forEach { variant ->
+    val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
+    val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
 
-        variant.registerJavaGeneratingTask(task, sourceDir)
-    }
-})
+    variant.registerJavaGeneratingTask(task, sourceDir)
+}
+// Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
+// This fixes issue with no assets in build/ovpnassets after first build.
+// Check if this is still an issue after each rebase on schwabe project.
+android.libraryVariants.all {
+    tasks.findByName("compile${name.capitalize()}Kotlin")
+        ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
+}
+
 
 
 dependencies {

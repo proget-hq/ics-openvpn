@@ -16,6 +16,7 @@
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
         <item name="popupMenuBackground">@color/white</item>
         <item name="materialSwitchStyle">@style/SwitchStyle</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="AboutTitleTheme" parent="android:Widget.TextView">

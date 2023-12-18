@@ -725,6 +725,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         // Write OpenVPN binary
         String[] argv = VPNLaunchHelper.buildOpenvpnArgv(this);
 
+
         // Set a flag that we are starting a new VPN
         mStarting = true;
         // Stop the previous session by interrupting the thread.
@@ -738,15 +739,9 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         // Open the Management Interface
         if (!useOpenVPN3) {
             // start a Thread that handles incoming messages of the management socket
-            OpenVpnManagementThread ovpnManagementThread = new OpenVpnManagementThread(
-                    mProfile,
-                    this
-            );
+            OpenVpnManagementThread ovpnManagementThread = new OpenVpnManagementThread(mProfile, this);
             if (ovpnManagementThread.openManagementInterface(this)) {
-                Thread mSocketManagerThread = new Thread(
-                        ovpnManagementThread,
-                        "OpenVPNManagementThread"
-                );
+                Thread mSocketManagerThread = new Thread(ovpnManagementThread, "OpenVPNManagementThread");
                 mSocketManagerThread.start();
                 mManagement = ovpnManagementThread;
                 VpnStatus.logInfo("started Socket Thread");
@@ -763,7 +758,6 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             mManagement = mOpenVPN3;
         } else {
             processThread = new OpenVPNThread(this, argv, nativeLibraryDirectory, tmpDir);
-            mOpenVPNThread = processThread;
         }
 
         synchronized (mProcessLock) {
@@ -773,10 +767,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
         if (!useOpenVPN3) {
             try {
-                mProfile.writeConfigFileOutput(
-                        this,
-                        ((OpenVPNThread) processThread).getOpenVPNStdin()
-                );
+                mProfile.writeConfigFileOutput(this, ((OpenVPNThread) processThread).getOpenVPNStdin());
             } catch (IOException | ExecutionException | InterruptedException e) {
                 VpnStatus.logException("Error generating config file", e);
                 endVpnService();
@@ -1615,9 +1606,10 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         if (mProfile == null) {
             VpnStatus.logInfo("VpnService: managedConfigurationChanged getProfile() returned null");
         } else if (autoConnect) {
+            Intent intent = new Intent().putExtra(EXTRA_PROFILEUUID, profileUuid);
             VpnStatus.logInfo(
                     "VpnService: managedConfigurationChanged getProfile() returned profile");
-            new Thread(() -> startOpenVPN(mProfile, 1)).start();
+            new Thread(() -> startOpenVPN(intent, 1)).start();
             ProfileManager.setConnectedVpnProfile(this, mProfile);
             VpnStatus.setConnectedVPNProfile(mProfile.getUUIDString());
         }
