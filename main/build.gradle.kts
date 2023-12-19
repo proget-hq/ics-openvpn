@@ -1,36 +1,38 @@
- /*
+/*
  * Copyright (c) 2012-2016 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
 
 plugins {
+    alias(libs.plugins.kotlin.android)
     id("com.android.library")
     id("checkstyle")
-
-    id("kotlin-android")
 }
 
 android {
+    buildToolsVersion = "33.0.1"
     buildFeatures {
         aidl = true
     }
     namespace = "de.blinkt.openvpn"
-    compileSdk = 33
+    compileSdk = 34
+    //compileSdkPreview = "UpsideDownCake"
 
     // Also update runcoverity.sh
-    ndkVersion = "25.1.8937393"
+    ndkVersion = "26.1.10909125"
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         externalNativeBuild {
             cmake {
+                //arguments+= "-DCMAKE_VERBOSE_MAKEFILE=1"
             }
         }
     }
 
 
-    testOptions.unitTests.isIncludeAndroidResources = true
+    //testOptions.unitTests.isIncludeAndroidResources = true
 
     externalNativeBuild {
         cmake {
@@ -41,7 +43,6 @@ android {
     sourceSets {
         getByName("main") {
             assets.srcDirs("src/main/assets", "build/ovpnassets")
-
         }
 
         create("ui") {
@@ -72,6 +73,20 @@ android {
             enableV2Signing = true
         }
 
+        create("releaseOvpn2") {
+            // ~/.gradle/gradle.properties
+            val keystoreO2File: String? by project
+            storeFile = keystoreO2File?.let { file(it) }
+            val keystoreO2Password: String? by project
+            storePassword = keystoreO2Password
+            val keystoreO2AliasPassword: String? by project
+            keyPassword = keystoreO2AliasPassword
+            val keystoreO2Alias: String? by project
+            keyAlias = keystoreO2Alias
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+
     }
 
     lint {
@@ -80,32 +95,50 @@ android {
         disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
     }
 
+
+    flavorDimensions += listOf("implementation", "ovpnimpl")
+
+    productFlavors {
+        create("ui") {
+            dimension = "implementation"
+        }
+
+        create("skeleton") {
+            dimension = "implementation"
+        }
+
+        create("ovpn23")
+        {
+            dimension = "ovpnimpl"
+            buildConfigField("boolean", "openvpn3", "true")
+        }
+
+        create("ovpn2")
+        {
+            dimension = "ovpnimpl"
+            buildConfigField("boolean", "openvpn3", "false")
+        }
+    }
+
     buildTypes {
         getByName("release") {
             if (project.hasProperty("icsopenvpnDebugSign")) {
                 logger.warn("property icsopenvpnDebugSign set, using debug signing for release")
                 signingConfig = android.signingConfigs.getByName("debug")
             } else {
-                signingConfig = signingConfigs.getByName("release")
+                productFlavors["ovpn23"].signingConfig = signingConfigs.getByName("release")
+                productFlavors["ovpn2"].signingConfig = signingConfigs.getByName("releaseOvpn2")
             }
-        }
-    }
-    flavorDimensions += listOf("implementation")
-
-    productFlavors {
-        create("ui") {
-            dimension = "implementation"
-            buildConfigField("boolean", "openvpn3", "true")
-        }
-        create("skeleton") {
-            dimension = "implementation"
-            buildConfigField("boolean", "openvpn3", "false")
         }
     }
 
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     splits {
@@ -117,7 +150,11 @@ android {
         }
     }
 
-
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 }
 
 var swigcmd = "swig"
@@ -150,54 +187,50 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
     }
     return baseDir
 }
+
 android.libraryVariants.forEach { variant ->
     val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
     val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
 
     variant.registerJavaGeneratingTask(task, sourceDir)
 }
- // Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
- // This fixes issue with no assets in build/ovpnassets after first build.
- // Check if this is still an issue after each rebase on schwabe project.
- android.libraryVariants.all {
-     tasks.findByName("compile${name.capitalize()}Kotlin")
-         ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
- }
+// Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
+// This fixes issue with no assets in build/ovpnassets after first build.
+// Check if this is still an issue after each rebase on schwabe project.
+android.libraryVariants.all {
+    tasks.findByName("compile${name.capitalize()}Kotlin")
+        ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
+}
+
+
 
 dependencies {
     // https://maven.google.com/web/index.html
-    // https://developer.android.com/jetpack/androidx/releases/core
-    val preferenceVersion = "1.2.0"
-    val coreVersion = "1.9.0"
-    val materialVersion = "1.7.0"
-    val fragment_version = "1.5.5"
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.core.ktx)
 
+    uiImplementation(libs.android.view.material)
+    uiImplementation(libs.androidx.appcompat)
+    uiImplementation(libs.androidx.cardview)
+    uiImplementation(libs.androidx.constraintlayout)
+    uiImplementation(libs.androidx.core.ktx)
+    uiImplementation(libs.androidx.fragment.ktx)
+    uiImplementation(libs.androidx.lifecycle.runtime.ktx)
+    uiImplementation(libs.androidx.lifecycle.viewmodel.ktx)
+    uiImplementation(libs.androidx.preference.ktx)
+    uiImplementation(libs.androidx.recyclerview)
+    uiImplementation(libs.androidx.security.crypto)
+    uiImplementation(libs.androidx.webkit)
+    uiImplementation(libs.kotlin)
+    uiImplementation(libs.mpandroidchart)
+    uiImplementation(libs.square.okhttp)
 
-    implementation("androidx.annotation:annotation:1.3.0")
-    implementation("androidx.core:core:$coreVersion")
-
-
-    // Is there a nicer way to do this?
-    dependencies.add("uiImplementation", "androidx.constraintlayout:constraintlayout:2.1.4")
-    dependencies.add("uiImplementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.22")
-    dependencies.add("uiImplementation", "androidx.cardview:cardview:1.0.0")
-    dependencies.add("uiImplementation", "androidx.recyclerview:recyclerview:1.2.1")
-    dependencies.add("uiImplementation", "androidx.appcompat:appcompat:1.5.1")
-    dependencies.add("uiImplementation", "com.github.PhilJay:MPAndroidChart:v3.1.0")
-    dependencies.add("uiImplementation", "com.squareup.okhttp3:okhttp:4.9.3")
-    dependencies.add("uiImplementation", "androidx.core:core:$coreVersion")
-    dependencies.add("uiImplementation", "androidx.core:core-ktx:$coreVersion")
-    dependencies.add("uiImplementation", "androidx.fragment:fragment-ktx:$fragment_version")
-    dependencies.add("uiImplementation", "androidx.preference:preference:$preferenceVersion")
-    dependencies.add("uiImplementation", "androidx.preference:preference-ktx:$preferenceVersion")
-    dependencies.add("uiImplementation", "com.google.android.material:material:$materialVersion")
-    dependencies.add("uiImplementation", "androidx.webkit:webkit:1.4.0")
-    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    dependencies.add("uiImplementation", "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    dependencies.add("uiImplementation","androidx.security:security-crypto:1.0.0")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:3.9.0")
-    testImplementation("org.robolectric:robolectric:4.10")
-    testImplementation("androidx.test:core:1.4.0")
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlin)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.robolectric)
 }
+
+fun DependencyHandler.uiImplementation(dependencyNotation: Any): Dependency? =
+    add("uiImplementation", dependencyNotation)

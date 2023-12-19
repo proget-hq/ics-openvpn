@@ -8,13 +8,13 @@ val buildVersionName: String = project.properties["versionName"] as String? ?: "
 val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
 
 android {
-    compileSdk = 33
-    buildToolsVersion = "30.0.3"
+    compileSdk = 34
+    buildToolsVersion = "33.0.1"
 
     defaultConfig {
         applicationId = "pl.proget.openvpn"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = buildVersionCode
         versionName = buildVersionName
 
@@ -26,7 +26,7 @@ android {
         create("prod")
     }
 
-    flavorDimensions.add("implementation")
+    flavorDimensions += listOf("implementation", "ovpnimpl")
 
     productFlavors {
         create("staging") {
@@ -36,8 +36,12 @@ android {
         }
         create("prod") {
             dimension = "implementation"
-            matchingFallbacks.add("skeleton")
             applicationId = "pl.proget.openvpn$buildPackageNamePostfix"
+            matchingFallbacks.add("skeleton")
+        }
+        create("ovpn") {
+            dimension = "ovpnimpl"
+            matchingFallbacks.add("ovpn23")
         }
     }
 
@@ -66,12 +70,12 @@ android {
 dependencies {
     implementation(project(":main"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("com.google.android.material:material:1.7.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("net.lingala.zip4j:zip4j:2.9.0")
+    implementation("net.lingala.zip4j:zip4j:2.11.2")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
