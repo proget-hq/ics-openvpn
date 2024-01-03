@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ConfigParser
@@ -88,7 +89,12 @@ class MainActivity : AppCompatActivity(), MainView {
             }
         }
         presenter.attach(this)
-        registerReceiver(eventsReceiver, eventsReceiver.intentFilter())
+        ContextCompat.registerReceiver(
+            this,
+            eventsReceiver,
+            eventsReceiver.intentFilter(),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
         checkNotificationPermissions()
     }
 
