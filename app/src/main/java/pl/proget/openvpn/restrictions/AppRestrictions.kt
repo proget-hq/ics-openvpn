@@ -129,7 +129,12 @@ class AppRestrictions private constructor() {
                             IOpenVPNServiceInternal.Stub.asInterface(binder)
                                 .run {
                                     stopVPN(false)
-                                    vpnProfile?.let { managedConfigurationChanged(it.uuidString, config.autoConnect) }
+                                    vpnProfile?.let {
+                                        managedConfigurationChanged(
+                                            it.uuidString,
+                                            config.autoConnect
+                                        )
+                                    }
                                 }
 
                             context.sendBroadcast(Intent(Const.ACTION_CONFIGURATION_CHANGED))
@@ -262,7 +267,7 @@ class AppRestrictions private constructor() {
         bundle?.run {
             mAllowedAppsVpn = mapper.mapApplications(getString("apps"))
             mAllowedAppsVpnAreDisallowed = mAllowedAppsVpn.size > 0 &&
-                    getBoolean("useVpnForAllApplications", false)
+                getBoolean("useVpnForAllApplications", false)
         }
     }
 
