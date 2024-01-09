@@ -34,6 +34,7 @@
         android:entryValues="@array/auth_types_values"
         android:key="authType"
         android:restrictionType="choice"
+        android:defaultValue="Certificates"
         android:title="@string/config_auth_type" />
 
     <restriction
@@ -204,14 +205,14 @@
             android:title="@string/config_search_domain" />
 
         <restriction
-            android:defaultValue="8.8.8.8"
+            android:defaultValue=""
             android:description="@string/config_desc_dns_server"
             android:key="dnsServer"
             android:restrictionType="string"
             android:title="@string/config_dns_server" />
 
         <restriction
-            android:defaultValue="8.8.4.4"
+            android:defaultValue=""
             android:description="@string/config_desc_dns_alternative_server"
             android:key="dnsAlternativeServer"
             android:restrictionType="string"
@@ -347,6 +348,7 @@
             android:title="@string/config_tls_auth_direction" />
 
         <restriction
+            android:defaultValue="AES-256-CBC"
             android:description="@string/config_desc_cipher"
             android:key="cipher"
             android:restrictionType="string"
@@ -366,7 +368,7 @@
         android:title="@string/config_advanced">
 
         <restriction
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:description="@string/config_desc_use_persistent_tun"
             android:key="usePersistentTun"
             android:restrictionType="bool"
@@ -408,6 +410,7 @@
             android:title="@string/config_tun_mtu" />
 
         <restriction
+            android:defaultValue="explicit-exit-notify"
             android:description="@string/config_desc_user_options"
             android:key="userOptions"
             android:restrictionType="string"
@@ -471,6 +474,7 @@
             android:title="@string/config_keep_logs_days" />
 
         <restriction
+            android:defaultValue="@array/default_log_level_values"
             android:entries="@array/log_level_type"
             android:entryValues="@array/log_level_type_values"
             android:key="logLevel"
