@@ -14,11 +14,11 @@ android {
         aidl = true
     }
     namespace = "de.blinkt.openvpn"
-    compileSdk = 34
+    compileSdk = 35
     //compileSdkPreview = "UpsideDownCake"
 
     // Also update runcoverity.sh
-    ndkVersion = "26.1.10909125"
+    ndkVersion = "26.3.11579264"
 
     defaultConfig {
         minSdk = 21
@@ -270,6 +270,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     uiImplementation(libs.android.view.material)
+    uiImplementation(libs.androidx.activity)
+    uiImplementation(libs.androidx.activity.ktx)
     uiImplementation(libs.androidx.appcompat)
     uiImplementation(libs.androidx.cardview)
     uiImplementation(libs.androidx.viewpager2)
