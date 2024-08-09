@@ -86,31 +86,10 @@ android {
             enableV2Signing = true
         }
 
-        create("releaseOvpn2") {
-            // ~/.gradle/gradle.properties
-            val keystoreO2File: String? by project
-            storeFile = keystoreO2File?.let { file(it) }
-            val keystoreO2Password: String? by project
-            storePassword = keystoreO2Password
-            val keystoreO2AliasPassword: String? by project
-            keyPassword = keystoreO2AliasPassword
-            val keystoreO2Alias: String? by project
-            keyAlias = keystoreO2Alias
-            enableV1Signing = true
-            enableV2Signing = true
-        }
-
     }
 
     lint {
-        enable += setOf(
-            "BackButton",
-            "EasterEgg",
-            "StopShip",
-            "IconExpectedSize",
-            "GradleDynamicVersion",
-            "NewerVersionAvailable"
-        )
+        enable += setOf("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
         checkOnly += setOf("ImpliedQuantity", "MissingQuantity")
         disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
     }
@@ -222,47 +201,26 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
         doFirst {
             mkdir(genDir)
         }
-        commandLine(
-            listOf(
-                swigcmd,
-                "-outdir",
-                genDir,
-                "-outcurrentdir",
-                "-c++",
-                "-java",
-                "-package",
-                "net.openvpn.ovpn3",
-                "-Isrc/main/cpp/openvpn3/client",
-                "-Isrc/main/cpp/openvpn3/",
+        commandLine(listOf(swigcmd, "-outdir", genDir, "-outcurrentdir", "-c++", "-java", "-package", "net.openvpn.ovpn3",
+                "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
                 "-DOPENVPN_PLATFORM_ANDROID",
-                "-o",
-                "${genDir}/ovpncli_wrap.cxx",
-                "-oh",
-                "${genDir}/ovpncli_wrap.h",
-                "src/main/cpp/openvpn3/client/ovpncli.i"
-            )
-        )
-        inputs.files("src/main/cpp/openvpn3/client/ovpncli.i")
-        outputs.dir(genDir)
+                "-o", "${genDir}/ovpncli_wrap.cxx", "-oh", "${genDir}/ovpncli_wrap.h",
+                "src/main/cpp/openvpn3/client/ovpncli.i"))
+        inputs.files( "src/main/cpp/openvpn3/client/ovpncli.i")
+        outputs.dir( genDir)
 
     }
     return baseDir
 }
 
-android.libraryVariants.forEach { variant ->
-    val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
-    val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
+android.applicationVariants.all(object : Action<ApplicationVariant> {
+    override fun execute(variant: ApplicationVariant) {
+        val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
+        val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
 
-    variant.registerJavaGeneratingTask(task, sourceDir)
-}
-// Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
-// This fixes issue with no assets in build/ovpnassets after first build.
-// Check if this is still an issue after each rebase on schwabe project.
-android.libraryVariants.all {
-    tasks.findByName("compile${name.capitalize()}Kotlin")
-        ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
-}
-
+        variant.registerJavaGeneratingTask(task, sourceDir)
+    }
+})
 
 
 dependencies {
