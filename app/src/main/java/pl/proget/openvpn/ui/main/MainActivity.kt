@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -18,6 +20,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
@@ -32,6 +35,7 @@ import pl.proget.openvpn.data.isImported
 import pl.proget.openvpn.data.isValid
 import pl.proget.openvpn.data.save
 import pl.proget.openvpn.databinding.ActivityMainBinding
+import pl.proget.openvpn.tools.isAndroidM
 import pl.proget.openvpn.ui.about.AboutActivity
 import pl.proget.openvpn.ui.logs.LogsActivity
 
@@ -212,6 +216,7 @@ class MainActivity : AppCompatActivity(), MainView {
             changeConnectSwitch(false)
             binding.info.text = information(importedProfile)
             binding.connectSwitch.isEnabled = true
+            setGraySwitch()
         }
     }
 
@@ -229,6 +234,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
             binding.connectSwitch.isEnabled = allowDisconnect
+            setGreenSwitch()
         }
     }
 
@@ -240,6 +246,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.connectionMarble.setRed()
             binding.info.text = information(importedProfile)
             changeConnectSwitch(false)
+            setGraySwitch()
         }
     }
 
@@ -256,6 +263,7 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.info.text = information(importedProfile)
             binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
+            setOrangeSwitch()
             binding.connectSwitch.isEnabled = allowDisconnect
         }
     }
@@ -295,6 +303,28 @@ class MainActivity : AppCompatActivity(), MainView {
             checkSelfPermission(POST_NOTIFICATIONS) == PERMISSION_DENIED
         ) {
             requestPermissionsLauncher.launch(POST_NOTIFICATIONS)
+        }
+    }
+
+    private fun setGreenSwitch() {
+        if (isAndroidM()) {
+            binding.connectSwitch.trackTintList = ColorStateList.valueOf(this.getColor(R.color.light_green_400))
+            binding.connectSwitch.thumbIconDrawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_24)
+            binding.connectSwitch.thumbIconTintList = ColorStateList.valueOf(this.getColor(R.color.light_green_400))
+        }
+    }
+
+    private fun setOrangeSwitch() {
+        if (isAndroidM()) {
+            binding.connectSwitch.trackTintList = ColorStateList.valueOf(this.getColor(R.color.orange_500))
+            binding.connectSwitch.thumbIconDrawable = null
+        }
+    }
+
+    private fun setGraySwitch() {
+        if (isAndroidM()) {
+            binding.connectSwitch.trackTintList = ColorStateList.valueOf(Color.LTGRAY)
+            binding.connectSwitch.thumbIconDrawable = null
         }
     }
 

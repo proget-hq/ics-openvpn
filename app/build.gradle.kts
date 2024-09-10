@@ -8,13 +8,12 @@ val buildVersionName: String = project.properties["versionName"] as String? ?: "
 val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
 
 android {
-    compileSdk = 34
-    buildToolsVersion = "33.0.1"
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "pl.proget.openvpn"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = buildVersionCode
         versionName = buildVersionName
 
@@ -81,16 +80,16 @@ android {
 dependencies {
     implementation(project(":main"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("net.lingala.zip4j:zip4j:2.11.2")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.kotlin.stdlib.v1920)
+    implementation(libs.androidx.core.core.ktx)
+    implementation(libs.androidx.appcompat.v161)
+    implementation(libs.android.view.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.zip4j)
+    implementation(libs.androidx.datastore.preferences)
 
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

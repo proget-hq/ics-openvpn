@@ -4,8 +4,8 @@
  */
 
 plugins {
-    alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.android.library")
     id("checkstyle")
 }
 
@@ -89,7 +89,14 @@ android {
     }
 
     lint {
-        enable += setOf("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
+        enable += setOf(
+            "BackButton",
+            "EasterEgg",
+            "StopShip",
+            "IconExpectedSize",
+            "GradleDynamicVersion",
+            "NewerVersionAvailable"
+        )
         checkOnly += setOf("ImpliedQuantity", "MissingQuantity")
         disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
     }
@@ -115,7 +122,6 @@ android {
         create("ovpn2")
         {
             dimension = "ovpnimpl"
-            versionNameSuffix = "-o2"
             buildConfigField("boolean", "openvpn3", "false")
         }
     }
@@ -155,31 +161,6 @@ android {
             useLegacyPackaging = true
         }
     }
-
-    bundle {
-        codeTransparency {
-            signing {
-                val keystoreTPFile: String? by project
-                storeFile = keystoreTPFile?.let { file(it) }
-                val keystoreTPPassword: String? by project
-                storePassword = keystoreTPPassword
-                val keystoreTPAliasPassword: String? by project
-                keyPassword = keystoreTPAliasPassword
-                val keystoreTPAlias: String? by project
-                keyAlias = keystoreTPAlias
-
-                if (keystoreTPFile?.isEmpty() ?: true)
-                    println("keystoreTPFile not set, disabling transparency signing")
-                if (keystoreTPPassword?.isEmpty() ?: true)
-                    println("keystoreTPPassword not set, disabling transparency signing")
-                if (keystoreTPAliasPassword?.isEmpty() ?: true)
-                    println("keystoreTPAliasPassword not set, disabling transparency signing")
-                if (keystoreTPAlias?.isEmpty() ?: true)
-                    println("keyAlias not set, disabling transparency signing")
-
-            }
-        }
-    }
 }
 
 var swigcmd = "swig"
@@ -201,26 +182,46 @@ fun registerGenTask(variantName: String, variantDirName: String): File {
         doFirst {
             mkdir(genDir)
         }
-        commandLine(listOf(swigcmd, "-outdir", genDir, "-outcurrentdir", "-c++", "-java", "-package", "net.openvpn.ovpn3",
-                "-Isrc/main/cpp/openvpn3/client", "-Isrc/main/cpp/openvpn3/",
+        commandLine(
+            listOf(
+                swigcmd,
+                "-outdir",
+                genDir,
+                "-outcurrentdir",
+                "-c++",
+                "-java",
+                "-package",
+                "net.openvpn.ovpn3",
+                "-Isrc/main/cpp/openvpn3/client",
+                "-Isrc/main/cpp/openvpn3/",
                 "-DOPENVPN_PLATFORM_ANDROID",
-                "-o", "${genDir}/ovpncli_wrap.cxx", "-oh", "${genDir}/ovpncli_wrap.h",
-                "src/main/cpp/openvpn3/client/ovpncli.i"))
-        inputs.files( "src/main/cpp/openvpn3/client/ovpncli.i")
-        outputs.dir( genDir)
+                "-o",
+                "${genDir}/ovpncli_wrap.cxx",
+                "-oh",
+                "${genDir}/ovpncli_wrap.h",
+                "src/main/cpp/openvpn3/client/ovpncli.i"
+            )
+        )
+        inputs.files("src/main/cpp/openvpn3/client/ovpncli.i")
+        outputs.dir(genDir)
 
     }
     return baseDir
 }
 
-android.applicationVariants.all(object : Action<ApplicationVariant> {
-    override fun execute(variant: ApplicationVariant) {
-        val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
-        val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
+android.libraryVariants.forEach { variant ->
+    val sourceDir = registerGenTask(variant.name, variant.baseName.replace("-", "/"))
+    val task = tasks.named("generateOpenVPN3Swig${variant.name}").get()
 
-        variant.registerJavaGeneratingTask(task, sourceDir)
-    }
-})
+    variant.registerJavaGeneratingTask(task, sourceDir)
+}
+// Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
+// This fixes issue with no assets in build/ovpnassets after first build.
+// Check if this is still an issue after each rebase on schwabe project.
+android.libraryVariants.all {
+    tasks.findByName("compile${name.capitalize()}Kotlin")
+        ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
+}
 
 
 dependencies {

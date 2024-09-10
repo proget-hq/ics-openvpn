@@ -153,7 +153,13 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             OpenVPNService.this.challengeResponse(repsonse);
         }
 
-
+        @Override
+        public void managedConfigurationChanged(
+                String profileUuid,
+                boolean autoConnect
+        ) throws RemoteException {
+            OpenVPNService.this.managedConfigurationChanged(profileUuid, autoConnect);
+        }
     };
     private TunConfig mLastTunCfg;
     private String mRemoteGW;
