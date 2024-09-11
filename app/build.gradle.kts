@@ -8,13 +8,13 @@ val buildVersionName: String = project.properties["versionName"] as String? ?: "
 val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
 
 android {
-    compileSdk = 33
-    buildToolsVersion = "30.0.3"
+    compileSdk = 35
+    namespace = "pl.proget.openvpn"
 
     defaultConfig {
         applicationId = "pl.proget.openvpn"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 35
         versionCode = buildVersionCode
         versionName = buildVersionName
 
@@ -40,7 +40,6 @@ android {
             applicationId = "pl.proget.openvpn$buildPackageNamePostfix"
         }
     }
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -51,14 +50,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_1_8)
-        targetCompatibility(JavaVersion.VERSION_1_8)
+        sourceCompatibility(JavaVersion.VERSION_17)
+        targetCompatibility(JavaVersion.VERSION_17)
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         viewBinding = true
+        aidl = true
     }
 }
 

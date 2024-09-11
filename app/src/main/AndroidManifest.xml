@@ -7,14 +7,15 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission"
         tools:node="remove" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:name=".OpenVpnApplication"
         android:allowBackup="false"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_logo"
-        android:roundIcon="@mipmap/ic_logo_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Icsopenvpn"
         tools:node="replace">
@@ -63,12 +64,20 @@
         <service
             android:name="de.blinkt.openvpn.core.OpenVPNService"
             android:exported="true"
-            android:foregroundServiceType="connectedDevice"
+            android:foregroundServiceType="specialUse"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="vpn" />
+
         </service>
+        <service
+            android:name="de.blinkt.openvpn.core.keepVPNAlive"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name="de.blinkt.openvpn.core.OpenVPNStatusService"
             android:exported="false" />
@@ -84,5 +93,4 @@
         </provider>
 
     </application>
-
 </manifest>

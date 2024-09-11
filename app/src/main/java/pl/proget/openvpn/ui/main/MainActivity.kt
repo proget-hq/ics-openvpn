@@ -13,6 +13,7 @@ import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ConfigParser
@@ -76,7 +77,12 @@ class MainActivity : AppCompatActivity(), MainView {
             }
         }
         presenter.attach(this)
-        registerReceiver(eventsReceiver, eventsReceiver.intentFilter())
+        ContextCompat.registerReceiver(
+            this,
+            eventsReceiver,
+            eventsReceiver.intentFilter(),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun onDestroy() {
@@ -166,8 +172,9 @@ class MainActivity : AppCompatActivity(), MainView {
             .let {
                 try {
                     startActivityForResult(it, IMPORT_PROFILE_REQUEST_CODE)
-                } catch (e: ActivityNotFoundException){
-                    Toast.makeText(this, getString(R.string.no_app_found), Toast.LENGTH_SHORT).show()
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(this, getString(R.string.no_app_found), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
     }

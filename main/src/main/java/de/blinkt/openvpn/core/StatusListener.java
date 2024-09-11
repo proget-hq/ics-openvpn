@@ -1,8 +1,5 @@
 /*
- * Copyright (c) 2012-2016 Arne Schwabe
- * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
- */
-
+ * Copyright (c) 2012-2016 Arne Schwabe * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt */
 package de.blinkt.openvpn.core;
 
 import android.app.ActivityManager;
@@ -29,9 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by arne on 09.11.16.
- */
-
+ * Created by arne on 09.11.16. */
 public class StatusListener implements VpnStatus.LogListener {
     private final IStatusCallbacks mCallback = new IStatusCallbacks.Stub() {
         @Override
@@ -48,8 +43,7 @@ public class StatusListener implements VpnStatus.LogListener {
 
         private Intent reCreateIntent(Intent intent) {
             /* To avoid UnsafeIntentLaunchViolation we recreate the intent that we passed
-             * to ourselves via the AIDL interface */
-            if (intent == null)
+             * to ourselves via the AIDL interface */            if (intent == null)
                 return null;
             Intent newIntent = new Intent(intent.getAction(), intent.getData());
             if (intent.getExtras() != null)
@@ -73,7 +67,7 @@ public class StatusListener implements VpnStatus.LogListener {
 
         @Override
         public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+                IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             IServiceStatus serviceStatus = IServiceStatus.Stub.asInterface(service);
             try {
@@ -123,7 +117,7 @@ public class StatusListener implements VpnStatus.LogListener {
     private Context mContext;
     private String pkgName = "(packageName not yet set)";
 
-    void init(Context c) {
+    public void init(Context c) {
         pkgName = c.getPackageName();
         Intent intent = new Intent(c, OpenVPNStatusService.class);
         intent.setAction(OpenVPNService.START_SERVICE);
