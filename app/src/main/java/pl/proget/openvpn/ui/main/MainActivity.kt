@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), MainView {
         unregisterReceiver(eventsReceiver)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
@@ -104,6 +104,7 @@ class MainActivity : AppCompatActivity(), MainView {
             R.id.logs -> startActivity(Intent(this, LogsActivity::class.java))
             R.id.about -> presenter.onAboutClick()
         }
+
         return true
     }
 
