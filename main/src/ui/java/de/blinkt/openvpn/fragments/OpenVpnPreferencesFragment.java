@@ -46,14 +46,16 @@ public abstract class OpenVpnPreferencesFragment extends PreferenceFragmentCompa
 			String profileUUID = savedInstanceState.getString(VpnProfile.EXTRA_PROFILEUUID);
 			mProfile = ProfileManager.get(getActivity(), profileUUID);
 			loadSettings();
-
 		}
 	}
 
     @Override
 	public void onSaveInstanceState (Bundle outState) {
 		super.onSaveInstanceState(outState);
-		saveSettings();
+		if (getView() != null) {
+			//if we have no view, there is no point in trying to save anything.
+			saveSettings();
+		}
 		outState.putString(VpnProfile.EXTRA_PROFILEUUID, mProfile.getUUIDString());
 	}
 }

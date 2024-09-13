@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/stdpadding"
         android:paddingRight="@dimen/stdpadding"
+        android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay">
 
     <LinearLayout
@@ -45,9 +46,13 @@
                 android:id="@+id/version_ovpn3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12sp"
                 tools:text="OpenVPN3 core version 8df8718283" />
-
+        <TextView
+                android:id="@+id/openssl_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12sp"
+                tools:text="OpenSSL version 8df8718283" />
 
         <TextView
                 android:layout_width="match_parent"

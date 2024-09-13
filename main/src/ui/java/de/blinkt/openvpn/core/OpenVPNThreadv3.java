@@ -189,12 +189,14 @@ public class OpenVPNThreadv3 extends ClientAPI_OpenVPNClient implements Runnable
         config.setExternalPkiAlias("extpki");
         config.setCompressionMode("asym");
 
+
         config.setHwAddrOverride(NetworkUtils.getFakeMacAddrFromSAAID(mService));
         config.setInfo(true);
         config.setAllowLocalLanAccess(mVp.mAllowLocalLAN);
         boolean retryOnAuthFailed = mVp.mAuthRetry == AUTH_RETRY_NOINTERACT;
         config.setRetryOnAuthFailed(retryOnAuthFailed);
         config.setEnableLegacyAlgorithms(mVp.mUseLegacyProvider);
+        /* We want the same app internal route emulation for OpenVPN 2 and OpenVPN 3 */
         config.setEnableRouteEmulation(false);
         if (mVp.mCompatMode > 0 && mVp.mCompatMode < 20500)
             config.setEnableNonPreferredDCAlgorithms(true);
@@ -260,7 +262,6 @@ public class OpenVPNThreadv3 extends ClientAPI_OpenVPNClient implements Runnable
     void setUserPW() {
         if (mVp.isUserPWAuth()) {
             ClientAPI_ProvideCreds creds = new ClientAPI_ProvideCreds();
-            creds.setCachePassword(true);
             creds.setPassword(mVp.getPasswordAuth());
             creds.setUsername(mVp.mUsername);
             provide_creds(creds);
@@ -292,7 +293,7 @@ public class OpenVPNThreadv3 extends ClientAPI_OpenVPNClient implements Runnable
     @Override
     public void sendCRResponse(String response) {
         mHandler.post(() -> {
-            post_cc_msg("CR_RESPONSE," + response + "\n");
+            post_cc_msg("CR_RESPONSE," + response);
         });
     }
 
@@ -310,25 +311,30 @@ public class OpenVPNThreadv3 extends ClientAPI_OpenVPNClient implements Runnable
     public void event(ClientAPI_Event event) {
         String name = event.getName();
         String info = event.getInfo();
-        if (name.equals("INFO")) {
-            if (info.startsWith("OPEN_URL:") || info.startsWith("CR_TEXT:")
-                || info.startsWith("WEB_AUTH:")) {
-                mService.trigger_sso(info);
-            } else {
-                VpnStatus.logInfo(R.string.info_from_server, info);
+        switch (name) {
+            case "INFO" -> {
+                if (info.startsWith("OPEN_URL:") || info.startsWith("CR_TEXT:")
+                        || info.startsWith("WEB_AUTH:")) {
+                    mService.trigger_sso(info);
+                } else {
+                    VpnStatus.logInfo(R.string.info_from_server, info);
+                }
             }
-        } else if (name.equals("COMPRESSION_ENABLED") || name.equals(("WARN"))) {
-            VpnStatus.logInfo(String.format(Locale.US, "%s: %s", name, info));
-        } else {
-            VpnStatus.updateStateString(name, info);
+            case "COMPRESSION_ENABLED", "WARN" ->
+                    VpnStatus.logInfo(String.format(Locale.US, "%s: %s", name, info));
+            case "PAUSE" ->
+                    VpnStatus.updateStateString(name, "VPN connection paused", R.string.state_userpause, ConnectionStatus.LEVEL_VPNPAUSED);
+            case "RESUME" ->
+                    VpnStatus.updateStateString(name, "VPN connection resumed", R.string.state_reconnecting, ConnectionStatus.LEVEL_CONNECTING_NO_SERVER_REPLY_YET);
+            default ->
+            {
+                VpnStatus.updateStateString(name, info);
+                VpnStatus.logInfo(String.format("EVENT: %s: %s", name, info));
+            }
         }
-		/* if (event.name.equals("DYNAMIC_CHALLENGE")) {
-			ClientAPI_DynamicChallenge challenge = new ClientAPI_DynamicChallenge();
-			final boolean status = ClientAPI_OpenVPNClient.parse_dynamic_challenge(event.info, challenge);
-
-		} else */
         if (event.getError())
             VpnStatus.logError(String.format("EVENT(Error): %s: %s", name, info));
+
     }
 
     @Override

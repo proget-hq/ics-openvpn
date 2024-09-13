@@ -1,15 +1,9 @@
 /*
- * Copyright (c) 2012-2016 Arne Schwabe
- * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
- */
-
+ * Copyright (c) 2012-2016 Arne Schwabe * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt */
 package de.blinkt.openvpn.core;
-
-import static android.app.ApplicationExitInfo.REASON_CRASH_NATIVE;
 
 import android.app.ActivityManager;
 import android.app.ApplicationExitInfo;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -29,11 +23,10 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 /**
- * Created by arne on 09.11.16.
- */
-
+ * Created by arne on 09.11.16. */
 public class StatusListener implements VpnStatus.LogListener {
     private final IStatusCallbacks mCallback = new IStatusCallbacks.Stub() {
         @Override
@@ -44,7 +37,18 @@ public class StatusListener implements VpnStatus.LogListener {
         @Override
         public void updateStateString(String state, String msg, int resid, ConnectionStatus
                 level, Intent intent) throws RemoteException {
-            VpnStatus.updateStateString(state, msg, resid, level, intent);
+            Intent newIntent = reCreateIntent(intent);
+            VpnStatus.updateStateString(state, msg, resid, level, newIntent);
+        }
+
+        private Intent reCreateIntent(Intent intent) {
+            /* To avoid UnsafeIntentLaunchViolation we recreate the intent that we passed
+             * to ourselves via the AIDL interface */            if (intent == null)
+                return null;
+            Intent newIntent = new Intent(intent.getAction(), intent.getData());
+            if (intent.getExtras() != null)
+                newIntent.putExtras(intent.getExtras());
+            return newIntent;
         }
 
         @Override
@@ -63,7 +67,7 @@ public class StatusListener implements VpnStatus.LogListener {
 
         @Override
         public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+                IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             IServiceStatus serviceStatus = IServiceStatus.Stub.asInterface(service);
             try {
@@ -111,9 +115,10 @@ public class StatusListener implements VpnStatus.LogListener {
 
     };
     private Context mContext;
+    private String pkgName = "(packageName not yet set)";
 
     public void init(Context c) {
-
+        pkgName = c.getPackageName();
         Intent intent = new Intent(c, OpenVPNStatusService.class);
         intent.setAction(OpenVPNService.START_SERVICE);
         mCacheDir = c.getCacheDir();
@@ -154,23 +159,19 @@ public class StatusListener implements VpnStatus.LogListener {
 
     @Override
     public void newLog(LogItem logItem) {
+        String tag = pkgName + "(OpenVPN)";
+        long logAge = System.currentTimeMillis() - logItem.getLogtime();
+        if (logAge > 5000)
+        {
+            tag += String.format(Locale.US, "[%ds ago]", logAge/1000 );
+        }
+
         switch (logItem.getLogLevel()) {
-            case INFO:
-                Log.i("OpenVPN", logItem.getString(mContext));
-                break;
-            case DEBUG:
-                Log.d("OpenVPN", logItem.getString(mContext));
-                break;
-            case ERROR:
-                Log.e("OpenVPN", logItem.getString(mContext));
-                break;
-            case VERBOSE:
-                Log.v("OpenVPN", logItem.getString(mContext));
-                break;
-            case WARNING:
-            default:
-                Log.w("OpenVPN", logItem.getString(mContext));
-                break;
+            case INFO -> Log.i(tag, logItem.getString(mContext));
+            case DEBUG -> Log.d(tag, logItem.getString(mContext));
+            case ERROR -> Log.e(tag, logItem.getString(mContext));
+            case VERBOSE -> Log.v(tag, logItem.getString(mContext));
+            default -> Log.w(tag, logItem.getString(mContext));
         }
 
     }

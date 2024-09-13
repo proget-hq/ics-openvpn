@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.4.1)
+project("ics-openvpn")
 # Git version string
 
 include(GetGitRevisionDescription.cmake)
@@ -109,8 +110,8 @@ target_compile_definitions(ovpnutil PRIVATE -DTARGET_ARCH_ABI=\"${ANDROID_ABI}\"
         )
 target_link_libraries(ovpnutil log)
 
-add_library(rsapss SHARED ovpnutil/rsapss.cpp)
-target_link_libraries(rsapss log crypto ssl)
+add_library(osslutil SHARED ovpnutil/osslutil.cpp)
+target_link_libraries(osslutil log crypto ssl)
 
 if (NOT ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} MATCHES "build/intermediates/cmake/.*skeleton.*/")
     add_library(osslspeedtest SHARED ovpnutil/sslspeed.c)
@@ -180,6 +181,7 @@ set(openvpn_srcs
         src/openvpn/proxy.c
         src/openvpn/ps.c
         src/openvpn/push.c
+        src/openvpn/reflect_filter.c
         src/openvpn/reliable.c
         src/openvpn/route.c
         src/openvpn/run_command.c

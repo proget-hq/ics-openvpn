@@ -27,10 +27,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.android.vending.billing.IInAppBillingService;
 
+import de.blinkt.openvpn.BuildConfig;
 import de.blinkt.openvpn.core.NativeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,9 +87,18 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
 
         TextView verO2 = v.findViewById(R.id.version_ovpn2);
         TextView verO3 = v.findViewById(R.id.version_ovpn3);
+        TextView osslVer = v.findViewById(R.id.openssl_version);
 
         verO2.setText(String.format(Locale.US, "OpenVPN version: %s", NativeUtils.getOpenVPN2GitVersion()));
-        verO3.setText(String.format(Locale.US, "OpenVPN3 core version: %s", NativeUtils.getOpenVPN3GitVersion()));
+        if (BuildConfig.openvpn3)
+            verO3.setText(String.format(Locale.US, "OpenVPN3 core version: %s", NativeUtils.getOpenVPN3GitVersion()));
+        else
+            verO3.setText("(OpenVPN 2.x only build. No OpenVPN 3.x core in this app)");
+
+
+        osslVer.setText(String.format(Locale.US, "OpenSSL version: %s", NativeUtils.getOpenSSLVersion()));
+
+
 
         /* recreating view without onCreate/onDestroy cycle */
         TextView translation = (TextView) v.findViewById(R.id.translation);
@@ -98,6 +111,16 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
 
         TextView wv = (TextView) v.findViewById(R.id.full_licenses);
         wv.setText(Html.fromHtml(readHtmlFromAssets()));
+
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(v, (view, windowInsets) ->
+                {
+                    Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+                    view.setPadding(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(), insets.bottom);
+                    return WindowInsetsCompat.CONSUMED;
+                }
+        );
         return v;
     }
 

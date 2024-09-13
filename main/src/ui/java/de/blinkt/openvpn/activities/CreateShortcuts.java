@@ -5,6 +5,8 @@
 
 package de.blinkt.openvpn.activities;
 
+import static de.blinkt.openvpn.core.OpenVPNService.EXTRA_START_REASON;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,9 +51,6 @@ import java.util.Vector;
  * or start a particular operation.
  */
 public class CreateShortcuts extends ListActivity implements OnItemClickListener {
-
-
-    private static final int START_VPN_PROFILE= 70;
 
 
     private ProfileManager mPM;
@@ -128,7 +127,8 @@ public class CreateShortcuts extends ListActivity implements OnItemClickListener
 
         Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
         shortcutIntent.setClass(this, LaunchVPN.class);
-        shortcutIntent.putExtra(LaunchVPN.EXTRA_KEY,profile.getUUID().toString());
+        shortcutIntent.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUID().toString());
+        shortcutIntent.putExtra(EXTRA_START_REASON, "shortcut");
 
         // Then, set up the container intent (the response to the caller)
 
