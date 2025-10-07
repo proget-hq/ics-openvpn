@@ -206,6 +206,7 @@ set(openvpn_srcs
         src/openvpn/ssl_verify_mbedtls.c
         src/openvpn/status.c
         src/openvpn/tls_crypt.c
+        src/openvpn/tun_afunix.c
         src/openvpn/tun.c
         src/openvpn/vlan.c
         src/openvpn/xkey_helper.c

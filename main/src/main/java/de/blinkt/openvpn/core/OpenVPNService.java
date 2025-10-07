@@ -152,7 +152,13 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             OpenVPNService.this.challengeResponse(repsonse);
         }
 
-
+        @Override
+        public void managedConfigurationChanged(
+                String profileUuid,
+                boolean autoConnect
+        ) {
+           OpenVPNService.this.managedConfigurationChanged(profileUuid,autoConnect);
+        }
     };
     private TunConfig mLastTunCfg;
     private String mRemoteGW;
@@ -666,6 +672,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             VpnStatus.logInfo(R.string.ignore_vpn_start_request, mProfile.getName());
             return;
         }
+        startOpenVPN(vp, startId);
     }
 
     private void startOpenVPN(VpnProfile vp, int startId) {
@@ -985,7 +992,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         }
 
         VpnStatus.logInfo(R.string.local_ip_info, ipv4info, ipv4len, ipv6info, tc.mMtu);
-        VpnStatus.logInfo(R.string.dns_server_info, TextUtils.join(", ", tc.mDnslist), TextUtils.join(", ", tc.mDomain));
+        VpnStatus.logInfo(R.string.dns_server_info, TextUtils.join(", ", tc.mDnslist), TextUtils.join(", ", tc.mSearchDomainList));
         VpnStatus.logInfo(R.string.routes_info_incl, TextUtils.join(", ", tc.mRoutes.getNetworks(true)), TextUtils.join(", ", tc.mRoutesv6.getNetworks(true)));
         VpnStatus.logInfo(R.string.routes_info_excl, TextUtils.join(", ", tc.mRoutes.getNetworks(false)), TextUtils.join(", ", tc.mRoutesv6.getNetworks(false)));
         if (tc.mProxyInfo != null) {
