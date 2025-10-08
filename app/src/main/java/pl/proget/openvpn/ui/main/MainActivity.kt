@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.elevation = 0f
         ActivityMainBinding.inflate(layoutInflater)
             .let {
                 binding = it

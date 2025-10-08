@@ -1,7 +1,7 @@
 /*
-* Copyright (c) 2012-2016 Arne Schwabe
-* Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
-*/
+ * Copyright (c) 2012-2016 Arne Schwabe
+ * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
+ */
 
 plugins {
     id("com.android.library")
@@ -20,7 +20,7 @@ android {
     //compileSdkPreview = "UpsideDownCake"
 
     // Also update runcoverity.sh
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.0.13004108"
 
     defaultConfig {
         minSdk = 21
