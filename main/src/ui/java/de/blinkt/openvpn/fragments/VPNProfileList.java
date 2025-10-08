@@ -24,9 +24,6 @@ import android.os.PersistableBundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.ListFragment;
@@ -93,8 +90,6 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
     private ArrayAdapter<VpnProfile> mArrayadapter;
     private Intent mLastIntent;
     private VpnProfile defaultVPN;
-    private View mPermissionView;
-    private ActivityResultLauncher<String> mPermReceiver;
     private View mPermissionView;
     private ActivityResultLauncher<String> mPermReceiver;
 
