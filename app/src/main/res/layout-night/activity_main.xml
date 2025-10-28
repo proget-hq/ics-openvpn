@@ -5,15 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".45" />
+
     <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
         android:src="@drawable/logo_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_top"
+        app:layout_constraintEnd_toEndOf="@id/guideline_right"
+        app:layout_constraintStart_toStartOf="@id/guideline_left"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -22,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="@string/status_title"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/status"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
@@ -42,23 +47,24 @@
         android:layout_marginStart="12dp"
         android:layout_marginBottom="12dp"
         android:text="@string/not_initiated"
-        app:layout_constraintBottom_toBottomOf="@id/divider2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/divider_top"
         app:layout_constraintStart_toEndOf="@id/statusMarble" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/connectSwitch"
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/connect_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@id/status"
+        app:layout_constraintBottom_toBottomOf="@id/divider_top"
         app:layout_constraintEnd_toStartOf="@id/guideline_right" />
 
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/divider_top"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
         android:layout_marginBottom="12dp"
+        android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@id/connection_title"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
@@ -69,12 +75,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="@string/connection_title"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/connection"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
     <pl.proget.openvpn.ui.Marble
-        android:id="@+id/connectionMarble"
+        android:id="@+id/connection_marble"
         android:layout_width="12dp"
         android:layout_height="12dp"
         app:layout_constraintBottom_toBottomOf="@id/connection"
@@ -89,11 +94,12 @@
         android:layout_marginStart="12dp"
         android:layout_marginBottom="12dp"
         android:text="@string/not_connected"
-        app:layout_constraintBottom_toBottomOf="@id/divider1"
-        app:layout_constraintStart_toEndOf="@id/connectionMarble" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/divider_bottom"
+        app:layout_constraintStart_toEndOf="@id/connection_marble" />
 
     <View
-        android:id="@+id/divider1"
+        android:id="@+id/divider_bottom"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginBottom="12dp"
@@ -108,17 +114,18 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="@string/info_title"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/info"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
     <TextView
         android:id="@+id/info"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="@string/no_configuration"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left" />
 
     <androidx.constraintlayout.widget.Guideline

@@ -21,6 +21,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    /**
+     * Prevents IOException during connection (process start failure).
+     * Only occurs when installing from .aab.
+     * @note Ensure the code below is present in main/build.gradle during updates.
+     */
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     sourceSets {
         create("staging")
         create("prod")
@@ -60,6 +71,7 @@ android {
         viewBinding = true
         aidl = true
     }
+    namespace = "pl.proget.openvpn"
 }
 
 dependencies {

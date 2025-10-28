@@ -88,7 +88,7 @@ class LogsActivity : AppCompatActivity(), LogsView {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.logs_menu, menu)
         return true
     }
