@@ -17,6 +17,7 @@ interface MainView {
         allowDisconnect: Boolean,
         importedProfile: Boolean
     )
+    fun setAllowDisconnect(allowDisconnect: Boolean)
 
     fun startVpn(profile: VpnProfile)
     fun stopVpn()

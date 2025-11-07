@@ -4,6 +4,8 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
@@ -12,8 +14,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.material.materialswitch.MaterialSwitch
 import de.blinkt.openvpn.LaunchVPN
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ConfigParser
@@ -201,6 +205,7 @@ class MainActivity : AppCompatActivity(), MainView {
             changeConnectSwitch(false)
             binding.info.text = information(importedProfile)
             binding.connectSwitch.isEnabled = true
+            binding.connectSwitch.alpha = 1f
         }
     }
 
@@ -218,6 +223,9 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
             binding.connectSwitch.isEnabled = allowDisconnect
+            if (allowDisconnect) binding.connectSwitch.alpha = 1f
+            else binding.connectSwitch.alpha = 0.5f
+            binding.connectSwitch.setTrackColor(resources.getColor(R.color.light_green_400))
         }
     }
 
@@ -246,6 +254,9 @@ class MainActivity : AppCompatActivity(), MainView {
             binding.connectSwitch.visibility = VISIBLE
             changeConnectSwitch(true)
             binding.connectSwitch.isEnabled = allowDisconnect
+            if (allowDisconnect) binding.connectSwitch.alpha = 1f
+            else binding.connectSwitch.alpha =  0.5f
+            binding.connectSwitch.setTrackColor(resources.getColor(R.color.orange_500))
         }
     }
 
@@ -267,6 +278,14 @@ class MainActivity : AppCompatActivity(), MainView {
             .run { this@MainActivity.startActivity(this) }
     }
 
+    override fun setAllowDisconnect(allowDisconnect: Boolean) {
+        runOnUiThread {
+            binding.connectSwitch.isEnabled = allowDisconnect
+            if (allowDisconnect) binding.connectSwitch.alpha = 1f
+            else binding.connectSwitch.alpha = 0.5f
+        }
+    }
+
     private fun changeConnectSwitch(expected: Boolean) {
         if (binding.connectSwitch.isChecked != expected) {
             binding.connectSwitch.isChecked = expected
@@ -278,6 +297,20 @@ class MainActivity : AppCompatActivity(), MainView {
             if (importedProfile) R.string.manual_configuration
             else R.string.configured_by_emm
         )
+
+    private fun MaterialSwitch.setTrackColor(@ColorInt colorChecked: Int) {
+        val unchecked = trackTintList?.getColorForState(intArrayOf(), trackTintList?.defaultColor ?: Color.LTGRAY) ?: Color.LTGRAY
+        trackTintList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf()
+            ),
+            intArrayOf(
+                colorChecked,
+                unchecked
+            )
+        )
+    }
 
     companion object {
         private const val IMPORT_PROFILE_REQUEST_CODE = 1

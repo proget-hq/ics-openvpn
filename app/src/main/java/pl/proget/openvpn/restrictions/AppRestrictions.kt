@@ -80,6 +80,7 @@ class AppRestrictions private constructor() {
                 if (config.allowImportProfile &&
                     ProfileManager.getInstance(context).hasImportedProfile()
                 ) {
+                    sendConfigChangedBroadcast(context)
                     return
                 }
 
@@ -137,7 +138,7 @@ class AppRestrictions private constructor() {
                                     }
                                 }
 
-                            context.sendBroadcast(Intent(Const.ACTION_CONFIGURATION_CHANGED))
+                            sendConfigChangedBroadcast(context)
                             if (config.autoConnect && vpnProfile != null) {
                                 Intent(context, LaunchVPN::class.java)
                                     .putExtra(LaunchVPN.EXTRA_KEY, vpnProfile!!.uuid.toString())
@@ -303,6 +304,13 @@ class AppRestrictions private constructor() {
         } catch (exception: Throwable) {
             ""
         }
+
+    private fun sendConfigChangedBroadcast(context: Context) {
+        context.sendBroadcast(
+                Intent(Const.ACTION_CONFIGURATION_CHANGED)
+                    .setPackage(context.packageName)
+            )
+    }
 
     companion object {
         @SuppressLint("StaticFieldLeak")
