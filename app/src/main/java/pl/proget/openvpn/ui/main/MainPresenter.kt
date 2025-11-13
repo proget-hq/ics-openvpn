@@ -64,7 +64,7 @@ class MainPresenter(
     }
 
     fun onConnectChanged(checked: Boolean) {
-        with(manager.profiles.firstOrNull()) {
+        with(getProfile()) {
             when {
                 this == null -> view?.showNoConfiguration()
                 checked -> {
@@ -89,9 +89,8 @@ class MainPresenter(
     }
 
     fun onConfigurationChanged() {
-        if (getProfile() == null) {
-            view?.showNoConfiguration()
-        }
+        if (getProfile() == null) view?.showNoConfiguration()
+        else view?.setAllowDisconnect(configRepo.fetchConfig().allowDisconnect)
     }
 
     private fun getProfile(): VpnProfile? =
