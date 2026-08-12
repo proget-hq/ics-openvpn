@@ -5,18 +5,39 @@ import android.annotation.TargetApi
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Build
+import androidx.core.content.ContextCompat
 import de.blinkt.openvpn.core.OpenVPNService
+import de.blinkt.openvpn.core.ProfileManager
 import de.blinkt.openvpn.core.StatusListener
 import de.blinkt.openvpn.core.VpnStatus
 import pl.proget.openvpn.data.ConfigRepo
+import pl.proget.openvpn.data.ConfigurationChangedBroadcastReceiver
+import pl.proget.openvpn.data.ProfileImporter
 import pl.proget.openvpn.logs.LogFileProvider
 import pl.proget.openvpn.logs.LogListener
+import pl.proget.openvpn.presentation.ViewModelFactory
+import pl.proget.openvpn.presentation.main.MainViewModel
 import pl.proget.openvpn.restrictions.AppRestrictions
 import pl.proget.openvpn.tools.isAndroidO
 
 class OpenVpnApplication : Application() {
+
+    val viewModelFactory: ViewModelFactory by lazy {
+        ViewModelFactory(
+            mapOf(
+                MainViewModel::class.java to {
+                    MainViewModel(
+                        profileManager = ProfileManager.getInstance(this),
+                        configRepo = ConfigRepo.getInstance(this),
+                        importer = ProfileImporter(this),
+                    )
+                },
+            )
+        )
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -38,6 +59,12 @@ class OpenVpnApplication : Application() {
 
         StatusListener().init(applicationContext)
         if (isMainProcess) {
+            ContextCompat.registerReceiver(
+                applicationContext,
+                ConfigurationChangedBroadcastReceiver(ConfigRepo.getInstance(applicationContext)),
+                IntentFilter(Const.ACTION_CONFIGURATION_CHANGED),
+                ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
             AppRestrictions.getInstance().checkRestrictions(applicationContext)
         }
     }

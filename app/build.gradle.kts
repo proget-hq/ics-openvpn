@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    alias(libs.plugins.kotlin.compose)
 }
 
 val buildVersionCode: Int = ((project.properties["versionCode"] as String?)?.toInt() ?: 999)
@@ -70,12 +71,14 @@ android {
     buildFeatures {
         viewBinding = true
         aidl = true
+        compose = true
     }
     namespace = "pl.proget.openvpn"
 }
 
 dependencies {
     implementation(project(":main"))
+    implementation(libs.androidx.compose.material3.window.size.class1)
 
     implementation(libs.kotlin.stdlib.v1621)
     implementation(libs.core.ktx)
@@ -84,4 +87,16 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.zip4j)
     implementation(libs.androidx.datastore.preferences)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.kotlinx.coroutines.android)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
