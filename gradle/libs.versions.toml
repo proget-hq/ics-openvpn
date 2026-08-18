@@ -16,9 +16,13 @@ androidx-cardview = "1.0.0"
 androidx-recyclerview = "1.4.0"
 androidx-viewpager2 = "1.1.0"
 bouncycastle = "1.69"
+compose-bom = "2024.12.01"
 core-ktx = "1.13.1"
 datastore-preferences = "1.1.1"
 kotlin-stdlib = "2.0.10"
+kotlinx-coroutines-android = "1.9.0"
+lifecycle-runtime-compose = "2.8.7"
+lifecycle-viewmodel-compose = "2.8.7"
 mpandroidchart = "v3.1.0"
 square-okhttp = "4.12.0"
 kotlin = "2.0.21"
@@ -29,15 +33,26 @@ junit = "4.13.2"
 mockito-core = "4.8.1"
 robolectric = "4.10.2"
 zip4j = "2.11.2"
+material3-window-size-class1 = "1.4.0"
 
 [libraries]
 android-view-material = { group = "com.google.android.material", name = "material", version.ref = "android-view-material" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidx-annotation" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "androidx-activity" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "androidx-cardview" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
+androidx-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "androidx-viewpager2" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core", version.ref = "androidx-core-ktx" }
@@ -50,6 +65,7 @@ androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview"
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidx-security-crypto" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 kotlin-stdlib-v1621 = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-stdlib" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
 mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 org-bouncycastle-bcprov-jdk15on = { group = "org.bouncycastle", name = "bcprov-jdk15on", version.ref = "bouncycastle" }
 org-bouncycastle-bcprov-ext-jdk15on = { group = "org.bouncycastle", name = "bcprov-ext-jdk15on", version.ref = "bouncycastle" }
@@ -65,7 +81,9 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }
+androidx-compose-material3-window-size-class1 = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3-window-size-class1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
