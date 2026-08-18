@@ -1,7 +1,8 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.compose.compiler)
 }
 
 val buildVersionCode: Int = ((project.properties["versionCode"] as String?)?.toInt() ?: 999)
@@ -9,13 +10,13 @@ val buildVersionName: String = project.properties["versionName"] as String? ?: "
 val buildPackageNamePostfix: String = project.properties["packageNamePostfix"] as String? ?: ""
 
 android {
-    compileSdk = 35
+    compileSdk = 37
     namespace = "pl.proget.openvpn"
 
     defaultConfig {
         applicationId = "pl.proget.openvpn"
-        minSdk = 21
-        targetSdk = 35
+        minSdk = 23
+        targetSdk = 36
         versionCode = buildVersionCode
         versionName = buildVersionName
 
@@ -27,7 +28,7 @@ android {
      * Only occurs when installing from .aab.
      * @note Ensure the code below is present in main/build.gradle during updates.
      */
-    packagingOptions {
+    packaging {
         jniLibs {
             useLegacyPackaging = true
         }
@@ -65,13 +66,11 @@ android {
         sourceCompatibility(JavaVersion.VERSION_17)
         targetCompatibility(JavaVersion.VERSION_17)
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         viewBinding = true
         aidl = true
         compose = true
+        buildConfig = true
     }
     namespace = "pl.proget.openvpn"
 }
@@ -80,7 +79,6 @@ dependencies {
     implementation(project(":main"))
     implementation(libs.androidx.compose.material3.window.size.class1)
 
-    implementation(libs.kotlin.stdlib.v1621)
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.android.view.material)

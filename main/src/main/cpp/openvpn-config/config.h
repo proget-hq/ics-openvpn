@@ -44,6 +44,7 @@
 
 /* Define to 1 if you have the `accept' function. */
 #define HAVE_ACCEPT 1
+#define HAVE_BASENAME 1
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1

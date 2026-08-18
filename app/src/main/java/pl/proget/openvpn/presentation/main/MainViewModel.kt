@@ -5,11 +5,9 @@ import androidx.lifecycle.viewModelScope
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ProfileManager
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pl.proget.openvpn.data.Config
@@ -29,15 +27,15 @@ class MainViewModel(
 ) : ViewModel() {
 
     private val vpnStates: StateFlow<VpnStateEvent> = VpnStatusSource.state
+    
+    val uiState: StateFlow<MainUiState>
+        field = MutableStateFlow(MainUiState())
 
-    private val _uiState = MutableStateFlow(MainUiState())
-    val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
-
-    private val _events = Channel<MainEvent>(capacity = Channel.BUFFERED)
-    val events: Flow<MainEvent> = _events.receiveAsFlow()
+    val events: ReceiveChannel<MainEvent>
+        field = Channel<MainEvent>(capacity = Channel.BUFFERED)
 
     init {
-        if (profileManager.profiles.isNullOrEmpty()) _uiState.update { it.noConfiguration() }
+        if (profileManager.profiles.isNullOrEmpty()) uiState.update { it.noConfiguration() }
 
         viewModelScope.launch {
             vpnStates.collect(::reduceVpnState)
@@ -45,33 +43,38 @@ class MainViewModel(
 
         viewModelScope.launch {
             configRepo.changes.collect { config ->
-                if (profile() == null) _uiState.update { it.noConfiguration() }
-                else _uiState.update { it.allowDisconnect(config.allowDisconnect) }
+                if (profile() == null) uiState.update { it.noConfiguration() }
+                else uiState.update { it.allowDisconnect(config.allowDisconnect) }
             }
         }
     }
 
     fun connectChanged(checked: Boolean) {
-        _uiState.update { it.copy(switchChecked = checked) }
+        uiState.update { it.copy(switchChecked = checked) }
         val profile = profile()
         when {
-            profile == null -> _uiState.update { it.noConfiguration() }
-            checked -> _events.trySend(MainEvent.VpnStartRequested(profile.uuid.toString()))
-            else -> _events.trySend(MainEvent.VpnStopRequested)
+            profile == null -> uiState.update { it.noConfiguration() }
+            checked -> events.trySend(MainEvent.VpnStartRequested(profile.uuid.toString()))
+            else -> events.trySend(MainEvent.VpnStopRequested)
         }
     }
 
+     fun importProfileClicked() {
+        if (config().allowImportProfile) events.trySend(MainEvent.ProfilePickerRequested)
+        else events.trySend(MainEvent.ProfileImportDisallowed)
+    }
+
     fun filePickerNotFound() {
-        _events.trySend(MainEvent.FilePickerNotFound)
+        events.trySend(MainEvent.FilePickerNotFound)
     }
 
     fun profilePicked(picked: Profile?) {
         if (picked == null) return
         viewModelScope.launch {
             when (importer.import(picked.uri, picked.inline)) {
-                ImportResult.Success -> _uiState.update { it.notConnected(imported = true) }
-                ImportResult.InvalidProfile -> _events.trySend(MainEvent.ProfileValidationFailed)
-                ImportResult.Failed -> _events.trySend(MainEvent.ProfileImportFailed)
+                ImportResult.Success -> uiState.update { it.notConnected(imported = true) }
+                ImportResult.InvalidProfile -> events.trySend(MainEvent.ProfileValidationFailed)
+                ImportResult.Failed -> events.trySend(MainEvent.ProfileImportFailed)
             }
         }
     }
@@ -82,12 +85,12 @@ class MainViewModel(
 
     private fun reduceVpnState(event: VpnStateEvent) {
         val level = event.level ?: return
-        val profile = profile() ?: return _uiState.update { it.noConfiguration() }
+        val profile = profile() ?: return uiState.update { it.noConfiguration() }
         val connection = profile.connection()
-            ?: return _uiState.update { it.notConnected(profile.isImported()) }
+            ?: return uiState.update { it.notConnected(profile.isImported()) }
         val isImported = profile.isImported()
         val server = connection.mServerName
-        _uiState.update {
+        uiState.update {
             when (level) {
                 VpnLevel.LEVEL_CONNECTED -> it.connected(server, config().allowDisconnect, isImported)
                 VpnLevel.LEVEL_AUTH_FAILED -> it.authFailed(isImported)

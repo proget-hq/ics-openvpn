@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.blinkt.openvpn.LaunchVPN
+import kotlinx.coroutines.flow.receiveAsFlow
 import pl.proget.openvpn.R
 import pl.proget.openvpn.presentation.theme.ProgetTheme
 
@@ -19,9 +20,12 @@ import pl.proget.openvpn.presentation.theme.ProgetTheme
 @Composable
 private fun MainScreenPreview() {
     ProgetTheme {
-        MainScreenPortraitContent(
+        MainScreenContent(
             uiState = MainUiState().noConfiguration(),
-            onConnectChanged = {}
+            onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
         )
     }
 }
@@ -30,9 +34,12 @@ private fun MainScreenPreview() {
 @Composable
 private fun MainScreenLandscapePreview() {
     ProgetTheme {
-        MainScreenLandscapeContent(
+        MainScreenContent(
             uiState = MainUiState().noConfiguration(),
-            onConnectChanged = {}
+            onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
         )
     }
 }
@@ -41,9 +48,12 @@ private fun MainScreenLandscapePreview() {
 @Composable
 private fun MainScreenNotConnectedPreview() {
     ProgetTheme {
-        MainScreenPortraitContent(
+        MainScreenContent(
             uiState = MainUiState().notConnected(imported = false),
-            onConnectChanged = {}
+            onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
         )
     }
 }
@@ -52,9 +62,12 @@ private fun MainScreenNotConnectedPreview() {
 @Composable
 private fun MainScreenConnectedPreview() {
     ProgetTheme {
-        MainScreenPortraitContent(
+        MainScreenContent(
             uiState = MainUiState().connected("vpn.example.com", allowDisconnect = true, imported = true),
             onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
         )
     }
 }
@@ -63,9 +76,12 @@ private fun MainScreenConnectedPreview() {
 @Composable
 private fun MainScreenConnectedNoDisconnectPreview() {
     ProgetTheme {
-        MainScreenPortraitContent(
+        MainScreenContent(
             uiState = MainUiState().connected("vpn.example.com", allowDisconnect = false, imported = false),
             onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
         )
     }
 }
@@ -74,9 +90,12 @@ private fun MainScreenConnectedNoDisconnectPreview() {
 @Composable
 private fun MainScreenConnectingPreview() {
     ProgetTheme {
-        MainScreenPortraitContent(
+        MainScreenContent(
             uiState = MainUiState().connecting("vpn.example.com", allowDisconnect = true, imported = false),
             onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
         )
     }
 }
@@ -85,11 +104,14 @@ private fun MainScreenConnectingPreview() {
 @Composable
 private fun MainScreenAuthFailedAfterConnectedPreview() {
     ProgetTheme {
-        MainScreenPortraitContent(
+        MainScreenContent(
             uiState = MainUiState()
                 .connected("vpn.example.com", allowDisconnect = false, imported = false)
                 .authFailed(imported = false),
             onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
         )
     }
 }
@@ -108,7 +130,7 @@ fun MainScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.events.collect { event ->
+        viewModel.events.receiveAsFlow().collect { event ->
             when (event) {
                 is MainEvent.VpnStartRequested -> context.startActivity(
                     Intent(context, LaunchVPN::class.java)
@@ -121,8 +143,6 @@ fun MainScreen(
                 } catch (e: ActivityNotFoundException) {
                     viewModel.filePickerNotFound()
                 }
-                MainEvent.AboutRequested -> navigateToAbout()
-                MainEvent.LogsRequested -> navigateToLogs()
                 MainEvent.ProfileImportDisallowed ->
                     Toast.makeText(context, R.string.import_profile_not_allowed, Toast.LENGTH_SHORT).show()
                 MainEvent.ProfileValidationFailed ->
@@ -135,5 +155,11 @@ fun MainScreen(
         }
     }
 
-    MainScreenContent(uiState = uiState, onConnectChanged = viewModel::connectChanged, navigateToLogs, navigateToAbout)
+    MainScreenContent(
+        uiState = uiState,
+        onConnectChanged = viewModel::connectChanged,
+        onImportProfileClick = viewModel::importProfileClicked,
+        onLogsClick = { navigateToLogs() },
+        onAboutClick = { navigateToAbout() },
+    )
 }

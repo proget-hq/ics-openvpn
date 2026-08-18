@@ -8,14 +8,15 @@ import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun progetTypography(): Typography {
-    val size = LocalDimens.current.textSize
+    val dimens = LocalDimens.current
     val base = TextStyle(
-        fontSize = size,
+        fontSize = dimens.textSize,
         platformStyle = PlatformTextStyle(includeFontPadding = true),
     )
 
     return Typography(
         bodyMedium = base,                                    
         titleSmall = base.copy(fontWeight = FontWeight.Bold),  
+        titleLarge = base.copy(fontSize = dimens.toolbarTextSize),
     )
 }

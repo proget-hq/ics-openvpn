@@ -4,8 +4,6 @@ sealed interface MainEvent {
     data class VpnStartRequested(val profileUuid: String) : MainEvent
     data object VpnStopRequested : MainEvent
     data object ProfilePickerRequested : MainEvent
-    data object AboutRequested : MainEvent
-    data object LogsRequested : MainEvent
     data object ProfileImportDisallowed : MainEvent
     data object ProfileValidationFailed : MainEvent
     data object ProfileImportFailed : MainEvent

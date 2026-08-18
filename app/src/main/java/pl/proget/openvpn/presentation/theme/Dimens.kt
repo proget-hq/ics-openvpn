@@ -21,6 +21,8 @@ data class Dimens(
     val switchHeight: Dp,             
     val switchScale: Float,
     val textSize: TextUnit,           
+    val actionBarHeight: Dp,
+    val toolbarTextSize: TextUnit,
 )
 
 val dimens = Dimens(
@@ -38,6 +40,8 @@ val dimens = Dimens(
     switchHeight = 48.dp,
     switchScale = 0.8f,
     textSize = 14.sp,
+    actionBarHeight = 56.dp,
+    toolbarTextSize = 20.sp,
 )
 
 val LocalDimens = staticCompositionLocalOf { dimens }
