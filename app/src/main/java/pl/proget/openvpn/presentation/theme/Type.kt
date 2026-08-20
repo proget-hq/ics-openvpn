@@ -17,6 +17,10 @@ fun progetTypography(): Typography {
     return Typography(
         bodyMedium = base,                                    
         titleSmall = base.copy(fontWeight = FontWeight.Bold),  
+        titleMedium = base.copy(
+            fontSize = dimens.aboutTitleTextSize,
+            fontWeight = FontWeight.Bold,
+        ),
         titleLarge = base.copy(fontSize = dimens.toolbarTextSize),
     )
 }

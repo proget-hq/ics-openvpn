@@ -1,16 +1,21 @@
 package pl.proget.openvpn.presentation.main
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import de.blinkt.openvpn.LaunchVPN
 import kotlinx.coroutines.flow.receiveAsFlow
 import pl.proget.openvpn.R
@@ -120,10 +125,10 @@ private fun MainScreenAuthFailedAfterConnectedPreview() {
 fun MainScreen(
     viewModel: MainViewModel,
     navigateToLogs: () -> Unit,
-    navigateToAbout: () -> Unit,
-    stopVpn: () -> Unit,
+    navigateToAbout: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val activity = LocalActivity.current
     val context = LocalContext.current
     val picker = rememberLauncherForActivityResult(OvpnProfile()) {
         viewModel.profilePicked(it)
@@ -132,25 +137,20 @@ fun MainScreen(
     LaunchedEffect(Unit) {
         viewModel.events.receiveAsFlow().collect { event ->
             when (event) {
-                is MainEvent.VpnStartRequested -> context.startActivity(
-                    Intent(context, LaunchVPN::class.java)
+                is MainEvent.VpnStartRequested -> activity?.startActivity(
+                    Intent(activity, LaunchVPN::class.java)
                         .putExtra(LaunchVPN.EXTRA_KEY, event.profileUuid)
                         .setAction(Intent.ACTION_MAIN)
                 )
-                MainEvent.VpnStopRequested -> stopVpn()
                 MainEvent.ProfilePickerRequested -> try {
                     picker.launch(Unit)
                 } catch (e: ActivityNotFoundException) {
                     viewModel.filePickerNotFound()
                 }
-                MainEvent.ProfileImportDisallowed ->
-                    Toast.makeText(context, R.string.import_profile_not_allowed, Toast.LENGTH_SHORT).show()
-                MainEvent.ProfileValidationFailed ->
-                    Toast.makeText(context, R.string.profile_is_invalid, Toast.LENGTH_SHORT).show()
-                MainEvent.ProfileImportFailed ->
-                    Toast.makeText(context, R.string.import_profile_failed, Toast.LENGTH_SHORT).show()
-                MainEvent.FilePickerNotFound ->
-                    Toast.makeText(context, R.string.no_app_found, Toast.LENGTH_SHORT).show()
+                MainEvent.ProfileImportDisallowed -> context.showToast(R.string.import_profile_not_allowed)
+                MainEvent.ProfileValidationFailed -> context.showToast(R.string.profile_is_invalid)
+                MainEvent.ProfileImportFailed -> context.showToast(R.string.import_profile_failed)
+                MainEvent.FilePickerNotFound -> context.showToast(R.string.no_app_found)
             }
         }
     }
@@ -162,4 +162,8 @@ fun MainScreen(
         onLogsClick = { navigateToLogs() },
         onAboutClick = { navigateToAbout() },
     )
+}
+
+private fun Context.showToast(@StringRes text: Int) {
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import pl.proget.openvpn.data.Config
 import pl.proget.openvpn.data.ConfigRepo
 import pl.proget.openvpn.data.ImportResult
+import pl.proget.openvpn.data.MainServiceConnection
 import pl.proget.openvpn.data.ProfileImporter
 import pl.proget.openvpn.data.VpnStateEvent
 import pl.proget.openvpn.data.VpnStatusSource
@@ -24,6 +25,7 @@ class MainViewModel(
     private val profileManager: ProfileManager,
     private val configRepo: ConfigRepo,
     private val importer: ProfileImporter,
+    private val serviceConnection: MainServiceConnection,
 ) : ViewModel() {
 
     private val vpnStates: StateFlow<VpnStateEvent> = VpnStatusSource.state
@@ -55,7 +57,7 @@ class MainViewModel(
         when {
             profile == null -> uiState.update { it.noConfiguration() }
             checked -> events.trySend(MainEvent.VpnStartRequested(profile.uuid.toString()))
-            else -> events.trySend(MainEvent.VpnStopRequested)
+            else -> serviceConnection.stopVpn()
         }
     }
 
