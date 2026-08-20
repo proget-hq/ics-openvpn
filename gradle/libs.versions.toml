@@ -1,38 +1,37 @@
 [versions]
-android-gradle-plugin = "8.9.3"
-androidx-activity = "1.10.1"
-androidx-annotation = "1.9.1"
-androidx-appcompat = "1.7.1"
-android-view-material = "1.12.0"
-androidx-core-ktx = "1.16.0"
-androidx-fragment-ktx = "1.8.8"
+android-gradle-plugin = "9.3.1"
+androidx-activity = "1.13.0"
+androidx-annotation = "1.10.0"
+androidx-appcompat = "1.8.0"
+android-view-material = "1.14.0"
+androidx-core-ktx = "1.19.0"
+androidx-fragment-ktx = "1.9.0"
 androidx-preference-ktx = "1.2.1"
-androidx-webkit = "1.14.0"
-androidx-lifecycle-viewmodel-ktx = "2.9.2"
-androidx-lifecycle-runtime-ktx = "2.9.2"
-androidx-security-crypto = "1.1.0-beta01"
-androidx-constraintlayout = "2.2.1"
+androidx-webkit = "1.17.0"
+androidx-lifecycle-viewmodel-ktx = "2.11.0"
+androidx-lifecycle-runtime-ktx = "2.11.0"
+androidx-security-crypto = "1.1.0"
+androidx-constraintlayout = "2.2.2"
 androidx-cardview = "1.0.0"
 androidx-recyclerview = "1.4.0"
 androidx-viewpager2 = "1.1.0"
-bouncycastle = "1.69"
-compose-bom = "2024.12.01"
-core-ktx = "1.13.1"
-datastore-preferences = "1.1.1"
-kotlin-stdlib = "2.0.10"
-kotlinx-coroutines-android = "1.9.0"
-lifecycle-runtime-compose = "2.8.7"
-lifecycle-viewmodel-compose = "2.8.7"
+bouncycastle = "1.70"
+compose-bom = "2026.08.00"
+core-ktx = "1.19.0"
+datastore-preferences = "1.2.1"
+kotlinx-coroutines-android = "1.11.0"
+lifecycle-runtime-compose = "2.11.0"
+lifecycle-viewmodel-compose = "2.11.0"
 mpandroidchart = "v3.1.0"
-square-okhttp = "4.12.0"
-kotlin = "2.0.21"
+square-okhttp = "5.4.0"
+kotlin = "2.4.10"
 
 # Test
-androidx-test-core = "1.6.1"
+androidx-test-core = "1.7.0"
 junit = "4.13.2"
-mockito-core = "4.8.1"
-robolectric = "4.10.2"
-zip4j = "2.11.2"
+mockito-core = "5.23.0"
+robolectric = "4.16.1"
+zip4j = "2.11.6"
 material3-window-size-class1 = "1.4.0"
 
 [libraries]
@@ -64,14 +63,9 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidx-recyclerview" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidx-security-crypto" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
-kotlin-stdlib-v1621 = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-stdlib" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
 mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
-org-bouncycastle-bcprov-jdk15on = { group = "org.bouncycastle", name = "bcprov-jdk15on", version.ref = "bouncycastle" }
-org-bouncycastle-bcprov-ext-jdk15on = { group = "org.bouncycastle", name = "bcprov-ext-jdk15on", version.ref = "bouncycastle" }
-org-bouncycastle-bcpkix-jdk15on = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
 org-bouncycastle-bcmail-jdk15on = { group = "org.bouncycastle", name = "bcmail-jdk15on", version.ref = "bouncycastle" }
-org-bouncycastle-bcpg-jdk15on = { group = "org.bouncycastle", name = "bcpg-jdk15on", version.ref = "bouncycastle" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 square-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "square-okhttp" }
 
@@ -85,5 +79,4 @@ androidx-compose-material3-window-size-class1 = { group = "androidx.compose.mate
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

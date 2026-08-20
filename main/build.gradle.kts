@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Locale.getDefault
+
 /*
 * Copyright (c) 2012-2016 Arne Schwabe
 * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
@@ -6,8 +9,7 @@
 plugins {
     id("com.android.library")
     id("checkstyle")
-
-    id("kotlin-android")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -23,8 +25,7 @@ android {
     ndkVersion = "28.0.13004108"
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 35
+        minSdk = 23
         externalNativeBuild {
             cmake {
                 //arguments+= "-DCMAKE_VERBOSE_MAKEFILE=1"
@@ -100,8 +101,8 @@ android {
         )
         checkOnly += setOf("ImpliedQuantity", "MissingQuantity")
         disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
+        targetSdk = 35
     }
-
 
     flavorDimensions += listOf("implementation", "ovpnimpl")
 
@@ -137,10 +138,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     splits {
         abi {
             isEnable = true
@@ -154,6 +151,9 @@ android {
         jniLibs {
             useLegacyPackaging = true
         }
+    }
+    testOptions {
+        targetSdk = 35
     }
 
     //    bundle {
@@ -232,12 +232,15 @@ android.libraryVariants.forEach { variant ->
 
     variant.registerJavaGeneratingTask(task, sourceDir)
 }
-// Do not delete this, it forces externalNativeBuilds (cMake) to run before project build.
-// This fixes issue with no assets in build/ovpnassets after first build.
-// Check if this is still an issue after each rebase on schwabe project.
+
 android.libraryVariants.all {
-    tasks.findByName("compile${name.capitalize()}Kotlin")
-        ?.dependsOn(tasks.findByName("externalNativeBuild${name.capitalize()}"))
+    val nativeBuild = tasks.findByName(
+        "externalNativeBuild${name.replaceFirstChar { it.uppercaseChar() }}"
+    )
+    if (nativeBuild != null) {
+        tasks.findByName("compile${name.replaceFirstChar { it.uppercaseChar() }}Kotlin")
+            ?.dependsOn(nativeBuild)
+    }
 }
 
 dependencies {
