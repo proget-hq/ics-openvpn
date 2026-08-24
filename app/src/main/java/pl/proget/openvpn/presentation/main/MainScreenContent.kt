@@ -72,7 +72,7 @@ fun MainScreenContent(
         },
         containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets.systemBars
-            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom),
+            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
     ) { innerPadding ->
         if (landscape) {
             MainScreenLandscapeContent(uiState, onConnectChanged, Modifier.padding(innerPadding))

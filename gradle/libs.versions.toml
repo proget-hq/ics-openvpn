@@ -23,7 +23,7 @@ kotlinx-coroutines-android = "1.11.0"
 lifecycle-runtime-compose = "2.11.0"
 lifecycle-viewmodel-compose = "2.11.0"
 mpandroidchart = "v3.1.0"
-square-okhttp = "5.4.0"
+square-okhttp = "5.5.0"
 kotlin = "2.4.10"
 
 # Test
@@ -33,6 +33,7 @@ mockito-core = "5.23.0"
 robolectric = "4.16.1"
 zip4j = "2.11.6"
 material3-window-size-class1 = "1.4.0"
+navigation-compose = "2.9.8"
 
 [libraries]
 android-view-material = { group = "com.google.android.material", name = "material", version.ref = "android-view-material" }
@@ -49,6 +50,7 @@ androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -80,3 +82,4 @@ androidx-compose-material3-window-size-class1 = { group = "androidx.compose.mate
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

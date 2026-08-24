@@ -45,7 +45,7 @@ private fun VpnTopBarOverflowPreview() {
                 MenuAction.Overflow(R.string.import_vpn_profile) {},
                 MenuAction.Overflow(R.string.logs) {},
                 MenuAction.Overflow(R.string.about) {},
-            ),
+            )
         )
     }
 }
@@ -61,7 +61,22 @@ private fun VpnTopBarIconActionPreview() {
                     R.string.send_logs,
                     R.drawable.ic_baseline_share_24
                 ) {}
+            )
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun VpnTopBarIconNavigationPreview() {
+    ProgetTheme {
+        VpnTopBar(
+            titleRes = R.string.logs,
+            navigationIcon = MenuAction.Navigation(
+                R.drawable.ic_baseline_archive_24,
+                {}
             ),
+            actions = emptyList()
         )
     }
 }
@@ -72,10 +87,12 @@ fun VpnTopBar(
     @StringRes titleRes: Int,
     modifier: Modifier = Modifier,
     actions: List<MenuAction>,
+    navigationIcon: MenuAction.Navigation? = null
 ) {
     TopAppBar(
         title = { Text(stringResource(titleRes)) },
         modifier = modifier,
+        navigationIcon = { NavigationIcon(navigationIcon) },
         actions = { TopBarActions(actions) },
         expandedHeight = LocalDimens.current.actionBarHeight,
         colors = TopAppBarDefaults.topAppBarColors(
@@ -83,8 +100,22 @@ fun VpnTopBar(
             scrolledContainerColor = MaterialTheme.colorScheme.background,
             titleContentColor = MaterialTheme.colorScheme.onBackground,
             actionIconContentColor = MaterialTheme.colorScheme.onBackground,
-        ),
+        )
     )
+}
+
+@Composable
+private fun NavigationIcon(icon: MenuAction.Navigation?) {
+    icon?.let {
+        IconButton(
+            onClick = icon.onClick
+        ) {
+            Icon(
+                painter = painterResource(icon.iconRes),
+                contentDescription = null,
+            )
+        }
+    }
 }
 
 @Composable
@@ -134,6 +165,11 @@ private fun OverflowMenu(actions: List<MenuAction.Overflow>) {
 sealed interface MenuAction {
     data class Icon(
         @StringRes val titleRes: Int,
+        @DrawableRes val iconRes: Int,
+        val onClick: () -> Unit,
+    ) : MenuAction
+
+    data class Navigation(
         @DrawableRes val iconRes: Int,
         val onClick: () -> Unit,
     ) : MenuAction

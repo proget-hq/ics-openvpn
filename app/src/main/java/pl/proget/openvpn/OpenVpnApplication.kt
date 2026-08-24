@@ -15,6 +15,7 @@ import de.blinkt.openvpn.core.StatusListener
 import de.blinkt.openvpn.core.VpnStatus
 import pl.proget.openvpn.data.ConfigRepo
 import pl.proget.openvpn.data.ConfigurationChangedBroadcastReceiver
+import pl.proget.openvpn.data.MainServiceConnection
 import pl.proget.openvpn.data.ProfileImporter
 import pl.proget.openvpn.logs.LogFileProvider
 import pl.proget.openvpn.logs.LogListener
@@ -33,8 +34,9 @@ class OpenVpnApplication : Application() {
                         profileManager = ProfileManager.getInstance(this),
                         configRepo = ConfigRepo.getInstance(this),
                         importer = ProfileImporter(this),
+                        serviceConnection = MainServiceConnection
                     )
-                },
+                }
             )
         )
     }

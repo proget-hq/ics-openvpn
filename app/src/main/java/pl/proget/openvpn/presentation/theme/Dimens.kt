@@ -23,6 +23,11 @@ data class Dimens(
     val textSize: TextUnit,           
     val actionBarHeight: Dp,
     val toolbarTextSize: TextUnit,
+    val aboutHorizontalMargin: Dp,
+    val aboutTopMargin: Dp,
+    val aboutSectionGap: Dp,
+    val aboutTitleGap: Dp,
+    val aboutTitleTextSize: TextUnit,
 )
 
 val dimens = Dimens(
@@ -42,6 +47,11 @@ val dimens = Dimens(
     textSize = 14.sp,
     actionBarHeight = 56.dp,
     toolbarTextSize = 20.sp,
+    aboutHorizontalMargin = 8.dp,
+    aboutTopMargin = 4.dp,
+    aboutSectionGap = 12.dp,
+    aboutTitleGap = 4.dp,
+    aboutTitleTextSize = 16.sp,
 )
 
 val LocalDimens = staticCompositionLocalOf { dimens }
