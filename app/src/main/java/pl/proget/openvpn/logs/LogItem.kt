@@ -7,6 +7,5 @@ data class LogItem(
     val time: Date,
     val message: String
 ) {
-    override fun toString(): String =
-        "${dateFormatter().format(time)}  $message"
+    override fun toString(): String = "${dateFormatter().format(time)}  $message"
 }

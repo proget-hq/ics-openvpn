@@ -7,20 +7,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 data class Dimens(
-    val screenHorizontalMargin: Dp,   
+    val screenHorizontalMargin: Dp,
     val screenBottomMargin: Dp,
-    val sectionTitleGap: Dp,          
-    val valueToDividerGap: Dp,        
-    val dividerToTitleGap: Dp,        
+    val sectionTitleGap: Dp,
+    val valueToDividerGap: Dp,
+    val dividerToTitleGap: Dp,
     val dividerThickness: Dp,
-    val marbleSize: Dp,               
+    val marbleSize: Dp,
     val marbleGap: Dp,
-    val logoHeight: Dp,               
+    val logoHeight: Dp,
     val logoBandPercent: Float,
-    val switchWidth: Dp,              
-    val switchHeight: Dp,             
+    val switchWidth: Dp,
+    val switchHeight: Dp,
     val switchScale: Float,
-    val textSize: TextUnit,           
+    val textSize: TextUnit,
     val actionBarHeight: Dp,
     val toolbarTextSize: TextUnit,
     val aboutHorizontalMargin: Dp,
@@ -28,6 +28,11 @@ data class Dimens(
     val aboutSectionGap: Dp,
     val aboutTitleGap: Dp,
     val aboutTitleTextSize: TextUnit,
+    val smallGap: Dp,
+    val mediumPadding: Dp,
+    val scrollIconSize: Dp,
+    val fabBorderRoundnessPercent: Int,
+    val fabButtonHeight: Dp
 )
 
 val dimens = Dimens(
@@ -52,6 +57,11 @@ val dimens = Dimens(
     aboutSectionGap = 12.dp,
     aboutTitleGap = 4.dp,
     aboutTitleTextSize = 16.sp,
+    smallGap = 6.dp,
+    mediumPadding = 12.dp,
+    scrollIconSize = 20.dp,
+    fabBorderRoundnessPercent = 30,
+    fabButtonHeight = 55.dp
 )
 
 val LocalDimens = staticCompositionLocalOf { dimens }

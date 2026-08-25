@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import pl.proget.openvpn.presentation.about.AboutScreen
+import pl.proget.openvpn.presentation.logs.LogsScreen
+import pl.proget.openvpn.presentation.logs.LogsViewModel
 import pl.proget.openvpn.presentation.main.MainScreen
 import pl.proget.openvpn.presentation.main.MainViewModel
 import pl.proget.openvpn.presentation.viewModelFactory
@@ -28,6 +30,11 @@ fun Navigation() {
 
         composable<Route.AboutRoute> {
             AboutScreen { navController.navigateUp() }
+        }
+
+        composable<Route.LogsRoute> {
+            val viewModel = viewModel<LogsViewModel>(factory = factory)
+            LogsScreen(viewModel = viewModel) { navController.navigateUp() }
         }
     }
 }
