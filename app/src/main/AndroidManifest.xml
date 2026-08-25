@@ -39,17 +39,6 @@
             android:excludeFromRecents="true" />
 
         <activity
-            android:name=".ui.about.AboutActivity"
-            android:launchMode="singleInstance"
-            android:parentActivityName=".ui.main.MainActivity" />
-
-        <activity
-            android:name=".ui.logs.LogsActivity"
-            android:label="@string/logs"
-            android:launchMode="singleInstance"
-            android:parentActivityName=".ui.main.MainActivity" />
-
-        <activity
             android:name=".ui.AutoFinishActivity"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
