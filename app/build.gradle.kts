@@ -66,7 +66,6 @@ android {
         targetCompatibility(JavaVersion.VERSION_17)
     }
     buildFeatures {
-        viewBinding = true
         aidl = true
         compose = true
         buildConfig = true
@@ -80,7 +79,6 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.android.view.material)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.zip4j)
     implementation(libs.androidx.datastore.preferences)
 
