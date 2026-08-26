@@ -17,14 +17,18 @@ import pl.proget.openvpn.data.ConfigRepo
 import pl.proget.openvpn.data.ConfigurationChangedBroadcastReceiver
 import pl.proget.openvpn.data.MainServiceConnection
 import pl.proget.openvpn.data.ProfileImporter
+import pl.proget.openvpn.data.vpnLogs
 import pl.proget.openvpn.logs.LogFileProvider
 import pl.proget.openvpn.logs.LogListener
 import pl.proget.openvpn.presentation.ViewModelFactory
+import pl.proget.openvpn.presentation.logs.LogsViewModel
 import pl.proget.openvpn.presentation.main.MainViewModel
 import pl.proget.openvpn.restrictions.AppRestrictions
 import pl.proget.openvpn.tools.isAndroidO
 
 class OpenVpnApplication : Application() {
+
+    private val logFileProvider: LogFileProvider by lazy { LogFileProvider(applicationContext) }
 
     val viewModelFactory: ViewModelFactory by lazy {
         ViewModelFactory(
@@ -35,6 +39,12 @@ class OpenVpnApplication : Application() {
                         configRepo = ConfigRepo.getInstance(this),
                         importer = ProfileImporter(this),
                         serviceConnection = MainServiceConnection
+                    )
+                },
+                LogsViewModel::class.java to {
+                    LogsViewModel(
+                        logFileProvider = logFileProvider,
+                        logs = vpnLogs(applicationContext),
                     )
                 }
             )
@@ -52,7 +62,7 @@ class OpenVpnApplication : Application() {
         if (isMainProcess()) {
             VpnStatus.addLogListener(
                 LogListener(
-                    LogFileProvider(applicationContext),
+                    logFileProvider,
                     applicationContext,
                     ConfigRepo.getInstance(applicationContext)
                 )

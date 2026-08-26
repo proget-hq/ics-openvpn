@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
@@ -78,8 +76,7 @@ android {
 
 dependencies {
     implementation(project(":main"))
-    implementation(libs.androidx.compose.material3.window.size.class1)
-
+    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.android.view.material)
@@ -92,6 +89,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.foundation)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

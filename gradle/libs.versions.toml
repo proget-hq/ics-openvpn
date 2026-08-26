@@ -19,6 +19,7 @@ bouncycastle = "1.70"
 compose-bom = "2026.08.00"
 core-ktx = "1.19.0"
 datastore-preferences = "1.2.1"
+kotlinx-collections-immutable = "0.5.1"
 kotlinx-coroutines-android = "1.11.0"
 lifecycle-runtime-compose = "2.11.0"
 lifecycle-viewmodel-compose = "2.11.0"
@@ -50,6 +51,7 @@ androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3-window-size-class1" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
@@ -65,6 +67,7 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidx-recyclerview" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidx-security-crypto" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
 mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 org-bouncycastle-bcmail-jdk15on = { group = "org.bouncycastle", name = "bcmail-jdk15on", version.ref = "bouncycastle" }
@@ -77,7 +80,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }
-androidx-compose-material3-window-size-class1 = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3-window-size-class1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

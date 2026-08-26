@@ -147,6 +147,7 @@
     <string name="logs">Logs</string>
     <string name="menu_more_options">More options</string>
     <string name="send_logs">Send logs</string>
+    <string name="no_logs_to_share">No logs to share</string>
     <string name="no_configuration">No configuration received from the EMM agent</string>
     <string name="not_connected">Not connected</string>
     <string name="not_initiated">Not initiated</string>
@@ -170,4 +171,8 @@
     <string name="import_vpn_profile">Import profile</string>
     <string name="profile_is_invalid">Profile is invalid</string>
     <string name="no_app_found">No app found to perform this operation</string>
+    <string name="top">Top</string>
+    <string name="newest">Newest</string>
+    <string name="failed_to_read_historical_logs">Failed to read historical logs</string>
+    <string name="failed_to_pack_logs">Failed to pack logs and send it</string>
 </resources>

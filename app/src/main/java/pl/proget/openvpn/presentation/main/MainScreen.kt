@@ -1,24 +1,20 @@
 package pl.proget.openvpn.presentation.main
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
 import de.blinkt.openvpn.LaunchVPN
 import kotlinx.coroutines.flow.receiveAsFlow
 import pl.proget.openvpn.R
+import pl.proget.openvpn.presentation.common.showToast
 import pl.proget.openvpn.presentation.theme.ProgetTheme
 
 @PreviewLightDark
@@ -162,8 +158,4 @@ fun MainScreen(
         onLogsClick = { navigateToLogs() },
         onAboutClick = { navigateToAbout() },
     )
-}
-
-private fun Context.showToast(@StringRes text: Int) {
-    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
