@@ -189,6 +189,7 @@ private fun OverflowMenu(actions: List<MenuAction.Overflow>) {
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = { expanded = false },
+        containerColor = MaterialTheme.colorScheme.background
     ) {
         actions.forEach { action ->
             DropdownMenuItem(
