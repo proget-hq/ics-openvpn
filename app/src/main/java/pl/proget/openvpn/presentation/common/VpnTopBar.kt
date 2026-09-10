@@ -2,6 +2,7 @@ package pl.proget.openvpn.presentation.common
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.proget.openvpn.R
 import pl.proget.openvpn.presentation.theme.LocalDimens
@@ -40,6 +42,21 @@ private fun VpnTopBarPreview() {
 private fun VpnTopBarOverflowPreview() {
     ProgetTheme {
         VpnTopBar(
+            titleRes = R.string.app_name,
+            actions = listOf(
+                MenuAction.Overflow(R.string.import_vpn_profile) {},
+                MenuAction.Overflow(R.string.logs) {},
+                MenuAction.Overflow(R.string.about) {},
+            )
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun CenteredVpnTopBarOverflowPreview() {
+    ProgetTheme {
+        CenteredVpnTopBar(
             titleRes = R.string.app_name,
             actions = listOf(
                 MenuAction.Overflow(R.string.import_vpn_profile) {},
@@ -79,6 +96,29 @@ private fun VpnTopBarIconNavigationPreview() {
             actions = emptyList()
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CenteredVpnTopBar(
+    @StringRes titleRes: Int,
+    modifier: Modifier = Modifier,
+    actions: List<MenuAction>,
+    navigationIcon: MenuAction.Navigation? = null
+) {
+    TopAppBar(
+        title = { Text(stringResource(titleRes), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()) },
+        modifier = modifier,
+        navigationIcon = { NavigationIcon(navigationIcon) },
+        actions = { TopBarActions(actions) },
+        expandedHeight = LocalDimens.current.actionBarHeight,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            actionIconContentColor = MaterialTheme.colorScheme.onBackground,
+        )
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

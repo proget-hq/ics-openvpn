@@ -32,7 +32,8 @@ data class Dimens(
     val mediumPadding: Dp,
     val scrollIconSize: Dp,
     val fabBorderRoundnessPercent: Int,
-    val fabButtonHeight: Dp
+    val fabButtonHeight: Dp,
+    val topBarShadowElevation: Dp,
 )
 
 val dimens = Dimens(
@@ -61,7 +62,8 @@ val dimens = Dimens(
     mediumPadding = 12.dp,
     scrollIconSize = 20.dp,
     fabBorderRoundnessPercent = 30,
-    fabButtonHeight = 55.dp
+    fabButtonHeight = 55.dp,
+    topBarShadowElevation = 4.dp
 )
 
 val LocalDimens = staticCompositionLocalOf { dimens }

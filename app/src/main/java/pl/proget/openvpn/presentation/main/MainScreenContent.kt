@@ -33,13 +33,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import pl.proget.openvpn.R
+import pl.proget.openvpn.presentation.common.CenteredVpnTopBar
 import pl.proget.openvpn.presentation.common.MenuAction
 import pl.proget.openvpn.presentation.common.Marble
-import pl.proget.openvpn.presentation.common.VpnTopBar
 import pl.proget.openvpn.presentation.theme.LocalDimens
 import pl.proget.openvpn.presentation.theme.StatusGreen
 import pl.proget.openvpn.presentation.theme.StatusOrange
@@ -58,16 +59,18 @@ fun MainScreenContent(
         calculateWindowSizeClass(it).widthSizeClass
     }
     val landscape = widthSizeClass == WindowWidthSizeClass.Expanded
+    val dimens = LocalDimens.current
 
     Scaffold(
         topBar = {
-            VpnTopBar(
+            CenteredVpnTopBar(
                 titleRes = R.string.app_name,
                 actions = listOf(
                     MenuAction.Overflow(R.string.import_vpn_profile, onImportProfileClick),
                     MenuAction.Overflow(R.string.logs, onLogsClick),
                     MenuAction.Overflow(R.string.about, onAboutClick),
                 ),
+                modifier = Modifier.shadow(dimens.topBarShadowElevation)
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
