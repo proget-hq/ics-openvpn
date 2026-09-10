@@ -18,9 +18,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -243,12 +245,17 @@ fun ScaledSwitch(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     val dimens = LocalDimens.current
+    val trackColor = when (track) {
+        SwitchTrack.Default -> MaterialTheme.colorScheme.primary
+        SwitchTrack.Green -> StatusGreen
+        SwitchTrack.Orange -> StatusOrange
+    }
     val colors = SwitchDefaults.colors(
-        checkedTrackColor = when (track) {
-            SwitchTrack.Default -> MaterialTheme.colorScheme.primary
-            SwitchTrack.Green -> StatusGreen
-            SwitchTrack.Orange -> StatusOrange
-        },
+        checkedTrackColor = trackColor,
+        checkedBorderColor = trackColor,
+        disabledCheckedTrackColor = trackColor,
+        disabledCheckedBorderColor = trackColor,
+        disabledCheckedThumbColor = MaterialTheme.colorScheme.onPrimary,
     )
     Box(
         modifier = Modifier
@@ -261,8 +268,25 @@ fun ScaledSwitch(
             modifier = Modifier.scale(dimens.switchScale),
             enabled = enabled,
             colors = colors,
+            thumbContent = if (checked && track == SwitchTrack.Green) {
+                { ThumbIcon() }
+            } else {
+                null
+            },
         )
     }
+}
+
+@Composable
+private fun ThumbIcon() {
+    val dimens = LocalDimens.current
+
+    Icon(
+        painter = painterResource(R.drawable.ic_baseline_check_24),
+        contentDescription = null,
+        tint = StatusGreen,
+        modifier = Modifier.size(dimens.switchThumbIconSize),
+    )
 }
 
 @Composable

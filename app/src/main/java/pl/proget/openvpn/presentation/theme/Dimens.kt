@@ -20,6 +20,7 @@ data class Dimens(
     val switchWidth: Dp,
     val switchHeight: Dp,
     val switchScale: Float,
+    val switchThumbIconSize: Dp,
     val textSize: TextUnit,
     val actionBarHeight: Dp,
     val toolbarTextSize: TextUnit,
@@ -32,7 +33,6 @@ data class Dimens(
     val mediumPadding: Dp,
     val scrollIconSize: Dp,
     val fabBorderRoundnessPercent: Int,
-    val fabButtonHeight: Dp,
     val topBarShadowElevation: Dp,
 )
 
@@ -50,6 +50,7 @@ val dimens = Dimens(
     switchWidth = 52.dp,
     switchHeight = 48.dp,
     switchScale = 0.8f,
+    switchThumbIconSize = 16.dp,
     textSize = 14.sp,
     actionBarHeight = 56.dp,
     toolbarTextSize = 20.sp,
@@ -62,7 +63,6 @@ val dimens = Dimens(
     mediumPadding = 12.dp,
     scrollIconSize = 20.dp,
     fabBorderRoundnessPercent = 30,
-    fabButtonHeight = 55.dp,
     topBarShadowElevation = 4.dp
 )
 

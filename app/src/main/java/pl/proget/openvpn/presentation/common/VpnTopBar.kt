@@ -99,7 +99,6 @@ private fun VpnTopBarIconNavigationPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CenteredVpnTopBar(
     @StringRes titleRes: Int,
@@ -107,7 +106,7 @@ fun CenteredVpnTopBar(
     actions: List<MenuAction>,
     navigationIcon: MenuAction.Navigation? = null
 ) {
-    TopAppBar(
+    VpnTopBarLayout(
         title = {
             Text(
                 text = stringResource(titleRes),
@@ -117,19 +116,11 @@ fun CenteredVpnTopBar(
             )
         },
         modifier = modifier,
-        navigationIcon = { NavigationIcon(navigationIcon) },
-        actions = { TopBarActions(actions) },
-        expandedHeight = LocalDimens.current.actionBarHeight,
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            scrolledContainerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.onBackground,
-            actionIconContentColor = MaterialTheme.colorScheme.onBackground,
-        )
+        actions = actions,
+        navigationIcon = navigationIcon
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VpnTopBar(
     @StringRes titleRes: Int,
@@ -137,8 +128,24 @@ fun VpnTopBar(
     actions: List<MenuAction>,
     navigationIcon: MenuAction.Navigation? = null
 ) {
-    TopAppBar(
+    VpnTopBarLayout(
         title = { Text(stringResource(titleRes)) },
+        modifier = modifier,
+        actions = actions,
+        navigationIcon = navigationIcon
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun VpnTopBarLayout(
+    title: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    actions: List<MenuAction>,
+    navigationIcon: MenuAction.Navigation? = null
+) {
+    TopAppBar(
+        title = title,
         modifier = modifier,
         navigationIcon = { NavigationIcon(navigationIcon) },
         actions = { TopBarActions(actions) },
