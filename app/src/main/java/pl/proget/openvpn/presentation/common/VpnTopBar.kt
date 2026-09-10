@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import pl.proget.openvpn.R
@@ -107,7 +108,14 @@ fun CenteredVpnTopBar(
     navigationIcon: MenuAction.Navigation? = null
 ) {
     TopAppBar(
-        title = { Text(stringResource(titleRes), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()) },
+        title = {
+            Text(
+                text = stringResource(titleRes),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
         modifier = modifier,
         navigationIcon = { NavigationIcon(navigationIcon) },
         actions = { TopBarActions(actions) },
