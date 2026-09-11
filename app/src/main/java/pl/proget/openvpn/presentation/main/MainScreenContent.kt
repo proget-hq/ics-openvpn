@@ -18,9 +18,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -33,13 +35,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import pl.proget.openvpn.R
+import pl.proget.openvpn.presentation.common.CenteredVpnTopBar
 import pl.proget.openvpn.presentation.common.MenuAction
 import pl.proget.openvpn.presentation.common.Marble
-import pl.proget.openvpn.presentation.common.VpnTopBar
 import pl.proget.openvpn.presentation.theme.LocalDimens
 import pl.proget.openvpn.presentation.theme.StatusGreen
 import pl.proget.openvpn.presentation.theme.StatusOrange
@@ -58,16 +61,18 @@ fun MainScreenContent(
         calculateWindowSizeClass(it).widthSizeClass
     }
     val landscape = widthSizeClass == WindowWidthSizeClass.Expanded
+    val dimens = LocalDimens.current
 
     Scaffold(
         topBar = {
-            VpnTopBar(
+            CenteredVpnTopBar(
                 titleRes = R.string.app_name,
                 actions = listOf(
                     MenuAction.Overflow(R.string.import_vpn_profile, onImportProfileClick),
                     MenuAction.Overflow(R.string.logs, onLogsClick),
                     MenuAction.Overflow(R.string.about, onAboutClick),
                 ),
+                modifier = Modifier.shadow(dimens.topBarShadowElevation)
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -240,12 +245,17 @@ fun ScaledSwitch(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     val dimens = LocalDimens.current
+    val trackColor = when (track) {
+        SwitchTrack.Default -> MaterialTheme.colorScheme.primary
+        SwitchTrack.Green -> StatusGreen
+        SwitchTrack.Orange -> StatusOrange
+    }
     val colors = SwitchDefaults.colors(
-        checkedTrackColor = when (track) {
-            SwitchTrack.Default -> MaterialTheme.colorScheme.primary
-            SwitchTrack.Green -> StatusGreen
-            SwitchTrack.Orange -> StatusOrange
-        },
+        checkedTrackColor = trackColor,
+        checkedBorderColor = trackColor,
+        disabledCheckedTrackColor = trackColor,
+        disabledCheckedBorderColor = trackColor,
+        disabledCheckedThumbColor = MaterialTheme.colorScheme.onPrimary,
     )
     Box(
         modifier = Modifier
@@ -258,8 +268,25 @@ fun ScaledSwitch(
             modifier = Modifier.scale(dimens.switchScale),
             enabled = enabled,
             colors = colors,
+            thumbContent = if (checked && track == SwitchTrack.Green) {
+                { ThumbIcon() }
+            } else {
+                null
+            },
         )
     }
+}
+
+@Composable
+private fun ThumbIcon() {
+    val dimens = LocalDimens.current
+
+    Icon(
+        painter = painterResource(R.drawable.ic_baseline_check_24),
+        contentDescription = null,
+        tint = StatusGreen,
+        modifier = Modifier.size(dimens.switchThumbIconSize),
+    )
 }
 
 @Composable

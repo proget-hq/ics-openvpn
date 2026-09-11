@@ -46,7 +46,7 @@ class MainViewModel(
         viewModelScope.launch {
             configRepo.changes.collect { config ->
                 if (profile() == null) uiState.update { it.noConfiguration() }
-                else uiState.update { it.allowDisconnect(config.allowDisconnect) }
+                else uiState.update { it.copy(allowDisconnect = config.allowDisconnect) }
             }
         }
     }

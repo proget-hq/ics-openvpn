@@ -19,9 +19,11 @@ data class MainUiState(
     val info: InfoMessage = InfoMessage.NoConfiguration,
     val switchVisible: Boolean = true,
     val switchChecked: Boolean = true,
-    val switchEnabled: Boolean = true,
+    val allowDisconnect: Boolean = true,
     val switchTrack: SwitchTrack = SwitchTrack.Default,
-)
+) {
+    val switchEnabled: Boolean get() = !switchChecked || allowDisconnect
+}
 
 fun MainUiState.noConfiguration() = copy(
     sessionStatus = SessionStatus.NotInitiated,
@@ -42,7 +44,6 @@ fun MainUiState.notConnected(imported: Boolean) = copy(
     switchVisible = true,
     switchChecked = false,
     info = information(imported),
-    switchEnabled = true,
 )
 
 fun MainUiState.connected(server: String?, allowDisconnect: Boolean, imported: Boolean) = copy(
@@ -54,7 +55,7 @@ fun MainUiState.connected(server: String?, allowDisconnect: Boolean, imported: B
     info = information(imported),
     switchVisible = true,
     switchChecked = true,
-    switchEnabled = allowDisconnect,
+    allowDisconnect = allowDisconnect,
     switchTrack = SwitchTrack.Green,
 )
 
@@ -67,7 +68,7 @@ fun MainUiState.connecting(server: String?, allowDisconnect: Boolean, imported: 
     info = information(imported),
     switchVisible = true,
     switchChecked = true,
-    switchEnabled = allowDisconnect,
+    allowDisconnect = allowDisconnect,
     switchTrack = SwitchTrack.Orange,
 )
 
@@ -80,8 +81,6 @@ fun MainUiState.authFailed(imported: Boolean) = copy(
     info = information(imported),
     switchChecked = false,
 )
-
-fun MainUiState.allowDisconnect(allow: Boolean) = copy(switchEnabled = allow)
 
 private fun information(imported: Boolean) =
     if (imported) InfoMessage.ManualConfiguration else InfoMessage.ConfiguredByEmm

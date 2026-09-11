@@ -61,6 +61,20 @@ private fun MainScreenNotConnectedPreview() {
 
 @Preview
 @Composable
+private fun MainScreenNotConnectedNoDisconnectPreview() {
+    ProgetTheme {
+        MainScreenContent(
+            uiState = MainUiState(allowDisconnect = false).notConnected(imported = false),
+            onConnectChanged = {},
+            onImportProfileClick = {},
+            onLogsClick = {},
+            onAboutClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
 private fun MainScreenConnectedPreview() {
     ProgetTheme {
         MainScreenContent(

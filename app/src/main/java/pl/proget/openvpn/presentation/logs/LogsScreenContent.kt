@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -81,15 +79,6 @@ fun LogsScreenContent(
                 ),
             )
         },
-        floatingActionButton = {
-            if(!isAtBottom) {
-                ScrollToNewestFab {
-                    scope.launch {
-                        listState.animateScrollToItem(uiState.logs.lastIndex)
-                    }
-                }
-            }
-        },
         containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets.systemBars
             .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
@@ -108,6 +97,14 @@ fun LogsScreenContent(
                 ScrollToTopButton {
                     scope.launch {
                         listState.animateScrollToItem(0)
+                    }
+                }
+            }
+
+            if(!isAtBottom) {
+                ScrollToNewestButton {
+                    scope.launch {
+                        listState.animateScrollToItem(uiState.logs.lastIndex)
                     }
                 }
             }
@@ -147,24 +144,28 @@ fun BoxScope.ScrollToTopButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun ScrollToNewestFab(onClick: () -> Unit) {
+fun BoxScope.ScrollToNewestButton(onClick: () -> Unit) {
     val dimens = LocalDimens.current
 
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(dimens.fabBorderRoundnessPercent),
-        modifier = Modifier.height(dimens.fabButtonHeight)
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(bottom = dimens.mediumPadding),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inverseSurface)
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_baseline_arrow_back_24),
             contentDescription = null,
+            tint = MaterialTheme.colorScheme.inverseOnSurface,
             modifier = Modifier.size(dimens.scrollIconSize).rotate(-90f)
         )
 
         Spacer(Modifier.width(dimens.smallGap))
 
         Text(
-            text = stringResource(R.string.newest)
+            text = stringResource(R.string.newest),
+            color = MaterialTheme.colorScheme.inverseOnSurface
         )
     }
 }
